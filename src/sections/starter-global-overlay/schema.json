@@ -1,0 +1,6 @@
+{
+  "ctx_needs": ["form_notice", "form_error", "routes"],
+  "kind": "section",
+  "name": "starter-global-overlay",
+  "settings": []
+}

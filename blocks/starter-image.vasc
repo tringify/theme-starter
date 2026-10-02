@@ -1,0 +1,36 @@
+{% if settings.image and settings.image != empty %}<figure class="starter-content-image"><img src="{{ settings.image | image_url: width: 1400 }}" srcset="{{ settings.image | image_srcset: max: 1440 }}" sizes="(min-width: 701px) min(min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px), 46rem), min(min(100vw - 1.5rem, {{ theme.settings.content_width | default: 1248 }}px), 46rem)" alt="{{ settings.alt }}" {{ settings.image | image_loading }}>{% if settings.caption and settings.caption != empty %}<figcaption class="starter-muted">{{ settings.caption }}</figcaption>{% endif %}</figure>{% endif %}
+{% schema %}
+{
+  "name": "starter-image",
+  "kind": "block",
+  "settings": [
+    {
+      "id": "image",
+      "type": "image",
+      "default": "",
+      "editor": {
+        "label": "Image",
+        "group": "content"
+      }
+    },
+    {
+      "id": "alt",
+      "type": "text",
+      "default": "",
+      "editor": {
+        "label": "Image Alt Text",
+        "group": "content"
+      }
+    },
+    {
+      "id": "caption",
+      "type": "text",
+      "default": "",
+      "editor": {
+        "label": "Caption",
+        "group": "content"
+      }
+    }
+  ]
+}
+{% endschema %}

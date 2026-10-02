@@ -1,0 +1,16 @@
+{
+  "name": "starter-blog",
+  "kind": "section",
+  "ctx_needs": ["blog_post"],
+  "settings": [
+    {
+      "id": "show_author",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showAuthor",
+        "group": "design"
+      }
+    }
+  ]
+}

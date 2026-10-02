@@ -1,0 +1,38 @@
+<main class="starter starter-section starter-entity-list">
+  <div class="starter-shell">
+    <header class="starter-listing__header">
+      <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+      <h1 class="starter-heading">{{ settings.heading | default: list.title }}</h1>
+      <p class="starter-subheading">{{ settings.description }}</p>
+    </header>
+    <div class="starter-grid starter-grid--entities">
+      {% for item in list.items %}
+        <article class="starter-entity-card">
+          <a href="{{ item.url }}">
+            <div class="starter-entity-card__media">
+              {% if item.image -%}
+                <img src="{{ item.image.url | image_url: width: 900 }}" alt="{{ item.name }}" srcset="{{ item.image.url | image_srcset: max: 1440 }}" sizes="(min-width: 901px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem) * 2) / 3), (min-width: 701px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem)) / 2), calc(min(100vw - 1.5rem, {{ theme.settings.content_width | default: 1248 }}px))" {{ item.image.url | image_loading }}>
+              {%- else -%}
+                {{- 'collection-1' | placeholder_svg -}}
+              {%- endif %}
+            </div>
+            <div class="starter-entity-card__body">
+              <h2>{{ item.name }}</h2>
+              {% if item.description %}
+                <p>{{ item.description }}</p>
+              {% endif -%}
+              {%- if item.product_count -%}
+                <span>
+                  {{- item.product_count }}
+                  {{ 'products' | t -}}
+                </span>
+              {%- endif %}
+            </div>
+          </a>
+        </article>
+      {% else %}
+        <p class="starter-empty">{{ 'empty' | t }}</p>
+      {% endfor %}
+    </div>
+  </div>
+</main>

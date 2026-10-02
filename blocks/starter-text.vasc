@@ -1,0 +1,18 @@
+<div class="starter-richtext">{{ settings.text }}</div>
+{% schema %}
+{
+  "name": "starter-text",
+  "kind": "block",
+  "settings": [
+    {
+      "id": "text",
+      "type": "richtext",
+      "default": "<p>Discover useful objects for home, work, and wherever the day takes you.</p>",
+      "editor": {
+        "label": "Text",
+        "group": "content"
+      }
+    }
+  ]
+}
+{% endschema %}

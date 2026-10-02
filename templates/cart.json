@@ -1,0 +1,10 @@
+{
+  "page_type": "cart",
+  "sections": [
+    {
+      "position": 0,
+      "settings": {},
+      "type": "starter-cart"
+    }
+  ]
+}

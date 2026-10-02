@@ -1,0 +1,41 @@
+<h2 class="starter-heading starter-heading--{{ settings.size }}">{{ settings.text }}</h2>
+{% schema %}
+{
+  "name": "starter-heading",
+  "kind": "block",
+  "settings": [
+    {
+      "id": "text",
+      "type": "text",
+      "default": "Make room for the everyday.",
+      "editor": {
+        "label": "Heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "size",
+      "type": "select",
+      "default": "medium",
+      "editor": {
+        "label": "Heading Size",
+        "group": "design"
+      },
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

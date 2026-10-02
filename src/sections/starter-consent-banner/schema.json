@@ -1,0 +1,117 @@
+{
+  "name": "starter-consent-banner",
+  "kind": "embed",
+  "target": "global_overlay",
+  "ctx_needs": ["consent", "csrf_token"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Privacy",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Your privacy, your choice",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "message",
+      "type": "textarea",
+      "default": "We use cookies to run the store and, with your permission, improve your experience.",
+      "editor": {
+        "label": "message",
+        "group": "content"
+      }
+    },
+    {
+      "id": "preferences_label",
+      "type": "text",
+      "default": "Manage Preferences",
+      "editor": {
+        "label": "preferencesLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "essential_label",
+      "type": "text",
+      "default": "Essential \u2014 always on",
+      "editor": {
+        "label": "essentialLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "analytics_label",
+      "type": "text",
+      "default": "Analytics",
+      "editor": {
+        "label": "analyticsLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "advertising_label",
+      "type": "text",
+      "default": "Advertising",
+      "editor": {
+        "label": "advertisingLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "advertising_data_label",
+      "type": "text",
+      "default": "Advertising Data",
+      "editor": {
+        "label": "advertisingDataLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "personalized_advertising_label",
+      "type": "text",
+      "default": "Personalized Advertising",
+      "editor": {
+        "label": "personalizedAdvertisingLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "personalization_label",
+      "type": "text",
+      "default": "Personalization",
+      "editor": {
+        "label": "personalizationLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "save_label",
+      "type": "text",
+      "default": "Save Choices",
+      "editor": {
+        "label": "saveLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "accept_label",
+      "type": "text",
+      "default": "Accept All",
+      "editor": {
+        "label": "acceptLabel",
+        "group": "content"
+      }
+    }
+  ],
+  "icon": "shield"
+}

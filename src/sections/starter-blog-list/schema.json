@@ -1,0 +1,34 @@
+{
+  "name": "starter-blog-list",
+  "kind": "section",
+  "ctx_needs": ["blog"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Stories",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Journal",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "default": "Notes, ideas, and useful guides from the studio.",
+      "editor": {
+        "label": "description",
+        "group": "content"
+      }
+    }
+  ]
+}

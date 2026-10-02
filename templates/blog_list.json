@@ -1,0 +1,10 @@
+{
+  "page_type": "blog_list",
+  "sections": [
+    {
+      "position": 0,
+      "settings": {},
+      "type": "starter-blog-list"
+    }
+  ]
+}

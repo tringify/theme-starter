@@ -1,0 +1,46 @@
+{% if settings.label and settings.label != empty and settings.url and settings.url != empty %}<a class="starter-button{% if settings.style == 'outline' %} starter-button--secondary{% endif %}" href="{{ settings.url }}">{{ settings.label }}</a>{% endif %}
+{% schema %}
+{
+  "name": "starter-button",
+  "kind": "block",
+  "settings": [
+    {
+      "id": "label",
+      "type": "text",
+      "default": "Explore the Collection",
+      "editor": {
+        "label": "Button Label",
+        "group": "content"
+      }
+    },
+    {
+      "id": "url",
+      "type": "url",
+      "default": "",
+      "editor": {
+        "label": "Button Link",
+        "group": "content"
+      }
+    },
+    {
+      "id": "style",
+      "type": "select",
+      "default": "solid",
+      "editor": {
+        "label": "Button Style",
+        "group": "design"
+      },
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

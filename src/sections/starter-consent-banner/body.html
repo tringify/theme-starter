@@ -1,0 +1,38 @@
+{% if consent.required and consent.given != true %}
+  <div class="starter starter-consent" role="dialog" aria-label="{{ settings.heading }}">
+    <div class="starter-consent__card">
+      <div>
+        <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+        <h2 class="starter-heading starter-heading--small">{{ settings.heading }}</h2>
+        <p class="starter-muted">{{ settings.message }}</p>
+      </div>
+      {% form 'consent_give', class: 'starter-consent__form' %}
+        <details>
+          <summary>{{ settings.preferences_label }}</summary>
+          <div class="starter-consent__options">
+            <label
+              ><input type="checkbox" checked disabled><span>{{ settings.essential_label }}</span></label
+            ><label
+              ><input type="checkbox" name="categories" value="analytics"
+              ><span>{{ settings.analytics_label }}</span></label
+            ><label
+              ><input type="checkbox" name="categories" value="advertising"
+              ><span>{{ settings.advertising_label }}</span></label
+            ><label
+              ><input type="checkbox" name="categories" value="advertising_data"
+              ><span>{{ settings.advertising_data_label }}</span></label
+            ><label
+              ><input type="checkbox" name="categories" value="personalized_advertising"
+              ><span>{{ settings.personalized_advertising_label }}</span></label
+            ><label
+              ><input type="checkbox" name="categories" value="personalization"
+              ><span>{{ settings.personalization_label }}</span></label
+            >
+          </div>
+          <button class="starter-button starter-button--secondary" type="submit">{{ settings.save_label }}</button>
+        </details>
+        <button class="starter-button" type="submit" name="accept_all" value="1">{{ settings.accept_label }}</button>
+      {% endform %}
+    </div>
+  </div>
+{% endif %}

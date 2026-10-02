@@ -1,0 +1,20 @@
+{
+  "page_type": "global_overlay",
+  "sections": [
+    {
+      "position": 0,
+      "settings": {},
+      "type": "starter-global-overlay"
+    },
+    {
+      "position": 1,
+      "settings": {},
+      "type": "starter-consent-banner"
+    },
+    {
+      "position": 2,
+      "settings": {},
+      "type": "starter-localization-prompt"
+    }
+  ]
+}

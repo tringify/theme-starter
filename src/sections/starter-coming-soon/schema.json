@@ -1,0 +1,16 @@
+{
+  "name": "starter-coming-soon",
+  "kind": "section",
+  "ctx_needs": ["shop", "routes"],
+  "settings": [
+    {
+      "id": "message",
+      "type": "textarea",
+      "default": "We are preparing something thoughtful. Please check back soon.",
+      "editor": {
+        "label": "comingSoonMessage",
+        "group": "content"
+      }
+    }
+  ]
+}

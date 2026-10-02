@@ -1,0 +1,43 @@
+{% if localization_prompt.should_show %}
+  <div class="starter starter-localization" role="dialog" aria-label="{{ settings.heading }}">
+    <div class="starter-localization__card">
+      <div>
+        <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+        <h2 class="starter-heading starter-heading--small">{{ settings.heading }}</h2>
+        <p class="starter-muted">{{ settings.message }}</p>
+      </div>
+      {% form 'localization_set', class: 'starter-localization__form' %}
+        <label class="starter-field"
+          ><span class="starter-label">{{ 'country_or_region' | t }}</span
+          ><select class="starter-select" name="country_code">
+            {% for country in localization.available_countries %}
+              <option
+                value="{{ country.iso_code }}"
+                {% if country.iso_code == localization_prompt.suggested_country_code %}
+                  selected
+                {% endif %}
+              >
+                {{ country.flag }}
+                {{ country.name }} · {{ country.currency_code }}
+              </option>
+            {% endfor %}
+          </select></label
+        ><label class="starter-field"
+          ><span class="starter-label">{{ 'language' | t }}</span
+          ><select class="starter-select" name="locale">
+            {% for language in localization.available_languages %}
+              <option
+                value="{{ language.iso_code }}"
+                {% if language.selected %}
+                  selected
+                {% endif %}
+              >
+                {{ language.name }}
+              </option>
+            {% endfor %}
+          </select></label
+        ><button class="starter-button" type="submit">{{ settings.button_label }}</button>
+      {% endform %}
+    </div>
+  </div>
+{% endif %}

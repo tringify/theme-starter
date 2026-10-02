@@ -1,0 +1,25 @@
+{
+  "name": "starter-track-order",
+  "kind": "section",
+  "ctx_needs": ["forms"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Order Help",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "default": "Enter your order details to receive a secure tracking code.",
+      "editor": {
+        "label": "description",
+        "group": "content"
+      }
+    }
+  ]
+}

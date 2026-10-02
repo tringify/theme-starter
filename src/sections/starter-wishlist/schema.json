@@ -1,0 +1,37 @@
+{
+  "name": "starter-wishlist",
+  "kind": "section",
+  "ctx_needs": ["wishlist", "routes"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Saved for Later",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "default": "Keep your favourite products together.",
+      "editor": {
+        "label": "description",
+        "group": "content"
+      }
+    },
+    {
+      "id": "columns",
+      "type": "range",
+      "default": 4,
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "editor": {
+        "label": "columns",
+        "group": "design"
+      }
+    }
+  ]
+}

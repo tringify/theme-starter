@@ -1,0 +1,25 @@
+{
+  "name": "starter-account",
+  "kind": "section",
+  "ctx_needs": ["customer", "routes"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Customer",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "signed_out_text",
+      "type": "textarea",
+      "default": "Sign in to see your account details, saved addresses, and orders.",
+      "editor": {
+        "label": "signedOutText",
+        "group": "content"
+      }
+    }
+  ]
+}

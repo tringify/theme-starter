@@ -1,0 +1,59 @@
+<main class="starter starter-section starter-listing">
+  <div class="starter-shell">
+    <header class="starter-listing__header">
+      <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+      <h1 class="starter-heading">{{ settings.heading }}</h1>
+      {% if settings.description %}
+        <p class="starter-subheading">{{ settings.description }}</p>
+      {% endif %}
+    </header>
+    <div class="starter-grid" style="--starter-columns: {{ settings.columns }}">
+      {% for item in products.items %}
+        <article class="starter-card">
+          <a class="starter-card__link" href="{{ item.url }}">
+            <div class="starter-card__media">
+              {% if item.featured_image -%}
+                <img
+                  src="{{ item.featured_image.url | image_url: width: 720 }}"
+                  alt="{{ item.featured_image.alt_text | default: item.title }}"
+                 srcset="{{ item.featured_image.url | image_srcset: max: 1440 }}" sizes="(min-width: 901px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem) * {{ settings.columns | default: 4 | minus: 1 }}) / {{ settings.columns | default: 4 }}), (min-width: 701px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem)) / 2), calc((min(100vw - 1.5rem, {{ theme.settings.content_width | default: 1248 }}px) - 0.75rem) / 2)" {{ item.featured_image.url | image_loading }}>
+              {%- else -%}
+                {{- 'product-1' | placeholder_svg -}}
+              {%- endif %}
+            </div>
+            <div class="starter-card__body">
+              {% if settings.show_vendor and item.vendor %}
+                <p class="starter-card__meta">{{ item.vendor }}</p>
+              {% endif %}
+              <h2 class="starter-card__title">{{ item.title }}</h2>
+              {% if item.price %}
+                <p class="starter-card__price">
+                  {% if item.price.on_sale -%}
+                    <del>{{ item.price.regular | money: isolate: true }}</del>
+                  {%- endif -%}
+                  {{- item.price.current | money: isolate: true }}
+                </p>
+              {% endif %}
+            </div>
+          </a>
+        </article>
+      {% else %}
+        <p class="starter-empty">{{ 'empty' | t }}</p>
+      {% endfor %}
+    </div>
+    {% if products.pagination.has_prev or products.pagination.has_next %}
+    <nav class="starter-pagination" aria-label="{{ 'pagination' | t }}">
+      {% if products.pagination.has_prev and products.pagination.prev_url != empty -%}
+        <a class="starter-button starter-button--secondary" href="{{ products.pagination.prev_url }}">
+          {{- 'previous' | t -}}
+        </a>
+      {%- endif -%}
+      {%- if products.pagination.has_next and products.pagination.next_url != empty -%}
+        <a class="starter-button starter-button--secondary" href="{{ products.pagination.next_url }}">
+          {{- 'next' | t -}}
+        </a>
+      {%- endif %}
+    </nav>
+    {% endif %}
+  </div>
+</main>

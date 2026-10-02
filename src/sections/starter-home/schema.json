@@ -1,0 +1,146 @@
+{
+  "name": "starter-home",
+  "kind": "section",
+  "ctx_needs": [
+    "shop",
+    "routes"
+  ],
+  "settings": [
+    {
+      "id": "scheme",
+      "type": "color_scheme",
+      "default": "",
+      "editor": {
+        "label": "colorScheme",
+        "group": "design"
+      }
+    },
+    {
+      "id": "layout",
+      "type": "select",
+      "default": "split",
+      "options": [
+        {
+          "value": "split",
+          "label": "Split"
+        },
+        {
+          "value": "centered",
+          "label": "Centered"
+        }
+      ],
+      "editor": {
+        "label": "layout",
+        "group": "design"
+      }
+    },
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "New collection",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Useful objects for everyday living.",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "text",
+      "type": "textarea",
+      "default": "From your first cup of coffee to the last page of the day. Explore our everyday collection.",
+      "editor": {
+        "label": "text",
+        "group": "content"
+      }
+    },
+    {
+      "id": "primary_label",
+      "type": "text",
+      "default": "Shop New Arrivals",
+      "editor": {
+        "label": "primaryButtonLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "primary_url",
+      "type": "url",
+      "default": "",
+      "editor": {
+        "label": "primaryButtonLink",
+        "group": "content"
+      }
+    },
+    {
+      "id": "secondary_label",
+      "type": "text",
+      "default": "Browse Collections",
+      "editor": {
+        "label": "secondaryButtonLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "secondary_url",
+      "type": "url",
+      "default": "",
+      "editor": {
+        "label": "secondaryButtonLink",
+        "group": "content"
+      }
+    },
+    {
+      "id": "image",
+      "type": "image",
+      "editor": {
+        "label": "image",
+        "group": "content"
+      }
+    },
+    {
+      "id": "image_alt",
+      "type": "text",
+      "default": "",
+      "editor": {
+        "label": "imageAltText",
+        "group": "content"
+      }
+    },
+    {
+      "id": "show_starter_image",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showStarterImage",
+        "group": "content"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Hero",
+      "category": "Banners",
+      "settings": {
+        "layout": "split"
+      }
+    },
+    {
+      "name": "Centered Hero",
+      "category": "Banners",
+      "settings": {
+        "layout": "centered",
+        "eyebrow": "Everyday Favorites",
+        "heading": "Good things for the everyday."
+      }
+    }
+  ],
+  "icon": "image"
+}

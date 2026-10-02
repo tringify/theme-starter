@@ -1,0 +1,5 @@
+{% if settings.blocks != empty %}
+<section class="{% if settings.scheme != empty %}tf-scheme-{{ settings.scheme }} {% endif %}starter starter-section starter-content-blocks starter-content-blocks--{{ settings.alignment }}">
+  <div class="starter-shell"><div class="starter-content-blocks__inner starter-content-blocks__inner--{{ settings.width }}">{% blocks %}</div></div>
+</section>
+{% endif %}

@@ -1,0 +1,76 @@
+.starter-auth {
+  width: min(100% - 2rem, 30rem);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 7vw, 5rem);
+}
+.starter-auth__header {
+  margin-block-end: 2rem;
+}
+.starter-auth__eyebrow {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-block-end: 1rem;
+}
+.starter-auth h1 {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-block: 0 0.75rem;
+}
+.starter-auth__header > p:last-child,
+.starter-field-help {
+  color: var(--text-muted, #595959);
+}
+.starter-auth form {
+  display: block;
+}
+.starter-auth label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-block: 1rem 0.5rem;
+}
+.starter-auth input:not([type="hidden"]):not([type="checkbox"]) {
+  display: block;
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--border, #bdbdbd);
+  border-radius: var(--starter-radius);
+  background: var(--bg, #fff);
+  color: var(--text, #111);
+  padding: 0.75rem;
+  font: inherit;
+  box-sizing: border-box;
+}
+.starter-auth input[hidden],
+.starter-auth [hidden] {
+  display: none !important;
+}
+.starter-primary {
+  display: block;
+  width: 100%;
+  margin-block-start: 1.25rem;
+  padding: 0.875rem 1rem;
+  min-height: 3rem;
+  border: 1px solid var(--btn, #111);
+  border-radius: var(--starter-radius);
+  background: var(--btn, #111);
+  color: var(--btn-text, #fff);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.starter-primary:hover {
+  filter: brightness(0.92);
+}
+.starter-message {
+  padding: 1rem;
+  border-inline-start: 2px solid var(--text, #111);
+  background: color-mix(in srgb, var(--text) 4%, var(--bg));
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-block: 1rem;
+}
+.starter-message--error {
+  font-weight: 500;
+}

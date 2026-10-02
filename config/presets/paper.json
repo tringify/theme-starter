@@ -1,0 +1,41 @@
+{
+  "name": "Paper",
+  "settings": {
+    "schemes": [
+      {
+        "id": "default",
+        "label": "Paper",
+        "colors": {
+          "accent": "#111111",
+          "bg": "#ffffff",
+          "border": "#e5e5e5",
+          "btn": "#111111",
+          "btn-text": "#ffffff",
+          "text": "#111111",
+          "text-muted": "#777777"
+        }
+      },
+      {
+        "id": "dark",
+        "label": "Inverse",
+        "colors": {
+          "accent": "#ffffff",
+          "bg": "#111111",
+          "border": "#2c2c2c",
+          "btn": "#ffffff",
+          "btn-text": "#111111",
+          "text": "#ffffff",
+          "text-muted": "#9a9a9a"
+        }
+      }
+    ],
+    "body_font": "system-sans",
+    "heading_font": "system-sans",
+    "body_size": 16,
+    "content_width": 1248,
+    "section_spacing": 80,
+    "corner_radius": 4,
+    "button_radius": 4,
+    "content_link_style": "underline"
+  }
+}

@@ -1,0 +1,36 @@
+{
+ "ctx_needs": [
+  "shop"
+ ],
+ "kind": "section",
+ "name": "starter-unavailable",
+ "settings": [
+  {
+   "id": "title",
+   "type": "text",
+   "default": "We’ll be right back",
+   "editor": {
+    "label": "title",
+    "group": "content"
+   }
+  },
+  {
+   "id": "message",
+   "type": "textarea",
+   "default": "The store can’t be reached right now. Please try again in a few minutes.",
+   "editor": {
+    "label": "message",
+    "group": "content"
+   }
+  },
+  {
+   "id": "retry_label",
+   "type": "text",
+   "default": "Try again",
+   "editor": {
+    "label": "buttonLabel",
+    "group": "content"
+   }
+  }
+ ]
+}

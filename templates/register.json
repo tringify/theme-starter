@@ -1,0 +1,10 @@
+{
+  "page_type": "register",
+  "sections": [
+    {
+      "position": 0,
+      "settings": {},
+      "type": "starter-register"
+    }
+  ]
+}

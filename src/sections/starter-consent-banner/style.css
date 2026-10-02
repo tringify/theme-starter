@@ -1,0 +1,100 @@
+.starter-consent {
+  position: fixed;
+  z-index: 100;
+  inset: auto 1rem 1rem;
+  background: transparent;
+}
+.starter-consent__card {
+  width: min(100%, 70rem);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: end;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  box-shadow: var(--starter-shadow);
+}
+.starter-consent__card p {
+  margin-block-end: 0;
+}
+.starter-consent__form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: end;
+}
+.starter-consent details {
+  position: relative;
+}
+.starter-consent summary {
+  padding: 0.75rem 0;
+  cursor: pointer;
+  font-size: 0.875rem;
+  text-decoration: underline;
+}
+.starter-consent__options {
+  position: absolute;
+  inset: auto 0 calc(100% + 0.75rem) auto;
+  display: grid;
+  width: min(24rem, calc(100vw - 2rem));
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  box-shadow: var(--starter-shadow);
+}
+.starter-consent__options label {
+  display: flex;
+  gap: 0.65rem;
+  font-size: 0.825rem;
+}
+.starter-consent__options input[type="checkbox"] {
+  appearance: none;
+  flex: 0 0 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin: 0.05rem 0 0;
+  padding: 0;
+  border: 1px solid var(--text-muted);
+  border-radius: var(--starter-radius);
+  background: var(--bg);
+  cursor: pointer;
+}
+.starter-consent__options input[type="checkbox"]:checked {
+  border-color: var(--btn);
+  background: var(--btn);
+}
+.starter-consent__options input[type="checkbox"]:checked::after {
+  content: "";
+  display: block;
+  width: 0.28rem;
+  height: 0.56rem;
+  margin: 0.15rem 0 0 0.4rem;
+  border: solid var(--btn-text);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.starter-consent__options input[type="checkbox"]:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+.starter-consent__options input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@media (max-width: 700px) {
+  .starter-consent__card {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .starter-consent__form {
+    display: grid;
+  }
+  .starter-consent__form > .starter-button {
+    width: 100%;
+  }
+  .starter-consent__options {
+    inset-inline: 0 auto;
+  }
+}

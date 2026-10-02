@@ -1,0 +1,13 @@
+.starter-text-section__inner {
+  max-width: 52rem;
+}
+.starter-text-section--center .starter-text-section__inner {
+  margin-inline: auto;
+  text-align: center;
+}
+.starter-text-section--center .starter-subheading {
+  margin-inline: auto;
+}
+.starter-text-section__inner .starter-button {
+  margin-block-start: 2rem;
+}

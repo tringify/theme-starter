@@ -1,0 +1,45 @@
+<main class="starter starter-section starter-track">
+  <div class="starter-shell starter-track__shell">
+    <header>
+      <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+      <h1 class="starter-heading">{{ 'track_order' | t }}</h1>
+      <p class="starter-subheading">{{ settings.description }}</p>
+    </header>
+    <div class="starter-track__forms">
+      <section>
+        <h2 class="starter-heading starter-heading--small">{{ 'request_code' | t }}</h2>
+        {% form 'order_track_request' %}
+          <label class="starter-field"
+            ><span class="starter-label">{{ 'order_number' | t }}</span
+            ><input class="starter-input" name="order_number" required></label
+          ><label class="starter-field"
+            ><span class="starter-label">{{ 'contact' | t }}</span
+            ><input class="starter-input" name="contact" required></label
+          ><button class="starter-button" type="submit">{{ 'send_code' | t }}</button>
+        {% endform %}
+      </section>
+      <section>
+        <h2 class="starter-heading starter-heading--small">{{ 'have_code' | t }}</h2>
+        {% form 'order_track_verify' %}
+          <label class="starter-field"
+            ><span class="starter-label">{{ 'order_number' | t }}</span
+            ><input class="starter-input" name="order_number" required></label
+          ><label class="starter-field"
+            ><span class="starter-label">{{ 'contact' | t }}</span
+            ><input class="starter-input" name="contact" required></label
+          ><label class="starter-field"
+            ><span class="starter-label">{{ 'code' | t }}</span
+            ><input
+              class="starter-input"
+              name="code"
+              required
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              minlength="6"
+              maxlength="6"></label
+          ><button class="starter-button starter-button--secondary" type="submit">{{ 'track_order' | t }}</button>
+        {% endform %}
+      </section>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,368 @@
+<main
+  class="starter starter-auth"
+  data-preferred-method="{{ auth_form.provider | default: customer_settings.preferred_auth_method }}"
+>
+  <header class="starter-auth__header">
+    <p class="starter-auth__eyebrow">{{ shop.name }}</p>
+    <h1>{{ 'register' | t }}</h1>
+    <p>{{ 'auth_intro' | t }}</p>
+  </header>
+
+  {% if form_error.message %}
+    <p class="starter-message starter-message--error" role="alert">{{ form_error.message }}</p>
+  {% endif %}
+  {% if auth_notice.message %}
+    <p class="starter-message" role="status">{{ auth_notice.message }}</p>
+  {% endif %}
+
+  {% if customer_settings.accounts_available %}
+    {% if auth_form.otp_step == 'verify' %}
+      <div class="starter-auth__identity">
+        <span>
+          {%- if auth_form.provider == 'phone' %}{{ auth_form.phone_number }}{% else %}{{ auth_form.email }}{% endif -%}
+        </span>
+        <a href="{{ customer_settings.login_url }}">{{ 'change' | t }}</a>
+      </div>
+      {% if auth_form.purpose == 'register' %}
+        {% form 'register' %}
+          <input type="hidden" name="provider" value="{{ auth_form.provider }}">
+          {% if auth_form.provider == 'phone' %}
+            <input type="hidden" name="phone_number" value="{{ auth_form.phone_number }}">
+          {% else %}
+            <input type="hidden" name="email" value="{{ auth_form.email }}">
+          {% endif %}
+          <label for="starter-code">{{ 'code' | t }}</label>
+          <input
+            id="starter-code"
+            name="code"
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            pattern="[0-9]{6}"
+            minlength="6"
+            maxlength="6"
+            required
+            aria-describedby="starter-code-help"
+          >
+          <p id="starter-code-help" class="starter-field-help">{{ 'code_help' | t }}</p>
+          {% if auth_form.purpose == 'register' %}
+            <div class="starter-form-row">
+              <div>
+                <label for="starter-first-name">{{ 'first_name' | t }}</label
+                ><input id="starter-first-name" name="first_name" autocomplete="given-name">
+              </div>
+              <div>
+                <label for="starter-last-name">{{ 'last_name' | t }}</label
+                ><input id="starter-last-name" name="last_name" autocomplete="family-name">
+              </div>
+            </div>
+            {% if customer_settings.collect_marketing_consent and auth_form.provider == 'email' %}
+              <label class="starter-check"
+                ><input type="checkbox" name="accepts_marketing" value="true"
+                ><span>{{ 'marketing_consent' | t }}</span></label
+              >
+            {% endif %}
+          {% endif %}
+          <button class="starter-primary" type="submit">{{ 'verify_continue' | t }}</button>
+        {% endform %}
+      {% else %}
+        {% form 'login' %}
+          <input type="hidden" name="provider" value="{{ auth_form.provider }}">
+          {% if auth_form.provider == 'phone' %}
+            <input type="hidden" name="phone_number" value="{{ auth_form.phone_number }}">
+          {% else %}
+            <input type="hidden" name="email" value="{{ auth_form.email }}">
+          {% endif %}
+          <label for="starter-code">{{ 'code' | t }}</label>
+          <input
+            id="starter-code"
+            name="code"
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            pattern="[0-9]{6}"
+            minlength="6"
+            maxlength="6"
+            required
+            aria-describedby="starter-code-help"
+          >
+          <p id="starter-code-help" class="starter-field-help">{{ 'code_help' | t }}</p>
+          {% if auth_form.purpose == 'register' %}
+            <div class="starter-form-row">
+              <div>
+                <label for="starter-first-name">{{ 'first_name' | t }}</label
+                ><input id="starter-first-name" name="first_name" autocomplete="given-name">
+              </div>
+              <div>
+                <label for="starter-last-name">{{ 'last_name' | t }}</label
+                ><input id="starter-last-name" name="last_name" autocomplete="family-name">
+              </div>
+            </div>
+            {% if customer_settings.collect_marketing_consent and auth_form.provider == 'email' %}
+              <label class="starter-check"
+                ><input type="checkbox" name="accepts_marketing" value="true"
+                ><span>{{ 'marketing_consent' | t }}</span></label
+              >
+            {% endif %}
+          {% endif %}
+          <button class="starter-primary" type="submit">{{ 'verify_continue' | t }}</button>
+        {% endform %}
+      {% endif %}
+      <div class="starter-auth__resend">
+        {% form 'auth_code_send' %}
+          <input type="hidden" name="provider" value="{{ auth_form.provider }}">
+          {% if auth_form.provider == 'phone' -%}
+            <input type="hidden" name="phone_number" value="{{ auth_form.phone_number }}">
+          {%- else -%}
+            <input type="hidden" name="email" value="{{ auth_form.email }}">
+          {%- endif %}
+          <button class="starter-text-button" type="submit">{{ 'resend_code' | t }}</button>
+        {% endform %}
+      </div>
+    {% else %}
+      {% if customer_settings.email_login_available and customer_settings.phone_login_available %}
+        <div class="starter-auth__switcher" role="group" aria-label="{{ 'sign_in_method' | t }}" hidden>
+          <button type="button" data-method="email" aria-pressed="false">{{ 'email' | t }}</button>
+          <button type="button" data-method="phone" aria-pressed="false">{{ 'phone' | t }}</button>
+        </div>
+      {% endif %}
+      {% if customer_settings.email_login_available %}
+        <div class="starter-auth__method" data-method-panel="email">
+          {% form 'auth_code_send' %}
+            <input type="hidden" name="provider" value="email">
+            <label for="starter-email">{{ 'email' | t }}</label>
+            <input
+              id="starter-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              value="{{ auth_form.email }}"
+              required
+              maxlength="254"
+              placeholder="{{ 'email_example' | t }}"
+            >
+            <button class="starter-primary" type="submit">{{ 'send_code' | t }}</button>
+          {% endform %}
+        </div>
+      {% endif %}
+      {% if customer_settings.phone_login_available %}
+        <div class="starter-auth__method" data-method-panel="phone">
+          {% assign country_options = phone_countries | sort: 'name' %}
+          {% assign first_country = country_options | first %}
+          {% assign default_dial = first_country.dial_code %}
+          {% assign default_flag = first_country.flag %}
+          {% for country in country_options %}
+            {% if country.iso_code == customer_settings.default_phone_country %}
+              {% assign default_dial = country.dial_code %}
+              {% assign default_flag = country.flag %}
+            {% endif %}
+          {% endfor %}
+          {% form 'auth_code_send' %}
+            <input type="hidden" name="provider" value="phone">
+            <label for="starter-phone">{{ 'phone' | t }}</label>
+            <div class="starter-phone">
+              {% if country_options.size > 0 %}
+                <details class="starter-phone__country">
+                  <summary aria-label="{{ 'choose_country' | t }}" data-label="{{ 'choose_country' | t }}">
+                    <span data-country-flag>{{ default_flag }}</span
+                    ><span class="starter-phone__chevron" aria-hidden="true">⌄</span>
+                  </summary>
+                  <div class="starter-phone__picker">
+                    <label for="starter-country-search">{{ 'choose_country' | t }}</label>
+                    <input
+                      id="starter-country-search"
+                      type="search"
+                      data-country-search
+                      placeholder="{{ 'search_countries' | t }}"
+                      autocomplete="off"
+                    >
+                    <ul aria-label="{{ 'countries' | t }}">
+                      {% for country in country_options %}
+                        <li>
+                          <button
+                            type="button"
+                            data-country="{{ country.iso_code }}"
+                            data-dial="{{ country.dial_code }}"
+                            data-flag="{{ country.flag }}"
+                          >
+                            <span aria-hidden="true">{{ country.flag }}</span>
+                            <span data-country-name>{{ country.name }}</span>
+                            <span class="starter-phone__dial">{{ country.dial_code }}</span>
+                          </button>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                    <p data-country-empty hidden>{{ 'no_countries' | t }}</p>
+                  </div>
+                </details>
+              {% endif %}
+              <input
+                id="starter-phone"
+                name="phone_number"
+                type="tel"
+                dir="ltr"
+                autocomplete="tel"
+                inputmode="tel"
+                value="{{ auth_form.phone_number | default: default_dial }}"
+                data-current-dial="{{ default_dial }}"
+                data-current-country="{{ customer_settings.default_phone_country }}"
+                pattern="[+][0-9]{6,15}"
+                maxlength="16"
+                required
+                aria-describedby="starter-phone-help"
+              >
+            </div>
+            <p id="starter-phone-help" class="starter-field-help">{{ 'phone_help' | t }}</p>
+            <button class="starter-primary" type="submit">{{ 'send_code' | t }}</button>
+          {% endform %}
+        </div>
+      {% endif %}
+      {% unless customer_settings.email_login_available or customer_settings.phone_login_available %}
+        <p>{{ 'sign_in_unavailable' | t }}</p>
+      {% endunless %}
+    {% endif %}
+  {% else %}
+    <p>{{ 'sign_in_unavailable' | t }}</p>
+  {% endif %}
+  <a class="starter-auth__back" href="{{ routes.root_url }}">{{ 'back_to_store' | t }}</a>
+</main>
+<script>
+  (() => {
+    const root = document.currentScript.previousElementSibling;
+    if (!root || !root.classList.contains('starter-auth')) return;
+    const switcher = root.querySelector('.starter-auth__switcher');
+    const panels = [...root.querySelectorAll('[data-method-panel]')];
+    if (switcher) {
+      const select = (method) => {
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.methodPanel !== method;
+        });
+        switcher
+          .querySelectorAll('[data-method]')
+          .forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.method === method)));
+      };
+      const preferred = panels.some((panel) => panel.dataset.methodPanel === root.dataset.preferredMethod)
+        ? root.dataset.preferredMethod
+        : panels[0].dataset.methodPanel;
+      select(preferred);
+      switcher.hidden = false;
+      switcher.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-method]');
+        if (button) select(button.dataset.method);
+      });
+    }
+    const picker = root.querySelector('.starter-phone__country');
+    const phone = root.querySelector('#starter-phone');
+    if (picker && phone) {
+      const search = picker.querySelector('[data-country-search]');
+      const choices = [...picker.querySelectorAll('li')];
+      const list = picker.querySelector('ul');
+      choices.sort((a, b) =>
+        a
+          .querySelector('[data-country-name]')
+          .textContent.localeCompare(
+            b.querySelector('[data-country-name]').textContent,
+            document.documentElement.lang || undefined,
+          ),
+      );
+      choices.forEach((item) => list.appendChild(item));
+      const dialChoices = choices
+        .map((item) => item.querySelector('[data-dial]'))
+        .sort((a, b) => b.dataset.dial.length - a.dataset.dial.length);
+      const summary = picker.querySelector('summary');
+      const matchNumber = () => {
+        const value = phone.value.replace(/[\s().-]/g, '');
+        const selected = dialChoices.find((button) => button.dataset.country === phone.dataset.currentCountry);
+        const longest = dialChoices.find((button) => value.startsWith(button.dataset.dial));
+        if (
+          selected &&
+          value.startsWith(selected.dataset.dial) &&
+          (!longest || longest.dataset.dial.length === selected.dataset.dial.length)
+        )
+          return selected;
+        return longest && dialChoices.filter((button) => button.dataset.dial === longest.dataset.dial).length === 1
+          ? longest
+          : undefined;
+      };
+      const syncCountry = () => {
+        const selected = matchNumber();
+        phone.dataset.currentDial = selected?.dataset.dial || '';
+        phone.dataset.currentCountry = selected?.dataset.country || '';
+        picker.querySelector('[data-country-flag]').textContent = selected?.dataset.flag || '🌐';
+        summary.setAttribute(
+          'aria-label',
+          summary.dataset.label + (selected ? ': ' + selected.querySelector('[data-country-name]').textContent : ''),
+        );
+      };
+      syncCountry();
+      phone.addEventListener('input', syncCountry);
+      const place = () => {
+        const rect = phone.getBoundingClientRect();
+        const viewport = window.visualViewport;
+        const top = viewport ? viewport.offsetTop : 0;
+        const bottom = top + (viewport ? viewport.height : window.innerHeight);
+        const below = bottom - rect.bottom - 12;
+        const above = rect.top - top - 12;
+        const openAbove = below < 240 && above > below;
+        picker.dataset.side = openAbove ? 'above' : 'below';
+        const panel = picker.querySelector('.starter-phone__picker');
+        const chrome = panel.getBoundingClientRect().height - list.getBoundingClientRect().height;
+        list.style.maxHeight = Math.max(80, Math.min(240, (openAbove ? above : below) - chrome)) + 'px';
+      };
+      const filter = () => {
+        const query = search.value.trim().toLocaleLowerCase();
+        choices.forEach((item) => {
+          item.hidden = !item.textContent.toLocaleLowerCase().includes(query);
+        });
+        picker.querySelector('[data-country-empty]').hidden = choices.some((item) => !item.hidden);
+      };
+      picker.addEventListener('toggle', () => {
+        if (picker.open) {
+          filter();
+          list.scrollTop = 0;
+          place();
+          search.focus({ preventScroll: true });
+          window.addEventListener('resize', place);
+          window.visualViewport?.addEventListener('resize', place);
+        } else {
+          search.value = '';
+          filter();
+          window.removeEventListener('resize', place);
+          window.visualViewport?.removeEventListener('resize', place);
+        }
+      });
+      picker.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          picker.open = false;
+          picker.querySelector('summary').focus();
+        }
+        if (event.key === 'Enter' && event.target === search) event.preventDefault();
+      });
+      search.addEventListener('input', () => {
+        filter();
+        place();
+      });
+      picker.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-dial]');
+        if (!button) return;
+        let number = phone.value.replace(/[^+0-9]/g, '');
+        const previous = dialChoices.find((choice) => number.startsWith(choice.dataset.dial));
+        if (previous) number = number.slice(previous.dataset.dial.length);
+        phone.value = button.dataset.dial + number.replace(/[^0-9]/g, '');
+        phone.dataset.currentCountry = button.dataset.country;
+        syncCountry();
+        phone.dispatchEvent(new Event('input', { bubbles: true }));
+        picker.open = false;
+        phone.focus();
+      });
+      picker.addEventListener('focusout', (event) => {
+        if (event.relatedTarget && !picker.contains(event.relatedTarget)) picker.open = false;
+      });
+      root.addEventListener('pointerdown', (event) => {
+        if (!picker.contains(event.target)) picker.open = false;
+      });
+    }
+  })();
+</script>

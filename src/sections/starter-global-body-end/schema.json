@@ -1,0 +1,49 @@
+{
+  "name": "starter-global-body-end",
+  "kind": "section",
+  "ctx_needs": ["shop", "policies"],
+  "settings": [
+    {
+      "id": "scheme",
+      "type": "color_scheme",
+      "default": "",
+      "editor": { "label": "colorScheme", "group": "design" }
+    },
+    {
+      "id": "menu",
+      "type": "menu",
+      "default": "footer",
+      "editor": { "label": "menu", "group": "content" }
+    },
+    {
+      "id": "tagline",
+      "type": "text",
+      "default": "Useful things, thoughtfully chosen.",
+      "editor": { "label": "tagline", "group": "content" }
+    },
+    {
+      "id": "show_newsletter",
+      "type": "checkbox",
+      "default": true,
+      "editor": { "label": "showNewsletter", "group": "content" }
+    },
+    {
+      "id": "newsletter_heading",
+      "type": "text",
+      "default": "News worth opening",
+      "editor": { "label": "newsletterHeading", "group": "content" }
+    },
+    {
+      "id": "newsletter_text",
+      "type": "textarea",
+      "default": "New products, useful stories, and occasional offers.",
+      "editor": { "label": "newsletterText", "group": "content" }
+    },
+    {
+      "id": "newsletter_button",
+      "type": "text",
+      "default": "Subscribe",
+      "editor": { "label": "buttonLabel", "group": "content" }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "starter-featured-collections",
+  "kind": "section",
+  "ctx_needs": ["routes"],
+  "settings": [
+    {
+      "id": "scheme",
+      "type": "color_scheme",
+      "default": "",
+      "editor": { "label": "colorScheme", "group": "design" }
+    },
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Explore",
+      "editor": { "label": "eyebrow", "group": "content" }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Shop by Collection",
+      "editor": { "label": "heading", "group": "content" }
+    },
+    {
+      "id": "collections",
+      "type": "collection_list",
+      "max": 6,
+      "editor": { "label": "collections", "group": "content" }
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Grid",
+      "category": "Collections",
+      "settings": {}
+    }
+  ],
+  "icon": "collection"
+}

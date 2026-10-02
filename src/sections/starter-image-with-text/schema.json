@@ -1,0 +1,125 @@
+{
+  "name": "starter-image-with-text",
+  "kind": "section",
+  "ctx_needs": [
+    "routes"
+  ],
+  "settings": [
+    {
+      "id": "scheme",
+      "type": "color_scheme",
+      "default": "dark",
+      "editor": {
+        "label": "colorScheme",
+        "group": "design"
+      }
+    },
+    {
+      "id": "image_position",
+      "type": "select",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Image Left"
+        },
+        {
+          "value": "right",
+          "label": "Image Right"
+        }
+      ],
+      "editor": {
+        "label": "imagePosition",
+        "group": "design"
+      }
+    },
+    {
+      "id": "image",
+      "type": "image",
+      "editor": {
+        "label": "image",
+        "group": "content"
+      }
+    },
+    {
+      "id": "image_alt",
+      "type": "text",
+      "default": "",
+      "editor": {
+        "label": "imageAltText",
+        "group": "content"
+      }
+    },
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Everyday Favorites",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Small details. Everyday pleasures.",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "text",
+      "type": "richtext",
+      "default": "<p>A favorite mug. A notebook for your next idea. A little room for the things you enjoy.</p>",
+      "editor": {
+        "label": "text",
+        "group": "content"
+      }
+    },
+    {
+      "id": "button_label",
+      "type": "text",
+      "default": "Explore the Collection",
+      "editor": {
+        "label": "buttonLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "button_url",
+      "type": "url",
+      "default": "",
+      "editor": {
+        "label": "buttonLink",
+        "group": "content"
+      }
+    },
+    {
+      "id": "show_starter_image",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showStarterImage",
+        "group": "content"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with Text — Image Left",
+      "category": "Content",
+      "settings": {
+        "image_position": "left"
+      }
+    },
+    {
+      "name": "Image with Text — Image Right",
+      "category": "Content",
+      "settings": {
+        "image_position": "right"
+      }
+    }
+  ],
+  "icon": "image"
+}

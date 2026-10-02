@@ -1,0 +1,34 @@
+{
+  "name": "starter-category-list",
+  "kind": "section",
+  "ctx_needs": ["list"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Browse",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Categorys",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "default": "Explore by category.",
+      "editor": {
+        "label": "description",
+        "group": "content"
+      }
+    }
+  ]
+}

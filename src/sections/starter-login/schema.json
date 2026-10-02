@@ -1,0 +1,14 @@
+{
+  "name": "starter-login",
+  "kind": "section",
+  "ctx_needs": [
+    "shop",
+    "customer_settings",
+    "auth_form",
+    "auth_notice",
+    "form_error",
+    "phone_countries",
+    "routes"
+  ],
+  "settings": []
+}

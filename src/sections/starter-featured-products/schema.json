@@ -1,0 +1,70 @@
+{
+  "name": "starter-featured-products",
+  "kind": "section",
+  "ctx_needs": ["routes"],
+  "settings": [
+    {
+      "id": "scheme",
+      "type": "color_scheme",
+      "default": "",
+      "editor": { "label": "colorScheme", "group": "design" }
+    },
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Shop",
+      "editor": { "label": "eyebrow", "group": "content" }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Featured Products",
+      "editor": { "label": "heading", "group": "content" }
+    },
+    {
+      "id": "view_all_label",
+      "type": "text",
+      "default": "View All",
+      "editor": { "label": "viewAllLabel", "group": "content" }
+    },
+    {
+      "id": "products",
+      "type": "product_list",
+      "max": 8,
+      "editor": { "label": "products", "group": "content" }
+    },
+    {
+      "id": "columns",
+      "type": "range",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4,
+      "editor": { "label": "columns", "group": "design" }
+    },
+    {
+      "id": "show_vendor",
+      "type": "checkbox",
+      "default": true,
+      "editor": { "label": "showVendor", "group": "design" }
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid — Four Columns",
+      "category": "Products",
+      "settings": { "columns": 4 }
+    },
+    {
+      "name": "Product Grid — Three Columns",
+      "category": "Products",
+      "settings": { "columns": 3 }
+    },
+    {
+      "name": "Product Grid — Two Columns",
+      "category": "Products",
+      "settings": { "columns": 2 }
+    }
+  ],
+  "icon": "grid"
+}

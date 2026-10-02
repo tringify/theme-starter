@@ -1,0 +1,34 @@
+{
+  "name": "starter-brand-list",
+  "kind": "section",
+  "ctx_needs": ["list"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Browse",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Brands",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "description",
+      "type": "textarea",
+      "default": "Explore by brand.",
+      "editor": {
+        "label": "description",
+        "group": "content"
+      }
+    }
+  ]
+}

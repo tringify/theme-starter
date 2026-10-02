@@ -1,0 +1,34 @@
+<main class="starter starter-section starter-account">
+  <div class="starter-shell starter-account__shell">
+    <header>
+      <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+      <h1 class="starter-heading">{{ 'account' | t }}</h1>
+    </header>
+    {% if customer.logged_in %}
+      <div class="starter-account__card">
+        <p class="starter-muted">{{ 'signed_in_as' | t }}</p>
+        <h2 class="starter-heading starter-heading--small">
+          {{ customer.first_name }}
+          {{ customer.last_name }}
+        </h2>
+        {% if customer.email %}
+          <p>{{ customer.email }}</p>
+        {% endif -%}
+        {%- if customer.phone %}
+          <p>{{ customer.phone }}</p>
+        {% endif %}
+        {% form 'logout' %}
+          <button class="starter-button starter-button--secondary" type="submit">{{ 'logout' | t }}</button>
+        {% endform %}
+      </div>
+    {% else %}
+      <div class="starter-account__card">
+        <p class="starter-subheading">{{ settings.signed_out_text }}</p>
+        <div class="starter-cluster">
+          <a class="starter-button" href="{{ routes.login_url }}">{{ 'login' | t }}</a
+          ><a class="starter-button starter-button--secondary" href="{{ routes.register_url }}">{{ 'register' | t }}</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</main>

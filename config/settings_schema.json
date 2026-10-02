@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "settings": [
+    {
+      "default": [
+        {
+          "colors": {
+            "accent": "#111111",
+            "bg": "#ffffff",
+            "border": "#e5e5e5",
+            "btn": "#111111",
+            "btn-text": "#ffffff",
+            "text": "#111111",
+            "text-muted": "#777777"
+          },
+          "id": "default",
+          "label": "Tringify Starter"
+        },
+        {
+          "colors": {
+            "accent": "#ffffff",
+            "bg": "#111111",
+            "border": "#2c2c2c",
+            "btn": "#ffffff",
+            "btn-text": "#111111",
+            "text": "#ffffff",
+            "text-muted": "#9a9a9a"
+          },
+          "id": "dark",
+          "label": "Inverse"
+        }
+      ],
+      "fields": [
+        {
+          "key": "bg",
+          "label": "Background"
+        },
+        {
+          "key": "text",
+          "label": "Text"
+        },
+        {
+          "key": "text-muted",
+          "label": "Muted Text"
+        },
+        {
+          "key": "accent",
+          "label": "Accent"
+        },
+        {
+          "key": "border",
+          "label": "Border"
+        },
+        {
+          "key": "btn",
+          "label": "Button"
+        },
+        {
+          "key": "btn-text",
+          "label": "Button Text"
+        }
+      ],
+      "id": "schemes",
+      "type": "color_scheme_group",
+      "editor": {
+        "label": "Color Schemes",
+        "group": "Colors"
+      }
+    },
+    {
+      "id": "body_font",
+      "type": "font_picker",
+      "default": "system-sans",
+      "editor": {
+        "label": "Body Font",
+        "group": "Typography"
+      }
+    },
+    {
+      "id": "heading_font",
+      "type": "font_picker",
+      "default": "system-sans",
+      "editor": {
+        "label": "Heading Font",
+        "group": "Typography"
+      }
+    },
+    {
+      "id": "body_size",
+      "type": "range",
+      "default": 16,
+      "editor": {
+        "label": "Body Text Size",
+        "group": "Typography"
+      },
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "id": "content_width",
+      "type": "range",
+      "default": 1248,
+      "editor": {
+        "label": "Content Width",
+        "group": "Layout"
+      },
+      "min": 960,
+      "max": 1600,
+      "step": 16,
+      "unit": "px"
+    },
+    {
+      "id": "section_spacing",
+      "type": "range",
+      "default": 80,
+      "editor": {
+        "label": "Section Spacing",
+        "group": "Layout"
+      },
+      "min": 32,
+      "max": 112,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "id": "corner_radius",
+      "type": "range",
+      "default": 4,
+      "editor": {
+        "label": "Corner Radius",
+        "group": "Shape"
+      },
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "id": "button_radius",
+      "type": "range",
+      "default": 4,
+      "editor": {
+        "label": "Button Corner Radius",
+        "group": "Shape"
+      },
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "id": "content_link_style",
+      "type": "select",
+      "default": "underline",
+      "editor": {
+        "label": "Content Links",
+        "group": "Typography"
+      },
+      "options": [
+        {
+          "value": "underline",
+          "label": "Underlined"
+        },
+        {
+          "value": "plain",
+          "label": "Underline on Hover"
+        }
+      ]
+    }
+  ]
+}

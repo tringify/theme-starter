@@ -1,0 +1,178 @@
+<style>
+:root {
+  --starter-content-width: {{ theme.settings.content_width | default: 1248 }}px;
+  --starter-section-spacing: {{ theme.settings.section_spacing | default: 80 }}px;
+  --starter-corner-radius: {{ theme.settings.corner_radius }}px;
+  --starter-button-radius: {{ theme.settings.button_radius }}px;
+  --starter-body-size: {{ theme.settings.body_size | default: 16 }}px;
+}
+{% if theme.settings.content_link_style == 'plain' %}
+.starter-richtext a, .starter-copy a:not(.starter-button), .starter-footer__nav a, .starter-footer__policies a { text-decoration: none; }
+.starter-richtext a:hover, .starter-copy a:not(.starter-button):hover, .starter-footer__nav a:hover, .starter-footer__policies a:hover { text-decoration: underline; }
+{% endif %}
+</style>
+<header class="{% if settings.scheme != empty %}tf-scheme-{{ settings.scheme }} {% endif %}starter starter-header starter-header--{{ settings.navigation_layout }} starter-header--brand-{{ settings.brand_alignment }}{% if settings.sticky_header %} starter-header--sticky{% endif %}">
+  {% if settings.show_announcement and settings.announcement_text and settings.announcement_text != empty %}
+    <div class="starter-announcement">{{ settings.announcement_text }}</div>
+  {% endif %}
+  <div class="starter-shell starter-header__row">
+    <details class="starter-header__menu">
+        <summary aria-label="{{ 'menu' | t }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
+        <nav aria-label="{{ 'mobile_navigation' | t }}">
+          <ul class="starter-nav-items">
+            {% if settings.menu_resolved.items.size > 0 %}
+              {% for nav_item_1 in settings.menu_resolved.items %}
+                <li>
+                  {% if nav_item_1.children.size > 0 %}
+                    <details class="starter-nav-group">
+                      <summary>
+                        {{ nav_item_1.title }}
+                        <svg class="starter-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                      </summary>
+                      <ul class="starter-nav-children">
+                        {% if nav_item_1.url and nav_item_1.url != empty %}
+                          <li><a href="{{ nav_item_1.url }}"{% if nav_item_1.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ 'view_all' | t }}<span class="starter-visually-hidden"> {{ nav_item_1.title }}</span></a></li>
+                        {% endif %}
+                        {% for nav_item_2 in nav_item_1.children %}
+                          <li>
+                            {% if nav_item_2.children.size > 0 %}
+                              <details class="starter-nav-group">
+                                <summary>
+                                  {{ nav_item_2.title }}
+                                  <svg class="starter-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                                </summary>
+                                <ul class="starter-nav-children">
+                                  {% if nav_item_2.url and nav_item_2.url != empty %}
+                                    <li><a href="{{ nav_item_2.url }}"{% if nav_item_2.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ 'view_all' | t }}<span class="starter-visually-hidden"> {{ nav_item_2.title }}</span></a></li>
+                                  {% endif %}
+                                  {% for nav_item_3 in nav_item_2.children %}
+                                    <li>
+                                      {% if nav_item_3.url and nav_item_3.url != empty %}
+                                        <a href="{{ nav_item_3.url }}"{% if nav_item_3.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ nav_item_3.title }}</a>
+                                      {% else %}
+                                        <span class="starter-nav-label">{{ nav_item_3.title }}</span>
+                                      {% endif %}
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                              </details>
+                            {% else %}
+                              {% if nav_item_2.url and nav_item_2.url != empty %}
+                                <a href="{{ nav_item_2.url }}"{% if nav_item_2.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ nav_item_2.title }}</a>
+                              {% else %}
+                                <span class="starter-nav-label">{{ nav_item_2.title }}</span>
+                              {% endif %}
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </details>
+                  {% else %}
+                    {% if nav_item_1.url and nav_item_1.url != empty %}
+                      <a href="{{ nav_item_1.url }}"{% if nav_item_1.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ nav_item_1.title }}</a>
+                    {% else %}
+                      <span class="starter-nav-label">{{ nav_item_1.title }}</span>
+                    {% endif %}
+                  {% endif %}
+                </li>
+              {% endfor %}
+            {% else %}
+              <li><a href="{{ routes.shop_url }}">{{ 'shop' | t }}</a></li>
+              <li><a href="{{ routes.collections_url }}">{{ 'collections' | t }}</a></li>
+            {% endif %}
+          </ul>
+
+          {%- if settings.show_search -%}
+            <a href="{{ routes.search_url }}">{{ 'search' | t }}</a>
+          {%- endif -%}
+          {%- if settings.show_account -%}
+            <a href="{{ routes.account_url }}">{{ 'account' | t }}</a>
+          {%- endif %}
+        </nav>
+    </details>
+
+    <a class="starter-header__brand" href="{{ routes.root_url }}">
+      {% if settings.logo and settings.logo != empty %}
+        <img src="{{ settings.logo | image_url: width: 480 }}" alt="{{ shop.name }}" width="{{ settings.logo_width }}" style="max-width: {{ settings.logo_width }}px" fetchpriority="high" loading="eager">
+      {% else %}{{ shop.name }}{% endif %}
+    </a>
+    <nav class="starter-header__nav" aria-label="{{ 'main_navigation' | t }}">
+      <ul class="starter-nav-items">
+        {% if settings.menu_resolved.items.size > 0 %}
+          {% for nav_item_1 in settings.menu_resolved.items %}
+            <li>
+              {% if nav_item_1.children.size > 0 %}
+                <details class="starter-nav-group">
+                  <summary>
+                    {{ nav_item_1.title }}
+                    <svg class="starter-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                  </summary>
+                  <ul class="starter-nav-children">
+                    {% if nav_item_1.url and nav_item_1.url != empty %}
+                      <li><a href="{{ nav_item_1.url }}"{% if nav_item_1.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ 'view_all' | t }}<span class="starter-visually-hidden"> {{ nav_item_1.title }}</span></a></li>
+                    {% endif %}
+                    {% for nav_item_2 in nav_item_1.children %}
+                      <li>
+                        {% if nav_item_2.children.size > 0 %}
+                          <details class="starter-nav-group">
+                            <summary>
+                              {{ nav_item_2.title }}
+                              <svg class="starter-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                            </summary>
+                            <ul class="starter-nav-children">
+                              {% if nav_item_2.url and nav_item_2.url != empty %}
+                                <li><a href="{{ nav_item_2.url }}"{% if nav_item_2.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ 'view_all' | t }}<span class="starter-visually-hidden"> {{ nav_item_2.title }}</span></a></li>
+                              {% endif %}
+                              {% for nav_item_3 in nav_item_2.children %}
+                                <li>
+                                  {% if nav_item_3.url and nav_item_3.url != empty %}
+                                    <a href="{{ nav_item_3.url }}"{% if nav_item_3.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ nav_item_3.title }}</a>
+                                  {% else %}
+                                    <span class="starter-nav-label">{{ nav_item_3.title }}</span>
+                                  {% endif %}
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </details>
+                        {% else %}
+                          {% if nav_item_2.url and nav_item_2.url != empty %}
+                            <a href="{{ nav_item_2.url }}"{% if nav_item_2.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ nav_item_2.title }}</a>
+                          {% else %}
+                            <span class="starter-nav-label">{{ nav_item_2.title }}</span>
+                          {% endif %}
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </details>
+              {% else %}
+                {% if nav_item_1.url and nav_item_1.url != empty %}
+                  <a href="{{ nav_item_1.url }}"{% if nav_item_1.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ nav_item_1.title }}</a>
+                {% else %}
+                  <span class="starter-nav-label">{{ nav_item_1.title }}</span>
+                {% endif %}
+              {% endif %}
+            </li>
+          {% endfor %}
+        {% else %}
+          <li><a href="{{ routes.shop_url }}">{{ 'shop' | t }}</a></li>
+          <li><a href="{{ routes.collections_url }}">{{ 'collections' | t }}</a></li>
+        {% endif %}
+      </ul>
+
+    </nav>
+    <div class="starter-header__actions">
+      {% if settings.show_search -%}
+        <a class="starter-header__icon" href="{{ routes.search_url }}" aria-label="{{ 'search' | t }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg></a>
+      {%- endif %}
+      {% if settings.show_account -%}
+        <a class="starter-header__icon" href="{{ routes.account_url }}" aria-label="{{ 'account' | t }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></a>
+      {%- endif %}
+      <a class="starter-header__cart starter-header__icon" href="{{ routes.cart_url }}" aria-label="{{ 'cart' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 7h14l1 14H4L5 7Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        {% if settings.show_cart_count and cart.item_count > 0 %}<span class="starter-count">{{ cart.item_count }}</span>{% endif %}
+      </a>
+
+    </div>
+  </div>
+</header>

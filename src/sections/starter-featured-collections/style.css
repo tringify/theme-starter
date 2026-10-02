@@ -1,0 +1,27 @@
+.starter-collection-card {
+  display: grid;
+  text-decoration: none;
+}
+.starter-collection-card__media {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text) 4%, var(--bg));
+}
+.starter-collection-card__media img,
+.starter-collection-card__media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.starter-collection-card__label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.9rem;
+  border-block-end: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.starter-collection-card__label span:last-child {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}

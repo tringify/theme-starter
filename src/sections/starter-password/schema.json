@@ -1,0 +1,55 @@
+{
+  "name": "starter-password",
+  "kind": "section",
+  "ctx_needs": ["shop"],
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "default": "This store is private",
+      "editor": {
+        "group": "content",
+        "label": "title"
+      }
+    },
+    {
+      "id": "message",
+      "type": "textarea",
+      "default": "Enter the store password to continue.",
+      "editor": {
+        "group": "content",
+        "label": "message"
+      }
+    },
+    {
+      "id": "password_placeholder",
+      "type": "text",
+      "default": "Store password",
+      "editor": {
+        "group": "content",
+        "label": "passwordLabel"
+      }
+    },
+    {
+      "id": "button_label",
+      "type": "text",
+      "default": "Enter store",
+      "editor": {
+        "group": "content",
+        "label": "buttonLabel"
+      }
+    },
+    {
+      "id": "password_error",
+      "type": "text"
+    },
+    {
+      "id": "return_to",
+      "type": "text"
+    },
+    {
+      "id": "locale",
+      "type": "text"
+    }
+  ]
+}

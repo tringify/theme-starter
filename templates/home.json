@@ -1,0 +1,56 @@
+{
+  "page_type": "home",
+  "sections": [
+    {
+      "position": 0,
+      "settings": {},
+      "type": "starter-home"
+    },
+    {
+      "position": 1,
+      "settings": {},
+      "type": "starter-featured-products"
+    },
+    {
+      "position": 2,
+      "settings": {},
+      "type": "starter-featured-collections"
+    },
+    {
+      "position": 3,
+      "settings": {},
+      "type": "starter-image-with-text"
+    },
+    {
+      "position": 4,
+      "settings": {
+        "alignment": "center",
+        "eyebrow": "Stay in the loop",
+        "heading": "Good things, occasionally.",
+        "text": "<p>New products, useful stories, and considered offers\u2014sent with restraint.</p>",
+        "button_label": "Shop the Collection"
+      },
+      "type": "starter-rich-text"
+    },
+    {
+      "position": 5,
+      "type": "starter-content-blocks",
+      "settings": {
+        "alignment": "center",
+        "width": "reading",
+        "blocks": [
+          {
+            "id": "starter-story-heading",
+            "type": "theme:starter-heading",
+            "settings": {}
+          },
+          {
+            "id": "starter-story-text",
+            "type": "theme:starter-text",
+            "settings": {}
+          }
+        ]
+      }
+    }
+  ]
+}

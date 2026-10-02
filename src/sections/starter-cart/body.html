@@ -1,0 +1,108 @@
+<main class="starter starter-section starter-cart">
+  <div class="starter-shell">
+    <header class="starter-split starter-cart__header">
+      <div>
+        <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+        <h1 class="starter-heading">{{ 'cart' | t }}</h1>
+      </div>
+      <span class="starter-muted">
+        {{- cart.item_count }}
+        {% if cart.item_count == 1 %}{{ 'item' | t }}{% else %}{{ 'items' | t }}{% endif %}
+      </span>
+    </header>
+    {% if cart.items.size > 0 %}
+      <div class="starter-cart__layout">
+        <div class="starter-cart__lines">
+          {% for item in cart.items %}
+            <article class="starter-cart-line">
+              <a class="starter-cart-line__media" href="{{ item.product.url }}">
+                {%- if item.product.media -%}
+                  <img
+                    src="{{ item.product.media.url | image_url: width: 320 }}"
+                    alt="{{ item.product.media.alt_text | default: item.product.title }}"
+                   srcset="{{ item.product.media.url | image_srcset: max: 480 }}" sizes="(max-width: 760px) 5.5rem, 8rem" {{ item.product.media.url | image_loading }}>
+                {%- endif -%}
+              </a>
+              <div class="starter-cart-line__details">
+                <div class="starter-split">
+                  <div>
+                    <a class="starter-cart-line__title" href="{{ item.product.url }}">{{ item.product.title }}</a>
+                    {%- if item.variant %}
+                      <p class="starter-card__meta">{{ item.variant.title }}</p>
+                    {% endif %}
+                  </div>
+                  <strong>{{ item.line_subtotal | money: isolate: true }}</strong>
+                </div>
+                <div class="starter-cart-line__actions">
+                  {% form 'cart_update', class: 'starter-cart-line__form' %}
+                    <input type="hidden" name="product_id" value="{{ item.product_id }}"
+                    ><input type="hidden" name="line_id" value="{{ item.line_id }}">
+                    {%- if item.variant_id -%}
+                      <input type="hidden" name="variant_id" value="{{ item.variant_id }}">
+                    {%- endif -%}
+                    <label class="starter-field"
+                      ><span class="starter-label">{{ 'quantity' | t }}</span
+                      ><input
+                        class="starter-input starter-quantity"
+                        type="number"
+                        name="quantity"
+                        min="1"
+                        value="{{ item.quantity }}"
+                        {% if item.max_order_quantity > 0 %}
+                          max="{{ item.max_order_quantity }}"
+                        {% endif %}></label
+                    ><button class="starter-button starter-button--secondary" type="submit">{{ 'update' | t }}</button>
+                  {% endform %}
+                  {% form 'cart_update', class: 'starter-cart-line__remove-form' %}
+                    <input type="hidden" name="product_id" value="{{ item.product_id }}"
+                    ><input type="hidden" name="line_id" value="{{ item.line_id }}"
+                    ><input type="hidden" name="quantity" value="0">
+                    {%- if item.variant_id -%}
+                      <input type="hidden" name="variant_id" value="{{ item.variant_id }}">
+                    {%- endif -%}
+                    <button class="starter-button starter-button--text" type="submit">{{ 'remove' | t }}</button>
+                  {% endform %}
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+        <aside class="starter-cart__summary">
+          <h2 class="starter-heading starter-heading--small">{{ 'order_summary' | t }}</h2>
+          <div class="starter-cart__total">
+            <span>{{ 'subtotal' | t }}</span><strong>{{ cart.subtotal | money: isolate: true }}</strong>
+          </div>
+          {% assign tax = cart.subtotal.tax_display -%}
+          {%- if tax.mode == 'both' and tax.inclusive and tax.exclusive %}
+            <p class="starter-card__meta">
+              {{ tax.inclusive | money: isolate: true }} ({{ 'tax_included' | t }}) /
+              {{ tax.exclusive | money: isolate: true }} ({{ 'tax_excluded' | t }})
+            </p>
+          {% endif -%}
+          {%- if tax.status == 'estimated' %}
+            <p class="starter-card__meta">{{ 'tax_estimated' | t }}</p>
+          {% endif -%}
+          {%- if tax.status != 'unavailable' and tax.status != 'not_applicable' and tax.primary %}
+            <p class="starter-card__meta">
+              {% if tax.primary.tax_included %}{{ 'tax_included' | t }}{% else %}{{ 'tax_excluded' | t }}{% endif %}
+            </p>
+          {% endif -%}
+          {%- if cart.discounts.size > 0 -%}
+            {%- for discount in cart.discounts %}
+              <div class="starter-cart__total starter-muted">
+                <span>{{ discount.title }}</span><span>-{{ discount.amount | money: isolate: true }}</span>
+              </div>
+            {% endfor -%}
+          {%- endif -%}
+          <a class="starter-button starter-cart__checkout" href="{{ routes.checkout_url }}">{{ 'checkout' | t }}</a>
+          <p class="starter-card__meta">{{ 'charges_at_checkout' | t }}</p>
+        </aside>
+      </div>
+    {% else %}
+      <div class="starter-empty starter-cart__empty">
+        <h2 class="starter-heading starter-heading--small">{{ 'empty_cart' | t }}</h2>
+        <a class="starter-button" href="{{ routes.shop_url }}">{{ 'continue_shopping' | t }}</a>
+      </div>
+    {% endif %}
+  </div>
+</main>

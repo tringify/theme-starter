@@ -1,0 +1,46 @@
+{
+  "name": "starter-search",
+  "kind": "section",
+  "ctx_needs": ["routes", "search", "products"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Find",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Search",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "columns",
+      "type": "range",
+      "default": 4,
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "editor": {
+        "label": "columns",
+        "group": "design"
+      }
+    },
+    {
+      "id": "show_vendor",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showVendor",
+        "group": "design"
+      }
+    }
+  ]
+}

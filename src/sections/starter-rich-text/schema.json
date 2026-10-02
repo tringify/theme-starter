@@ -1,0 +1,99 @@
+{
+  "name": "starter-rich-text",
+  "kind": "section",
+  "ctx_needs": [
+    "routes"
+  ],
+  "settings": [
+    {
+      "id": "scheme",
+      "type": "color_scheme",
+      "default": "",
+      "editor": {
+        "label": "colorScheme",
+        "group": "design"
+      }
+    },
+    {
+      "id": "alignment",
+      "type": "select",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "editor": {
+        "label": "alignment",
+        "group": "design"
+      }
+    },
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "A Little Inspiration",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Find your next favorite.",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "text",
+      "type": "richtext",
+      "default": "<p>Browse the collection and discover something for your everyday.</p>",
+      "editor": {
+        "label": "text",
+        "group": "content"
+      }
+    },
+    {
+      "id": "button_label",
+      "type": "text",
+      "default": "Shop the Collection",
+      "editor": {
+        "label": "buttonLabel",
+        "group": "content"
+      }
+    },
+    {
+      "id": "button_url",
+      "type": "url",
+      "default": "",
+      "editor": {
+        "label": "buttonLink",
+        "group": "content"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text — Centered",
+      "category": "Content",
+      "settings": {
+        "alignment": "center"
+      }
+    },
+    {
+      "name": "Rich Text — Left Aligned",
+      "category": "Content",
+      "settings": {
+        "alignment": "left"
+      }
+    }
+  ],
+  "icon": "text"
+}

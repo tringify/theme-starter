@@ -1,0 +1,519 @@
+{
+  "schema_version": 1,
+  "shop": {
+    "name": "Everyday Goods",
+    "tagline": "Useful things, thoughtfully chosen.",
+    "currency_code": "USD",
+    "locale": "en",
+    "country_code": "US"
+  },
+  "products": [
+    {
+      "handle": "ceramic-mug",
+      "title": "Ceramic Mug",
+      "vendor": "Everyday Studio",
+      "description": "<p>A smooth ceramic mug for everyday coffee and tea.</p>",
+      "images": [
+        "ceramic-mug.webp"
+      ],
+      "price": "18.50",
+      "rating": {
+        "average": 4.8,
+        "count": 124
+      }
+    },
+    {
+      "handle": "canvas-tote",
+      "title": "Canvas Tote",
+      "vendor": "Common Form",
+      "description": "<p>A simple cotton canvas bag with comfortable carry handles.</p>",
+      "images": [
+        "canvas-tote.webp"
+      ],
+      "price": "24.00",
+      "rating": {
+        "average": 4.7,
+        "count": 89
+      }
+    },
+    {
+      "handle": "linen-notebook",
+      "title": "Linen Notebook",
+      "vendor": "Common Form",
+      "description": "<p>A linen-covered notebook for notes, lists and sketches.</p>",
+      "images": [
+        "linen-notebook.webp"
+      ],
+      "price": "12.75",
+      "rating": {
+        "average": 4.6,
+        "count": 57
+      }
+    },
+    {
+      "handle": "steel-water-bottle",
+      "title": "Steel Water Bottle",
+      "vendor": "Everyday Studio",
+      "description": "<p>A reusable stainless steel bottle with a secure screw cap.</p>",
+      "images": [
+        "steel-water-bottle.webp"
+      ],
+      "price": "28.00",
+      "rating": {
+        "average": 4.9,
+        "count": 203
+      },
+      "options": [
+        {
+          "name": "Size",
+          "values": [
+            "500 ml",
+            "750 ml"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "title": "500 ml",
+          "options": [
+            "500 ml"
+          ],
+          "price": "28.00",
+          "available": true
+        },
+        {
+          "title": "750 ml",
+          "options": [
+            "750 ml"
+          ],
+          "price": "34.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "desk-lamp",
+      "title": "Desk Lamp",
+      "vendor": "Field Office",
+      "description": "<p>A compact adjustable lamp for a desk or bedside table.</p>",
+      "images": [
+        "desk-lamp.webp"
+      ],
+      "price": "64.00",
+      "rating": {
+        "average": 4.5,
+        "count": 42
+      }
+    },
+    {
+      "handle": "cotton-cushion",
+      "title": "Cotton Cushion",
+      "vendor": "Common Form",
+      "description": "<p>A soft square cotton cushion in a gentle sage shade.</p>",
+      "images": [
+        "cotton-cushion.webp"
+      ],
+      "price": "32.00",
+      "rating": {
+        "average": 4.7,
+        "count": 76
+      }
+    },
+    {
+      "handle": "cotton-t-shirt",
+      "title": "Cotton T-Shirt",
+      "vendor": "Common Form",
+      "description": "<p>An everyday cotton crew-neck T-shirt with a relaxed shape.</p>",
+      "images": [
+        "cotton-t-shirt.webp"
+      ],
+      "price": "26.00",
+      "rating": {
+        "average": 4.8,
+        "count": 164
+      },
+      "options": [
+        {
+          "name": "Color",
+          "sub_type": "swatch",
+          "values": [
+            "White",
+            "Black",
+            "Sage"
+          ],
+          "colors": [
+            "#ffffff",
+            "#111111",
+            "#87927d"
+          ]
+        },
+        {
+          "name": "Size",
+          "values": [
+            "Small",
+            "Medium",
+            "Large"
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "title": "White / Small",
+          "options": [
+            "White",
+            "Small"
+          ],
+          "price": "26.00",
+          "available": true
+        },
+        {
+          "title": "Black / Medium",
+          "options": [
+            "Black",
+            "Medium"
+          ],
+          "price": "26.00",
+          "available": true
+        },
+        {
+          "title": "Sage / Large",
+          "options": [
+            "Sage",
+            "Large"
+          ],
+          "price": "26.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "ceramic-planter",
+      "title": "Ceramic Planter",
+      "vendor": "Everyday Studio",
+      "description": "<p>A small terracotta planter with a decorative succulent.</p>",
+      "images": [
+        "ceramic-planter.webp"
+      ],
+      "price": "22.00",
+      "rating": {
+        "average": 4.6,
+        "count": 68
+      }
+    },
+    {
+      "handle": "wireless-headphones",
+      "title": "Wireless Headphones",
+      "vendor": "Field Office",
+      "description": "<p>Over-ear headphones with a padded adjustable headband.</p>",
+      "images": [
+        "wireless-headphones.webp"
+      ],
+      "price": "89.00",
+      "rating": {
+        "average": 4.4,
+        "count": 311
+      },
+      "compare_at": "109.00"
+    },
+    {
+      "handle": "round-sunglasses",
+      "title": "Round Sunglasses",
+      "vendor": "Common Form",
+      "description": "<p>Round sunglasses with a warm tortoiseshell frame.</p>",
+      "images": [
+        "round-sunglasses.webp"
+      ],
+      "price": "38.00",
+      "rating": {
+        "average": 4.7,
+        "count": 95
+      }
+    }
+  ],
+  "collections": [
+    {
+      "handle": "everyday-essentials",
+      "title": "Everyday Essentials",
+      "description": "Ten useful objects selected for daily routines and lasting use.",
+      "image": "everyday-collection.webp",
+      "products": [
+        "ceramic-mug",
+        "canvas-tote",
+        "linen-notebook",
+        "steel-water-bottle",
+        "desk-lamp",
+        "cotton-cushion",
+        "cotton-t-shirt",
+        "ceramic-planter",
+        "wireless-headphones",
+        "round-sunglasses"
+      ]
+    },
+    {
+      "handle": "home-and-desk",
+      "title": "Home and Desk",
+      "description": "Quiet tools and objects for considered spaces.",
+      "image": "studio-journal.webp",
+      "products": [
+        "ceramic-mug",
+        "linen-notebook",
+        "desk-lamp",
+        "ceramic-planter",
+        "cotton-cushion"
+      ]
+    },
+    {
+      "handle": "soft-goods",
+      "title": "Soft Goods",
+      "description": "Simple cotton and canvas pieces made for repeat use.",
+      "image": "soft-goods-collection.webp",
+      "products": [
+        "canvas-tote",
+        "cotton-t-shirt",
+        "cotton-cushion"
+      ]
+    },
+    {
+      "handle": "on-the-go",
+      "title": "On the Go",
+      "description": "Useful companions for work, errands, and weekends away.",
+      "image": "everyday-collection.webp",
+      "products": [
+        "canvas-tote",
+        "steel-water-bottle",
+        "wireless-headphones",
+        "round-sunglasses"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "handle": "home-and-living",
+      "name": "Home and Living",
+      "description": "Useful pieces for quieter, more considered spaces.",
+      "image": "studio-journal.webp",
+      "products": [
+        "ceramic-mug",
+        "desk-lamp",
+        "cotton-cushion",
+        "ceramic-planter"
+      ]
+    },
+    {
+      "handle": "apparel-and-accessories",
+      "name": "Apparel and Accessories",
+      "description": "Easy pieces designed for everyday wear and carry.",
+      "image": "soft-goods-collection.webp",
+      "products": [
+        "canvas-tote",
+        "cotton-t-shirt",
+        "round-sunglasses"
+      ]
+    },
+    {
+      "handle": "technology",
+      "name": "Technology",
+      "description": "Simple tools that fit naturally into daily routines.",
+      "image": "wireless-headphones.webp",
+      "products": [
+        "wireless-headphones",
+        "desk-lamp"
+      ]
+    }
+  ],
+  "vendors": [
+    {
+      "handle": "everyday-studio",
+      "name": "Everyday Studio",
+      "description": "Independent makers of durable home and travel goods.",
+      "image": "everyday-collection.webp",
+      "products": [
+        "ceramic-mug",
+        "steel-water-bottle",
+        "ceramic-planter"
+      ]
+    },
+    {
+      "handle": "common-form",
+      "name": "Common Form",
+      "description": "Natural materials shaped into useful everyday pieces.",
+      "image": "soft-goods-collection.webp",
+      "products": [
+        "canvas-tote",
+        "linen-notebook",
+        "cotton-cushion",
+        "cotton-t-shirt",
+        "round-sunglasses"
+      ]
+    },
+    {
+      "handle": "field-office",
+      "name": "Field Office",
+      "description": "Considered tools for work, sound, and light.",
+      "image": "studio-journal.webp",
+      "products": [
+        "desk-lamp",
+        "wireless-headphones"
+      ]
+    }
+  ],
+  "brands": [
+    {
+      "handle": "field-notes",
+      "name": "Field Notes",
+      "description": "Quiet essentials with useful details.",
+      "image": "studio-journal.webp",
+      "products": [
+        "linen-notebook",
+        "desk-lamp",
+        "wireless-headphones"
+      ]
+    },
+    {
+      "handle": "daily-form",
+      "name": "Daily Form",
+      "description": "Uncomplicated goods designed to earn their place.",
+      "image": "everyday-collection.webp",
+      "products": [
+        "ceramic-mug",
+        "canvas-tote",
+        "steel-water-bottle",
+        "cotton-cushion",
+        "cotton-t-shirt",
+        "ceramic-planter",
+        "round-sunglasses"
+      ]
+    }
+  ],
+  "blog_posts": [
+    {
+      "handle": "little-things",
+      "title": "The Little Things",
+      "excerpt": "A few simple ways to make everyday spaces feel calmer and more useful.",
+      "content": "<p>A useful space does not need more objects. It needs better places for the objects already in it.</p><h2>Start with one surface</h2><p>Clear the desk, counter, or shelf you use most. Return only what helps that space do its job, then give each item a natural home.</p><h2>Choose materials that age well</h2><p>Cotton, linen, ceramic, steel, and wood become more familiar with use. Small marks can become part of the object instead of making it feel disposable.</p><p>The result is simple: fewer interruptions, easier routines, and a room that feels like your own.</p>",
+      "author_name": "Everyday Studio",
+      "image": "studio-journal.webp"
+    },
+    {
+      "handle": "a-better-morning-desk",
+      "title": "A Better Morning Desk",
+      "excerpt": "Build a workspace that is ready before you are.",
+      "content": "<p>A good morning setup reduces the number of choices between sitting down and beginning.</p><h2>Keep the first task visible</h2><p>Leave a notebook open to the next clear action. Put the tools you need within reach and move everything else out of the working area.</p><h2>Let the light move</h2><p>A small adjustable lamp is easier to live with than a fixed pool of light. Aim it at the page, soften it against a wall, or turn it away when the day brightens.</p>",
+      "author_name": "Mara Ellis",
+      "image": "studio-journal.webp"
+    },
+    {
+      "handle": "objects-that-travel-well",
+      "title": "Objects That Travel Well",
+      "excerpt": "What makes an everyday object easy to take anywhere.",
+      "content": "<p>The best travel companions are light, dependable, and easy to understand without instructions.</p><p>A bag should fold, a bottle should seal, and headphones should remain comfortable after an hour. Those practical details matter more than novelty.</p><p>Choose fewer pieces, check them before leaving, and let the rest of the trip stay open.</p>",
+      "author_name": "Noah Hart",
+      "image": "everyday-collection.webp"
+    }
+  ],
+  "pages": [
+    {
+      "handle": "about",
+      "title": "About Us",
+      "content": "<p>Everyday Goods is a fictional store created to demonstrate the Tringify Starter Theme.</p><p>Its catalog brings together useful objects with clear materials, honest descriptions, and room to breathe. Replace this content with your own story, products, and point of view.</p><h2>A starting point, not a finished identity</h2><p>The Starter Theme keeps the structure practical and the visual system restrained so developers and merchants can build something distinct without fighting hidden assumptions.</p>"
+    },
+    {
+      "handle": "contact",
+      "title": "Contact",
+      "content": "<p>Questions about an order or product? Use your store's customer support details here.</p><p>Email: hello@example.com<br>Monday to Friday, 9:00 a.m.–5:00 p.m.</p>"
+    }
+  ],
+  "menus": [
+    {
+      "handle": "main",
+      "items": [
+        {
+          "title": "Home",
+          "target": "home"
+        },
+        {
+          "title": "Shop",
+          "target": "shop",
+          "children": [
+            {
+              "title": "Everyday Essentials",
+              "target": "collection:everyday-essentials"
+            },
+            {
+              "title": "Explore",
+              "target": "label",
+              "children": [
+                {
+                  "title": "Soft Goods",
+                  "target": "collection:soft-goods"
+                },
+                {
+                  "title": "Ceramic Mug",
+                  "target": "product:ceramic-mug",
+                  "open_in_new_tab": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Journal",
+          "target": "blog"
+        },
+        {
+          "title": "About",
+          "target": "page:about"
+        }
+      ]
+    },
+    {
+      "handle": "footer",
+      "items": [
+        {
+          "title": "About Us",
+          "target": "page:about"
+        },
+        {
+          "title": "Contact",
+          "target": "page:contact"
+        },
+        {
+          "title": "Journal",
+          "target": "blog"
+        }
+      ]
+    }
+  ],
+  "cart": [
+    {
+      "product": "ceramic-mug",
+      "quantity": 2
+    },
+    {
+      "product": "canvas-tote",
+      "quantity": 1
+    },
+    {
+      "product": "linen-notebook",
+      "quantity": 3
+    },
+    {
+      "product": "steel-water-bottle",
+      "variant": "750 ml",
+      "quantity": 1
+    },
+    {
+      "product": "wireless-headphones",
+      "quantity": 1
+    },
+    {
+      "product": "round-sunglasses",
+      "quantity": 1
+    }
+  ],
+  "search_seeds": [
+    "Everyday",
+    "Home",
+    "Travel"
+  ]
+}

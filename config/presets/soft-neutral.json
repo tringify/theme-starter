@@ -1,0 +1,41 @@
+{
+  "name": "Soft Neutral",
+  "settings": {
+    "schemes": [
+      {
+        "id": "default",
+        "label": "Soft Neutral",
+        "colors": {
+          "accent": "#191919",
+          "bg": "#fbfaf7",
+          "border": "#dedbd4",
+          "btn": "#191919",
+          "btn-text": "#ffffff",
+          "text": "#191919",
+          "text-muted": "#66625c"
+        }
+      },
+      {
+        "id": "dark",
+        "label": "Deep Neutral",
+        "colors": {
+          "accent": "#fbfaf7",
+          "bg": "#191919",
+          "border": "#37342f",
+          "btn": "#fbfaf7",
+          "btn-text": "#191919",
+          "text": "#fbfaf7",
+          "text-muted": "#aaa49a"
+        }
+      }
+    ],
+    "body_font": "system-sans",
+    "heading_font": "system-sans",
+    "body_size": 16,
+    "content_width": 1248,
+    "section_spacing": 80,
+    "corner_radius": 8,
+    "button_radius": 8,
+    "content_link_style": "underline"
+  }
+}

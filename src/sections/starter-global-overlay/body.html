@@ -1,0 +1,73 @@
+{% if form_notice %}
+  <aside
+    class="starter starter-flash{% if form_notice.success %} starter-flash--success{% else %} starter-flash--error{% endif %}"
+    aria-live="polite"
+  >
+    <p>{{ form_notice.message }}</p>
+  </aside>
+{% endif %}
+<aside class="starter starter-flash starter-feedback" data-starter-feedback hidden
+  data-cart-add="{{ 'added_to_cart' | t }}"
+  data-cart-update="{{ 'cart_updated' | t }}"
+  data-wishlist-update="{{ 'wishlist_updated' | t }}">
+  <div>
+    <p data-starter-feedback-message role="status" aria-live="polite" aria-atomic="true"></p>
+    <a data-starter-feedback-cart href="{{ routes.cart_url }}" hidden>{{ 'view_cart' | t }}</a>
+    <a data-starter-feedback-wishlist href="{{ routes.wishlist_url }}" hidden>{{ 'view_wishlist' | t }}</a>
+  </div>
+  <button type="button" class="starter-feedback__dismiss" data-starter-feedback-dismiss aria-label="{{ 'dismiss' | t }}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+  </button>
+</aside>
+<script>
+(function () {
+  "use strict";
+  var ready = "data-starter-feedback-ready";
+  if (document.documentElement.hasAttribute(ready)) return;
+  document.documentElement.setAttribute(ready, "");
+
+  // Preserve the shopper's variant and quantity while using the confirmed
+  // saved state returned by the hosted action for this product-only form.
+  document.addEventListener("tf:action-success", function (event) {
+    var detail = event.detail;
+    if (!detail || detail.action !== "wishlist_toggle" || !detail.form) return;
+    var button = detail.form.querySelector("[data-starter-wishlist-toggle]");
+    var result = detail.result;
+    var state = result && result.product_session_state && result.product_session_state.product;
+    var saved = state && state.wishlist && state.wishlist.direct_saved;
+    if (!button || typeof saved !== "boolean") return;
+    button.textContent = button.getAttribute(saved ? "data-remove-label" : "data-save-label");
+  });
+
+  // The hosted bridge owns the request. This listener only presents its result.
+  document.addEventListener("tf:action-done", function (event) {
+    var action = event.detail && event.detail.action;
+    var cart = action === "cart_add" || action === "cart_update";
+    var wishlist = action === "wishlist_add" || action === "wishlist_remove" || action === "wishlist_toggle";
+    if (!cart && !wishlist) return;
+    var notice = document.querySelector("[data-starter-feedback]");
+    if (!notice) return;
+    var message = notice.querySelector("[data-starter-feedback-message]");
+    var key = action === "cart_add" ? "data-cart-add" : cart ? "data-cart-update" : "data-wishlist-update";
+    message.textContent = notice.getAttribute(key);
+    notice.querySelector("[data-starter-feedback-cart]").hidden = !cart;
+    notice.querySelector("[data-starter-feedback-wishlist]").hidden = !wishlist;
+    notice.hidden = false;
+  });
+
+  document.addEventListener("tf:action-start", function () {
+    var notice = document.querySelector("[data-starter-feedback]");
+    if (notice) notice.hidden = true;
+  });
+
+  document.addEventListener("click", function (event) {
+    var dismiss = event.target.closest && event.target.closest("[data-starter-feedback-dismiss]");
+    if (dismiss) dismiss.closest("[data-starter-feedback]").hidden = true;
+  });
+})();
+</script>
+{% if form_error %}
+  <aside class="starter starter-flash starter-flash--error" role="alert">
+    <p>{{ form_error.message }}</p>
+  </aside>
+{% endif %}

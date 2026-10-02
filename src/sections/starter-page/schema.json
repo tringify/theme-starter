@@ -1,0 +1,16 @@
+{
+  "name": "starter-page",
+  "kind": "section",
+  "ctx_needs": ["page"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Information",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    }
+  ]
+}

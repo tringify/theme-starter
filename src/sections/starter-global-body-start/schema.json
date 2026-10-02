@@ -1,0 +1,143 @@
+{
+  "name": "starter-global-body-start",
+  "kind": "section",
+  "ctx_needs": [
+    "shop",
+    "routes",
+    "cart.item_count"
+  ],
+  "settings": [
+    {
+      "id": "scheme",
+      "type": "color_scheme",
+      "default": "",
+      "editor": {
+        "label": "colorScheme",
+        "group": "design"
+      }
+    },
+    {
+      "id": "menu",
+      "type": "menu",
+      "default": "main",
+      "editor": {
+        "label": "menu",
+        "group": "content"
+      }
+    },
+    {
+      "id": "show_announcement",
+      "type": "checkbox",
+      "default": false,
+      "editor": {
+        "label": "showAnnouncement",
+        "group": "content"
+      }
+    },
+    {
+      "id": "announcement_text",
+      "type": "text",
+      "default": "",
+      "editor": {
+        "label": "announcementText",
+        "group": "content"
+      }
+    },
+    {
+      "id": "show_search",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showSearch",
+        "group": "content"
+      }
+    },
+    {
+      "id": "show_account",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showAccount",
+        "group": "content"
+      }
+    },
+    {
+      "id": "sticky_header",
+      "type": "checkbox",
+      "default": false,
+      "editor": {
+        "label": "stickyHeader",
+        "group": "design"
+      }
+    },
+    {
+      "id": "logo",
+      "type": "image",
+      "default": "",
+      "editor": {
+        "label": "Logo",
+        "group": "content"
+      }
+    },
+    {
+      "id": "logo_width",
+      "type": "range",
+      "default": 144,
+      "editor": {
+        "label": "Logo Width",
+        "group": "design"
+      },
+      "min": 64,
+      "max": 240,
+      "step": 8,
+      "unit": "px"
+    },
+    {
+      "id": "navigation_layout",
+      "type": "select",
+      "default": "drawer",
+      "editor": {
+        "label": "Desktop Navigation",
+        "group": "design"
+      },
+      "options": [
+        {
+          "value": "inline",
+          "label": "Inline Links"
+        },
+        {
+          "value": "drawer",
+          "label": "Menu Icon"
+        }
+      ]
+    },
+    {
+      "id": "brand_alignment",
+      "type": "select",
+      "default": "start",
+      "editor": {
+        "label": "Brand Alignment",
+        "group": "design"
+      },
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ]
+    },
+    {
+      "id": "show_cart_count",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "Show Cart Count",
+        "group": "content"
+      }
+    }
+  ]
+}

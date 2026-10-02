@@ -1,0 +1,1061 @@
+<style>
+:where(.starter) {
+  --starter-page: min(100% - clamp(2rem, 6vw, 6rem), var(--starter-content-width, 78rem));
+  --starter-space: clamp(2rem, 5vw, var(--starter-section-spacing, 5rem));
+  --starter-gap: clamp(1rem, 2.4vw, 2rem);
+  --starter-radius: var(--starter-corner-radius, 0.25rem);
+  --starter-shadow: 0 1rem 3rem color-mix(in srgb, var(--text) 8%, transparent);
+  box-sizing: border-box;
+  color: var(--text, #111111);
+  background: var(--bg, #ffffff);
+  font-family: var(--tf-font-body_font, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: var(--starter-body-size, 1rem);
+  line-height: 1.55;
+}
+:where(.starter *),
+:where(.starter *::before),
+:where(.starter *::after) {
+  box-sizing: border-box;
+}
+:where(.starter img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+:where(.starter a) {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+:where(.starter button),
+:where(.starter input),
+:where(.starter textarea),
+:where(.starter select) {
+  font: inherit;
+}
+:where(.starter button),
+:where(.starter summary) {
+  -webkit-tap-highlight-color: transparent;
+}
+:where(.starter :focus-visible) {
+  outline: 2px solid var(--accent, #111111);
+  outline-offset: 3px;
+}
+:where(.starter [hidden]) {
+  display: none !important;
+}
+.starter-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.starter-shell {
+  width: var(--starter-page);
+  margin-inline: auto;
+}
+.starter-section {
+  padding-block: var(--starter-space);
+}
+.starter-section--compact {
+  padding-block: clamp(2rem, 4vw, 4rem);
+}
+.starter-section--border {
+  border-block-start: 1px solid var(--border, #e5e5e5);
+}
+.starter-stack {
+  display: grid;
+  gap: var(--starter-gap);
+}
+.starter-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+.starter-split {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.starter-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--starter-columns, 4), minmax(0, 1fr));
+  gap: var(--starter-gap);
+}
+.starter-grid--entities {
+  --starter-columns: 3;
+}
+.starter-copy {
+  max-width: 42rem;
+}
+.starter-richtext {
+  max-width: 46rem;
+}
+.starter-richtext > :first-child {
+  margin-block-start: 0;
+}
+.starter-richtext > :last-child {
+  margin-block-end: 0;
+}
+.starter-richtext img {
+  margin-block: 2rem;
+}
+.starter-eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted, #686868);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.starter-heading {
+  font-family: var(--tf-font-heading_font, inherit);
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4.75rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.starter-heading--medium {
+  font-size: clamp(1.75rem, 3.6vw, 3rem);
+  line-height: 1.06;
+}
+.starter-heading--small {
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  line-height: 1.15;
+}
+.starter-subheading {
+  max-width: 42rem;
+  margin: 1rem 0 0;
+  color: var(--text-muted, #686868);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+}
+.starter-muted {
+  color: var(--text-muted, #686868);
+}
+.starter-empty {
+  padding: 2rem;
+  border: 1px solid var(--border, #e5e5e5);
+  text-align: center;
+}
+.starter-count {
+  display: inline-flex;
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 7%, var(--bg));
+  font-size: 0.75rem;
+}
+
+.starter-button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.35rem;
+  border: 1px solid var(--btn, #111111);
+  border-radius: var(--starter-radius);
+  background: var(--btn, #111111);
+  color: var(--btn-text, #ffffff);
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+}
+.starter-button:hover {
+  filter: brightness(0.92);
+}
+.starter-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.starter-button--secondary {
+  border-color: var(--border, #d8d8d8);
+  background: transparent;
+  color: var(--text, #111111);
+}
+.starter-button--text {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text, #111111);
+  text-decoration: underline;
+}
+.starter-field {
+  display: grid;
+  gap: 0.45rem;
+}
+.starter-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.starter-input,
+.starter-select,
+.starter-textarea {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--border, #cfcfcf);
+  border-radius: var(--starter-radius);
+  background: var(--bg, #ffffff);
+  color: var(--text, #111111);
+}
+.starter-textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.starter-card {
+  min-width: 0;
+}
+.starter-card__link {
+  display: block;
+  text-decoration: none;
+}
+.starter-card__media {
+  position: relative;
+  aspect-ratio: var(--starter-card-ratio, 4 / 5);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text) 4%, var(--bg));
+}
+.starter-card__media img,
+.starter-card__media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+.starter-card__link:hover .starter-card__media img {
+  transform: scale(1.02);
+}
+.starter-card__body {
+  display: grid;
+  gap: 0.25rem;
+  padding-block: 0.9rem 0.25rem;
+}
+.starter-card__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 580;
+  line-height: 1.35;
+}
+.starter-card__meta {
+  margin: 0;
+  color: var(--text-muted, #686868);
+  font-size: 0.8125rem;
+}
+.starter-card__price {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+}
+.starter-card__price del {
+  margin-inline-end: 0.4rem;
+  color: var(--text-muted, #686868);
+}
+.starter-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-block-start: 3rem;
+}
+
+.starter-header {
+  position: relative;
+  z-index: 30;
+  border-block-end: 1px solid var(--border, #e5e5e5);
+}
+.starter-header--sticky {
+  position: sticky;
+  inset-block-start: 0;
+}
+.starter-announcement {
+  padding: 0.55rem 1rem;
+  background: var(--btn, #111111);
+  color: var(--btn-text, #ffffff);
+  font-size: 0.75rem;
+  text-align: center;
+}
+.starter-header__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 4.75rem;
+  gap: 1rem;
+}
+.starter-header__brand {
+  min-width: 0;
+  font-family: var(--tf-font-heading_font, inherit);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.starter-header__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 2vw, 2rem);
+}
+.starter-header__nav a,
+.starter-header__actions a {
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+.starter-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+.starter-header__menu {
+  display: none;
+}
+.starter-header__cart,
+.starter-header__menu > summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  gap: 0.5rem;
+}
+.starter-header__icon svg,
+.starter-header__menu > summary svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.starter-footer {
+  border-block-start: 1px solid var(--border, #e5e5e5);
+}
+.starter-footer__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(12rem, 0.8fr) minmax(
+      16rem,
+      1fr
+    );
+  gap: clamp(2rem, 6vw, 6rem);
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+.starter-footer__brand {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.starter-footer__nav {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+}
+.starter-footer__nav a {
+  width: fit-content;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+.starter-footer__form {
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+}
+.starter-footer__form .starter-field {
+  flex: 1;
+}
+.starter-footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.25rem;
+  border-block-start: 1px solid var(--border, #e5e5e5);
+  font-size: 0.75rem;
+  color: var(--text-muted, #686868);
+}
+.starter-footer__policies {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem 1rem;
+}
+
+@media (max-width: 900px) {
+  .starter-grid {
+    --starter-columns: 2 !important;
+  }
+  .starter-grid--entities {
+    --starter-columns: 2 !important;
+  }
+  .starter-header__row {
+    grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+    gap: 0.5rem;
+  }
+  .starter-header__nav {
+    display: none;
+  }
+  .starter-header__actions > a:not(.starter-header__cart) {
+    display: none;
+  }
+  .starter-header__menu {
+    display: block;
+    position: relative;
+  }
+  .starter-header__menu > summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  .starter-header__menu > summary::-webkit-details-marker {
+    display: none;
+  }
+  .starter-header__menu nav {
+    position: absolute;
+    inset-block-start: calc(100% + 1rem);
+    inset-inline-start: 0;
+    display: grid;
+    width: min(18rem, calc(100vw - 2rem));
+    gap: 0;
+    padding: 0.5rem;
+    border: 1px solid var(--border, #e5e5e5);
+    background: var(--bg, #ffffff);
+    box-shadow: var(--starter-shadow);
+  }
+  .starter-header__menu nav a {
+    padding: 0.75rem;
+    text-decoration: none;
+  }
+  .starter-footer__main {
+    grid-template-columns: 1fr 1fr;
+  }
+  .starter-footer__newsletter {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 700px) {
+  :where(.starter) {
+    --starter-page: min(100% - 1.5rem, var(--starter-content-width, 78rem));
+  }
+  .starter-section {
+    padding-block: clamp(2rem, 10vw, var(--starter-section-spacing, 5rem));
+  }
+  .starter-grid {
+    gap: 1rem 0.75rem;
+  }
+  .starter-grid--entities {
+    --starter-columns: 1 !important;
+  }
+  .starter-header__actions > a:not(.starter-header__cart) {
+    display: none;
+  }
+  .starter-header__row {
+    min-height: 4rem;
+  }
+  .starter-split {
+    align-items: start;
+    flex-direction: column;
+  }
+  .starter-footer__main {
+    grid-template-columns: 1fr;
+  }
+  .starter-footer__newsletter {
+    grid-column: auto;
+  }
+  .starter-footer__form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .starter-footer__bottom {
+    flex-direction: column;
+  }
+  .starter-footer__policies {
+    justify-content: flex-start;
+  }
+  .starter-hero__grid,
+  .starter-image-copy__grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .starter-hero__content {
+    padding: 3.5rem 0;
+  }
+  .starter-hero__media,
+  .starter-image-copy__media {
+    min-height: min(32rem, 110vw);
+  }
+  .starter-image-copy__content {
+    padding: 3.5rem 0;
+  }
+  .starter-image-copy--right .starter-image-copy__media {
+    order: initial;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .starter-card__media img {
+    transition: none;
+  }
+}
+
+.starter-button { border-radius: var(--starter-button-radius, 0.25rem); }
+.starter-header__icon { position: relative; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 2.75rem; width: 2.75rem; height: 2.75rem; }
+.starter-header__cart .starter-count { position: absolute; inset-block-start: 0; inset-inline-end: -0.3rem; font-size: 0.65rem; min-width: 1.2rem; height: 1.2rem; padding-inline: 0.25rem; }
+.starter-header__brand img { width: 100%; height: auto; max-height: 3.5rem; object-fit: contain; object-position: left center; }
+.starter-header__menu > summary { width: 2.75rem; list-style: none; cursor: pointer; }
+.starter-header__menu > summary::-webkit-details-marker { display: none; }
+.starter-header__menu[open] > summary { background: color-mix(in srgb, var(--text) 5%, var(--bg)); }
+.starter-header__menu nav { max-height: min(65svh, 36rem); overflow-y: auto; }
+.starter-header__menu nav a:focus-visible { outline-offset: -3px; }
+.starter-header--brand-center .starter-header__brand { text-align: center; }
+.starter-header--brand-center .starter-header__brand img { margin-inline: auto; object-position: center; }
+@media (min-width: 901px) {
+  .starter-header--drawer .starter-header__row { grid-template-columns: 2.75rem minmax(0, 1fr) auto; }
+  .starter-header--drawer .starter-header__menu { display: block; position: relative; }
+  .starter-header--drawer .starter-header__nav { display: none; }
+  .starter-header--drawer .starter-header__menu nav { position: absolute; inset-block-start: calc(100% + 1rem); inset-inline-start: 0; display: grid; width: 20rem; padding: 0.5rem; border: 1px solid var(--border); background: var(--bg); box-shadow: var(--starter-shadow); }
+  .starter-header--drawer .starter-header__menu nav a { padding: 0.75rem; text-decoration: none; }
+  .starter-header--inline.starter-header--brand-center .starter-header__brand { grid-column: 2; grid-row: 1; }
+  .starter-header--inline.starter-header--brand-center .starter-header__nav { grid-column: 1; grid-row: 1; justify-content: start; }
+}
+
+
+.starter-hero__media,
+.starter-image-copy__media { min-width: 0; width: 100%; }
+
+.starter.starter-product {
+  padding-block: clamp(1.5rem, 3vw, 3rem) var(--starter-space);
+}
+.starter-product__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.75fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+}
+.starter-product__gallery {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+.starter-product__gallery figure {
+  margin: 0;
+  aspect-ratio: 1;
+  max-height: min(40rem, 75svh);
+  overflow: hidden;
+  background: var(--bg);
+}
+.starter-product__gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.starter-product__gallery--portrait figure {
+  aspect-ratio: 4 / 5;
+}
+.starter-product__gallery--landscape figure {
+  aspect-ratio: 4 / 3;
+}
+.starter-product__gallery figure:only-child {
+  grid-column: 1 / -1;
+}
+.starter-product__gallery .starter-product__placeholder {
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--text) 3%, var(--bg));
+}
+.starter-product__placeholder svg {
+  width: 45%;
+  height: auto;
+  opacity: 0.3;
+}
+.starter-product__gallery--cover img {
+  object-fit: cover;
+}
+.starter-product--grid .starter-product__gallery {
+  grid-template-columns: 1fr 1fr;
+}
+.starter-product--grid .starter-product__gallery figure:first-child {
+  grid-column: 1 / -1;
+}
+.starter-product__details {
+  position: sticky;
+  inset-block-start: 2rem;
+  min-width: 0;
+  padding-block-start: 0.75rem;
+}
+.starter-product__details h1 {
+  font-size: clamp(1.75rem, 2.7vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+.starter-product__intro {
+  color: var(--text-muted, #686868);
+  margin-block: 1.25rem;
+}
+.starter-product__price {
+  display: flex;
+  gap: 0.75rem;
+  margin-block: 1rem;
+  flex-wrap: wrap;
+  align-items: baseline;
+  font-size: 1.25rem;
+  font-weight: 550;
+}
+.starter-product__price del {
+  color: var(--text-muted);
+}
+.starter-product__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: -0.5rem 0 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+.starter-product__rating strong {
+  color: var(--text);
+}
+.starter-product__options {
+  display: grid;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  border-block-start: 1px solid var(--border);
+}
+.starter-product__swatches {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+.starter-product__swatches legend {
+  margin-block-end: 0.5rem;
+}
+.starter-product__swatch-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.starter-product__swatch {
+  cursor: pointer;
+}
+.starter-product__swatch-chip {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.75rem 0.45rem 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: var(--starter-radius);
+}
+.starter-product__swatch-chip i,
+.starter-product__swatch-chip img {
+  display: block;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  border-radius: 50%;
+  background: var(--bg);
+  object-fit: cover;
+}
+.starter-product__swatch input:checked + .starter-product__swatch-chip {
+  border-color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--text);
+}
+.starter-product__swatch input:disabled + .starter-product__swatch-chip {
+  opacity: 0.42;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+.starter-product__swatch input:focus-visible + .starter-product__swatch-chip {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.starter-product__buy {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  align-items: end;
+  gap: 0.75rem;
+  margin-block-start: 1.5rem;
+}
+.starter-product__add,
+.starter-product__wishlist .starter-button {
+  width: 100%;
+}
+.starter-product__buy-now {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+.starter-product__wishlist {
+  margin-block-start: 0.75rem;
+}
+.starter-product__unavailable {
+  padding: 1rem;
+  background: color-mix(in srgb, var(--text) 5%, var(--bg));
+}
+.starter-product__accordion {
+  margin-block-start: 2rem;
+  border-block: 1px solid var(--border);
+}
+.starter-product__accordion summary {
+  padding-block: 1rem;
+  cursor: pointer;
+  font-weight: 620;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  list-style: none;
+}
+.starter-product__accordion summary::-webkit-details-marker {
+  display: none;
+}
+.starter-product__accordion summary::after {
+  content: "+";
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+.starter-product__accordion[open] summary::after {
+  content: "−";
+}
+.starter-product__accordion > div {
+  padding-block-end: 1.25rem;
+}
+@media (max-width: 800px) {
+  .starter.starter-product {
+    padding-block-start: 1rem;
+  }
+  .starter-product__layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .starter-product__details {
+    position: static;
+  }
+  .starter-product .starter-product__gallery {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    padding-block-end: 0.5rem;
+  }
+  .starter-product .starter-product__gallery figure {
+    flex: 0 0 88%;
+    scroll-snap-align: start;
+    block-size: min(90vw, 25rem, 48svh);
+    max-height: none;
+  }
+  .starter-product .starter-product__gallery figure:only-child {
+    flex-basis: 100%;
+  }
+  .starter-product__buy {
+    grid-template-columns: 6rem minmax(0, 1fr);
+  }
+}
+.starter-gift-recipient { border: 1px solid currentColor; padding: 16px; display: grid; gap: 12px; width: 100%; grid-column: 1 / -1; }
+.starter-product__buy:has(.starter-gift-recipient) { flex-wrap: wrap; }
+.starter-gift-recipient { flex-basis: 100%; min-width: 0; }
+.starter-gift-recipient > label { display: flex; align-items: center; gap: 8px; }
+.starter-gift-recipient__fields { display: none; gap: 12px; }
+.starter-gift-recipient:has(input[value="true"]:checked) .starter-gift-recipient__fields { display: grid; }
+</style>
+<main class="starter starter-section starter-product starter-product--{{ settings.gallery_layout }}">
+  <div class="starter-shell starter-product__layout">
+    {% if product %}
+      <div class="starter-product__gallery starter-product__gallery--{{ settings.image_fit }} starter-product__gallery--{{ settings.image_ratio | default: 'square' }}" role="region" aria-label="{{ 'product_images' | t }}" tabindex="0">
+        {% for image in product.images %}
+          <figure>
+            <img
+              src="{{ image.url | image_url: width: 1200 }}"
+              alt="{{ image.alt_text | default: product.title }}"
+
+             srcset="{{ image.url | image_srcset: max: 2048 }}" sizes="(min-width: 801px) calc(min((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(2rem, 4vw, 4rem)) * 0.605263158, min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(2rem, 4vw, 4rem) - 20rem) * {% if settings.gallery_layout == 'grid' and forloop.first == false %}0.5{% else %}1{% endif %}{% if settings.gallery_layout == 'grid' and forloop.first == false %} - 0.5rem{% endif %}), (min-width: 701px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px)) * {% if product.images.size == 1 %}1{% else %}0.88{% endif %}), calc((min(100vw - 1.5rem, {{ theme.settings.content_width | default: 1248 }}px)) * {% if product.images.size == 1 %}1{% else %}0.88{% endif %})" {{ image.url | image_loading }}>
+          </figure>
+        {% else %}
+          <figure class="starter-product__placeholder" aria-label="{{ 'image_unavailable' | t }}">{{ 'product-1' | placeholder_svg }}</figure>
+        {% endfor %}
+      </div>
+      <div class="starter-product__details">
+        {% if settings.show_vendor and product.vendor %}
+          <p class="starter-eyebrow">{{ product.vendor }}</p>
+        {% endif %}
+        <h1 class="starter-heading starter-heading--medium">{{ product.title }}</h1>
+        {% assign price = product.price -%}
+        {%- assign available = product.available_for_sale -%}
+        {%- assign quantity_max = product.quantity_max %}
+        {% if product.display_variant -%}
+          {%- assign price = product.display_variant.price -%}
+          {%- assign available = product.display_variant.available_for_sale -%}
+          {%- assign quantity_max = product.display_variant.quantity_max -%}
+        {%- endif %}
+        {% if price %}
+          <p class="starter-product__price">
+            {% if price.on_sale -%}
+              <del aria-label="{{ 'regular_price' | t }}">{{ price.regular | money: isolate: true }}</del>
+            {%- endif -%}
+            <span>{{ price.current | money: isolate: true }}</span>
+          </p>
+        {% endif %}
+        {% if product.rating and product.rating.count > 0 %}
+          <p
+            class="starter-product__rating"
+            aria-label="{{ product.rating.average }} out of 5, {{ product.rating.count }} {{ 'reviews' | t }}"
+          >
+            <span aria-hidden="true">★</span>
+            <strong>{{ product.rating.average }}</strong>
+            <span
+              >· {{ product.rating.count }}
+              {{ 'reviews' | t -}}
+            </span>
+          </p>
+        {% endif %}
+        {% if product.short_description %}
+          <div class="starter-product__intro">{{ product.short_description }}</div>
+        {% endif %}
+
+        {% if product.type == 'variable' %}
+          <form class="starter-product__options" method="get" action="{{ product.url }}">
+            {% for option in product.options -%}
+              {% if option.sub_type == 'swatch' %}
+                <fieldset class="starter-product__swatches">
+                  <legend class="starter-label">{{ option.attribute_name }}</legend>
+                  <div class="starter-product__swatch-list">
+                    {% for value in option.values %}
+                      <label class="starter-product__swatch">
+                        <input
+                          class="starter-visually-hidden"
+                          type="radio"
+                          name="{{ option.attribute_slug }}"
+                          value="{{ value.value }}"
+                          {% if value.selected %}
+                            checked
+                          {% endif %}
+                          {% unless value.selectable %}
+                            disabled
+                          {% endunless %}
+                        >
+                        <span class="starter-product__swatch-chip">
+                          {% if value.color != empty %}
+                            <i style="background: {{ value.color }}"></i>
+                          {% elsif value.image_url != empty %}
+                            <img src="{{ value.image_url | image_url: width: 160 }}" alt="" srcset="{{ value.image_url | image_srcset: max: 160 }}" sizes="1.75rem" {{ value.image_url | image_loading }}>
+                          {% else %}
+                            <i></i>
+                          {% endif %}
+                          <span>{{ value.label }}</span>
+                        </span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </fieldset>
+              {% else %}
+                <label class="starter-field"
+                  ><span class="starter-label">{{ option.attribute_name }}</span
+                  ><select class="starter-select" name="{{ option.attribute_slug }}">
+                    <option value="">{{ 'choose' | t }}</option>
+                    {% for value in option.values %}
+                      <option
+                        value="{{ value.value }}"
+                        {% if value.selected %}
+                          selected
+                        {% endif %}
+                        {% unless value.selectable %}
+                          disabled
+                        {% endunless %}
+                      >
+                        {{ value.label }}
+                      </option>
+                    {% endfor %}
+                  </select></label
+                >
+              {% endif %}
+            {%- endfor %}
+            <button class="starter-button starter-button--secondary" type="submit">{{ 'select_options' | t }}</button>
+          </form>
+        {% endif %}
+
+        {% if available %}
+          {% form 'cart_add', class: 'starter-product__buy' %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            {% if product.is_gift_card %}
+              <fieldset class="starter-gift-recipient">
+                <legend>{{ 'gift_card_delivery' | t }}</legend>
+                <label><input type="radio" name="gift_card_send_as_gift" value="false" checked> {{ 'gift_card_for_me' | t }}</label>
+                <label><input type="radio" name="gift_card_send_as_gift" value="true"> {{ 'gift_card_send_as_gift' | t }}</label>
+                <div class="starter-gift-recipient__fields">
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_name' | t }}</span><input class="starter-input" name="gift_card_recipient_name" autocomplete="off" maxlength="255"></label>
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_email' | t }}</span><input class="starter-input" name="gift_card_recipient_email" inputmode="email" autocomplete="off" maxlength="320"></label>
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_phone' | t }}</span><input class="starter-input" name="gift_card_recipient_phone" inputmode="tel" autocomplete="off" maxlength="32"></label>
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_message' | t }}</span><textarea class="starter-input" name="gift_card_recipient_message" rows="3" maxlength="2000"></textarea></label>
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_schedule_utc' | t }}</span><input class="starter-input" name="gift_card_deliver_at" type="datetime-local"></label>
+                  <p>{{ 'gift_card_recipient_hint' | t }}</p>
+                </div>
+              </fieldset>
+            {% endif %}
+            {%- if product.selected_variant -%}
+              <input type="hidden" name="variant_id" value="{{ product.selected_variant.id }}">
+            {%- endif -%}
+            <label class="starter-field"
+              ><span class="starter-label">{{ 'quantity' | t }}</span
+              ><input
+                class="starter-input starter-quantity"
+                name="quantity"
+                type="number"
+                min="1"
+                step="1"
+                value="1"
+                {% if quantity_max %}
+                  max="{{ quantity_max }}"
+                {% endif %}></label
+            ><button
+              class="starter-button starter-product__add"
+              type="submit"
+              {% if product.type == 'variable' and product.selection_complete != true %}
+                disabled
+              {% endif %}
+            >
+              {{ 'add_to_cart' | t }}
+            </button>
+            {% if settings.show_buy_now %}
+              <button class="starter-button starter-button--secondary starter-product__buy-now" type="submit" name="purchase_intent" value="buy_now"{% if product.type == 'variable' and product.selection_complete != true %} disabled{% endif %}>{{ 'buy_now' | t }}</button>
+            {% endif %}
+          {% endform %}
+        {% else %}
+          <p class="starter-product__unavailable">{{ 'unavailable' | t }}</p>
+        {% endif %}
+
+        {% if wishlist.enabled %}
+          {% form 'wishlist_toggle', class: 'starter-product__wishlist' %}
+            <input type="hidden" name="product_id" value="{{ product.id }}"
+            ><button class="starter-button starter-button--secondary" type="submit"
+              data-starter-wishlist-toggle
+              data-save-label="{{ 'add_to_wishlist' | t }}"
+              data-remove-label="{{ 'remove_from_wishlist' | t }}">
+              {% if product.session_state.wishlist.direct_saved -%}
+                {{- 'remove_from_wishlist' | t -}}
+              {%- else -%}
+                {{- 'add_to_wishlist' | t -}}
+              {%- endif %}
+            </button>
+          {% endform %}
+        {% endif %}
+
+        {% assign tax = price.tax_display.current -%}
+        {%- if tax.status == 'estimated' %}
+          <p class="starter-card__meta">{{ 'tax_estimated' | t }}</p>
+        {% endif -%}
+        {%- if tax.status != 'unavailable' and tax.status != 'not_applicable' and tax.primary %}
+          <p class="starter-card__meta">
+            {% if tax.primary.tax_included %}{{ 'tax_included' | t }}{% else %}{{ 'tax_excluded' | t }}{% endif %}
+          </p>
+        {% endif %}
+        {% if product.description %}
+          <details class="starter-product__accordion" open>
+            <summary>{{ 'product_details' | t }}</summary>
+            <div class="starter-richtext">{{ product.description }}</div>
+          </details>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="starter-empty">
+        <h1 class="starter-heading starter-heading--small">{{ 'not_found' | t }}</h1>
+      </div>
+    {% endif %}
+  </div>
+</main>
+{% schema %}
+{
+  "name": "starter-product",
+  "kind": "section",
+  "ctx_needs": [
+    "product",
+    "wishlist"
+  ],
+  "settings": [
+    {
+      "id": "show_buy_now",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showBuyNow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "gallery_layout",
+      "type": "select",
+      "default": "stack",
+      "options": [
+        {
+          "value": "stack",
+          "label": "Stacked"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "editor": {
+        "label": "galleryLayout",
+        "group": "design"
+      }
+    },
+    {
+      "id": "image_fit",
+      "type": "select",
+      "default": "contain",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Show Full Image"
+        },
+        {
+          "value": "cover",
+          "label": "Fill the Frame"
+        }
+      ],
+      "editor": {
+        "label": "imageFit",
+        "group": "design"
+      }
+    },
+    {
+      "id": "image_ratio",
+      "type": "select",
+      "default": "square",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        }
+      ],
+      "editor": {
+        "label": "imageRatio",
+        "group": "design"
+      }
+    },
+    {
+      "id": "show_vendor",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showVendor",
+        "group": "content"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,10 @@
+{
+  "page_type": "login",
+  "sections": [
+    {
+      "position": 0,
+      "settings": {},
+      "type": "starter-login"
+    }
+  ]
+}

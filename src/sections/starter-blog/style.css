@@ -1,0 +1,14 @@
+.starter-article__header {
+  max-width: 58rem;
+  margin-block-end: 3rem;
+}
+.starter-article__hero {
+  width: 100%;
+  max-height: 46rem;
+  object-fit: cover;
+  margin-block-end: clamp(2.5rem, 6vw, 5rem);
+}
+.starter-article__content {
+  margin-inline: auto;
+  font-size: 1.05rem;
+}

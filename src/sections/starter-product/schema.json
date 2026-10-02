@@ -1,0 +1,86 @@
+{
+  "name": "starter-product",
+  "kind": "section",
+  "ctx_needs": [
+    "product",
+    "wishlist"
+  ],
+  "settings": [
+    {
+      "id": "show_buy_now",
+      "type": "checkbox",
+      "default": true,
+      "editor": {"label": "showBuyNow", "group": "content"}
+    },
+    {
+      "id": "gallery_layout",
+      "type": "select",
+      "default": "stack",
+      "options": [
+        {
+          "value": "stack",
+          "label": "Stacked"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "editor": {
+        "label": "galleryLayout",
+        "group": "design"
+      }
+    },
+    {
+      "id": "image_fit",
+      "type": "select",
+      "default": "contain",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Show Full Image"
+        },
+        {
+          "value": "cover",
+          "label": "Fill the Frame"
+        }
+      ],
+      "editor": {
+        "label": "imageFit",
+        "group": "design"
+      }
+    },
+    {
+      "id": "image_ratio",
+      "type": "select",
+      "default": "square",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        }
+      ],
+      "editor": {
+        "label": "imageRatio",
+        "group": "design"
+      }
+    },
+    {
+      "id": "show_vendor",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showVendor",
+        "group": "content"
+      }
+    }
+  ]
+}

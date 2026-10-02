@@ -1,0 +1,8 @@
+.starter-content-blocks__inner { display: flex; flex-direction: column; align-items: start; gap: 1.25rem; }
+.starter-content-blocks__inner--reading { max-width: 46rem; }
+.starter-content-blocks--center { text-align: center; }
+.starter-content-blocks--center .starter-content-blocks__inner { margin-inline: auto; align-items: center; }
+.starter-content-blocks__inner > [data-tf-block-id] { max-width: 100%; }
+.starter-content-image { margin: 0; }
+.starter-content-image img { width: 100%; height: auto; object-fit: contain; border-radius: var(--starter-radius); }
+.starter-content-image figcaption { margin-block-start: 0.75rem; font-size: 0.875rem; }

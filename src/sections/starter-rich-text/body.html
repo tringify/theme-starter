@@ -1,0 +1,14 @@
+<section class="{% if settings.scheme != empty %}tf-scheme-{{ settings.scheme }} {% endif %}starter starter-section starter-section--border starter-text-section starter-text-section--{{ settings.alignment }}">
+  <div class="starter-shell starter-text-section__inner">
+    {% if settings.eyebrow %}
+      <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+    {% endif %}
+    <h2 class="starter-heading starter-heading--medium">{{ settings.heading }}</h2>
+    <div class="starter-subheading">{{ settings.text }}</div>
+    {% if settings.button_label -%}
+      <a class="starter-button" href="{{ settings.button_url | default: routes.shop_url }}">
+        {{- settings.button_label -}}
+      </a>
+    {%- endif %}
+  </div>
+</section>

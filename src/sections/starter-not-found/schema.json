@@ -1,0 +1,16 @@
+{
+  "name": "starter-not-found",
+  "kind": "section",
+  "ctx_needs": ["shop", "routes"],
+  "settings": [
+    {
+      "id": "message",
+      "type": "textarea",
+      "default": "We are preparing something thoughtful. Please check back soon.",
+      "editor": {
+        "label": "notFoundMessage",
+        "group": "content"
+      }
+    }
+  ]
+}

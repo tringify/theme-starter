@@ -1,0 +1,87 @@
+{
+  "name": "starter-content-blocks",
+  "kind": "section",
+  "icon": "text",
+  "settings": [
+    {
+      "id": "scheme",
+      "type": "color_scheme",
+      "default": "",
+      "editor": {
+        "label": "Color Scheme",
+        "group": "design"
+      }
+    },
+    {
+      "id": "alignment",
+      "type": "select",
+      "default": "center",
+      "editor": {
+        "label": "Text Alignment",
+        "group": "design"
+      },
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ]
+    },
+    {
+      "id": "width",
+      "type": "select",
+      "default": "reading",
+      "editor": {
+        "label": "Content Width",
+        "group": "design"
+      },
+      "options": [
+        {
+          "value": "reading",
+          "label": "Reading Width"
+        },
+        {
+          "value": "full",
+          "label": "Full Width"
+        }
+      ]
+    }
+  ],
+  "blocks": {
+    "max": 12,
+    "types": [],
+    "accept_theme_blocks": true,
+    "accept_app_blocks": true
+  },
+  "presets": [
+    {
+      "name": "Story with Blocks",
+      "category": "Content",
+      "settings": {
+        "alignment": "center",
+        "width": "reading"
+      },
+      "blocks": [
+        {
+          "type": "theme:starter-heading"
+        },
+        {
+          "type": "theme:starter-text"
+        }
+      ]
+    },
+    {
+      "name": "Empty Content Section",
+      "category": "Content",
+      "settings": {
+        "alignment": "start",
+        "width": "full"
+      },
+      "blocks": []
+    }
+  ]
+}

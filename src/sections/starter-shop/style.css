@@ -1,0 +1,4 @@
+.starter-listing__header {
+  max-width: 48rem;
+  margin-block-end: clamp(2.5rem, 6vw, 5rem);
+}

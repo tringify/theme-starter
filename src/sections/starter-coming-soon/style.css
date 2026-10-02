@@ -1,0 +1,15 @@
+.starter-system {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+.starter-system__inner {
+  display: grid;
+  justify-items: center;
+  max-width: 44rem;
+}
+.starter-system__inner .starter-button {
+  margin-block-start: 2rem;
+}

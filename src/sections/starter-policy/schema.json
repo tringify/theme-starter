@@ -1,0 +1,16 @@
+{
+  "name": "starter-policy",
+  "kind": "section",
+  "ctx_needs": ["policy"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Policy",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    }
+  ]
+}

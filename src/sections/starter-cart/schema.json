@@ -1,0 +1,16 @@
+{
+  "name": "starter-cart",
+  "kind": "section",
+  "ctx_needs": ["cart", "routes"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Your Selection",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    }
+  ]
+}

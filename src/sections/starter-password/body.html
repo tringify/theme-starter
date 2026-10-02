@@ -1,0 +1,19 @@
+<main class="starter starter-auth">
+  <header class="starter-auth__header">
+    <p class="starter-auth__eyebrow">{{ shop.name }}</p>
+    <h1>{{ settings.title }}</h1>
+    {% if settings.message %}
+      <p>{{ settings.message }}</p>
+    {% endif %}
+  </header>
+  {% if settings.password_error %}
+    <p class="starter-message starter-message--error" role="alert">{{ settings.password_error }}</p>
+  {% endif %}
+  <form method="post" action="/unlock">
+    <input type="hidden" name="return_to" value="{{ settings.return_to }}">
+    <input type="hidden" name="locale" value="{{ settings.locale }}">
+    <label for="starter-store-password">{{ settings.password_placeholder }}</label>
+    <input id="starter-store-password" name="password" type="password" required autocomplete="current-password">
+    <button class="starter-primary" type="submit">{{ settings.button_label }}</button>
+  </form>
+</main>

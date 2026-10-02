@@ -1,0 +1,204 @@
+<main class="starter starter-section starter-product starter-product--{{ settings.gallery_layout }}">
+  <div class="starter-shell starter-product__layout">
+    {% if product %}
+      <div class="starter-product__gallery starter-product__gallery--{{ settings.image_fit }} starter-product__gallery--{{ settings.image_ratio | default: 'square' }}" role="region" aria-label="{{ 'product_images' | t }}" tabindex="0">
+        {% for image in product.images %}
+          <figure>
+            <img
+              src="{{ image.url | image_url: width: 1200 }}"
+              alt="{{ image.alt_text | default: product.title }}"
+
+             srcset="{{ image.url | image_srcset: max: 2048 }}" sizes="(min-width: 801px) calc(min((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(2rem, 4vw, 4rem)) * 0.605263158, min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(2rem, 4vw, 4rem) - 20rem) * {% if settings.gallery_layout == 'grid' and forloop.first == false %}0.5{% else %}1{% endif %}{% if settings.gallery_layout == 'grid' and forloop.first == false %} - 0.5rem{% endif %}), (min-width: 701px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px)) * {% if product.images.size == 1 %}1{% else %}0.88{% endif %}), calc((min(100vw - 1.5rem, {{ theme.settings.content_width | default: 1248 }}px)) * {% if product.images.size == 1 %}1{% else %}0.88{% endif %})" {{ image.url | image_loading }}>
+          </figure>
+        {% else %}
+          <figure class="starter-product__placeholder" aria-label="{{ 'image_unavailable' | t }}">{{ 'product-1' | placeholder_svg }}</figure>
+        {% endfor %}
+      </div>
+      <div class="starter-product__details">
+        {% if settings.show_vendor and product.vendor %}
+          <p class="starter-eyebrow">{{ product.vendor }}</p>
+        {% endif %}
+        <h1 class="starter-heading starter-heading--medium">{{ product.title }}</h1>
+        {% assign price = product.price -%}
+        {%- assign available = product.available_for_sale -%}
+        {%- assign quantity_max = product.quantity_max %}
+        {% if product.display_variant -%}
+          {%- assign price = product.display_variant.price -%}
+          {%- assign available = product.display_variant.available_for_sale -%}
+          {%- assign quantity_max = product.display_variant.quantity_max -%}
+        {%- endif %}
+        {% if price %}
+          <p class="starter-product__price">
+            {% if price.on_sale -%}
+              <del aria-label="{{ 'regular_price' | t }}">{{ price.regular | money: isolate: true }}</del>
+            {%- endif -%}
+            <span>{{ price.current | money: isolate: true }}</span>
+          </p>
+        {% endif %}
+        {% if product.rating and product.rating.count > 0 %}
+          <p
+            class="starter-product__rating"
+            aria-label="{{ product.rating.average }} out of 5, {{ product.rating.count }} {{ 'reviews' | t }}"
+          >
+            <span aria-hidden="true">★</span>
+            <strong>{{ product.rating.average }}</strong>
+            <span
+              >· {{ product.rating.count }}
+              {{ 'reviews' | t -}}
+            </span>
+          </p>
+        {% endif %}
+        {% if product.short_description %}
+          <div class="starter-product__intro">{{ product.short_description }}</div>
+        {% endif %}
+
+        {% if product.type == 'variable' %}
+          <form class="starter-product__options" method="get" action="{{ product.url }}">
+            {% for option in product.options -%}
+              {% if option.sub_type == 'swatch' %}
+                <fieldset class="starter-product__swatches">
+                  <legend class="starter-label">{{ option.attribute_name }}</legend>
+                  <div class="starter-product__swatch-list">
+                    {% for value in option.values %}
+                      <label class="starter-product__swatch">
+                        <input
+                          class="starter-visually-hidden"
+                          type="radio"
+                          name="{{ option.attribute_slug }}"
+                          value="{{ value.value }}"
+                          {% if value.selected %}
+                            checked
+                          {% endif %}
+                          {% unless value.selectable %}
+                            disabled
+                          {% endunless %}
+                        >
+                        <span class="starter-product__swatch-chip">
+                          {% if value.color != empty %}
+                            <i style="background: {{ value.color }}"></i>
+                          {% elsif value.image_url != empty %}
+                            <img src="{{ value.image_url | image_url: width: 160 }}" alt="" srcset="{{ value.image_url | image_srcset: max: 160 }}" sizes="1.75rem" {{ value.image_url | image_loading }}>
+                          {% else %}
+                            <i></i>
+                          {% endif %}
+                          <span>{{ value.label }}</span>
+                        </span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </fieldset>
+              {% else %}
+                <label class="starter-field"
+                  ><span class="starter-label">{{ option.attribute_name }}</span
+                  ><select class="starter-select" name="{{ option.attribute_slug }}">
+                    <option value="">{{ 'choose' | t }}</option>
+                    {% for value in option.values %}
+                      <option
+                        value="{{ value.value }}"
+                        {% if value.selected %}
+                          selected
+                        {% endif %}
+                        {% unless value.selectable %}
+                          disabled
+                        {% endunless %}
+                      >
+                        {{ value.label }}
+                      </option>
+                    {% endfor %}
+                  </select></label
+                >
+              {% endif %}
+            {%- endfor %}
+            <button class="starter-button starter-button--secondary" type="submit">{{ 'select_options' | t }}</button>
+          </form>
+        {% endif %}
+
+        {% if available %}
+          {% form 'cart_add', class: 'starter-product__buy' %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            {% if product.is_gift_card %}
+              <fieldset class="starter-gift-recipient">
+                <legend>{{ 'gift_card_delivery' | t }}</legend>
+                <label><input type="radio" name="gift_card_send_as_gift" value="false" checked> {{ 'gift_card_for_me' | t }}</label>
+                <label><input type="radio" name="gift_card_send_as_gift" value="true"> {{ 'gift_card_send_as_gift' | t }}</label>
+                <div class="starter-gift-recipient__fields">
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_name' | t }}</span><input class="starter-input" name="gift_card_recipient_name" autocomplete="off" maxlength="255"></label>
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_email' | t }}</span><input class="starter-input" name="gift_card_recipient_email" inputmode="email" autocomplete="off" maxlength="320"></label>
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_phone' | t }}</span><input class="starter-input" name="gift_card_recipient_phone" inputmode="tel" autocomplete="off" maxlength="32"></label>
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_message' | t }}</span><textarea class="starter-input" name="gift_card_recipient_message" rows="3" maxlength="2000"></textarea></label>
+                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_schedule_utc' | t }}</span><input class="starter-input" name="gift_card_deliver_at" type="datetime-local"></label>
+                  <p>{{ 'gift_card_recipient_hint' | t }}</p>
+                </div>
+              </fieldset>
+            {% endif %}
+            {%- if product.selected_variant -%}
+              <input type="hidden" name="variant_id" value="{{ product.selected_variant.id }}">
+            {%- endif -%}
+            <label class="starter-field"
+              ><span class="starter-label">{{ 'quantity' | t }}</span
+              ><input
+                class="starter-input starter-quantity"
+                name="quantity"
+                type="number"
+                min="1"
+                step="1"
+                value="1"
+                {% if quantity_max %}
+                  max="{{ quantity_max }}"
+                {% endif %}></label
+            ><button
+              class="starter-button starter-product__add"
+              type="submit"
+              {% if product.type == 'variable' and product.selection_complete != true %}
+                disabled
+              {% endif %}
+            >
+              {{ 'add_to_cart' | t }}
+            </button>
+            {% if settings.show_buy_now %}
+              <button class="starter-button starter-button--secondary starter-product__buy-now" type="submit" name="purchase_intent" value="buy_now"{% if product.type == 'variable' and product.selection_complete != true %} disabled{% endif %}>{{ 'buy_now' | t }}</button>
+            {% endif %}
+          {% endform %}
+        {% else %}
+          <p class="starter-product__unavailable">{{ 'unavailable' | t }}</p>
+        {% endif %}
+
+        {% if wishlist.enabled %}
+          {% form 'wishlist_toggle', class: 'starter-product__wishlist' %}
+            <input type="hidden" name="product_id" value="{{ product.id }}"
+            ><button class="starter-button starter-button--secondary" type="submit"
+              data-starter-wishlist-toggle
+              data-save-label="{{ 'add_to_wishlist' | t }}"
+              data-remove-label="{{ 'remove_from_wishlist' | t }}">
+              {% if product.session_state.wishlist.direct_saved -%}
+                {{- 'remove_from_wishlist' | t -}}
+              {%- else -%}
+                {{- 'add_to_wishlist' | t -}}
+              {%- endif %}
+            </button>
+          {% endform %}
+        {% endif %}
+
+        {% assign tax = price.tax_display.current -%}
+        {%- if tax.status == 'estimated' %}
+          <p class="starter-card__meta">{{ 'tax_estimated' | t }}</p>
+        {% endif -%}
+        {%- if tax.status != 'unavailable' and tax.status != 'not_applicable' and tax.primary %}
+          <p class="starter-card__meta">
+            {% if tax.primary.tax_included %}{{ 'tax_included' | t }}{% else %}{{ 'tax_excluded' | t }}{% endif %}
+          </p>
+        {% endif %}
+        {% if product.description %}
+          <details class="starter-product__accordion" open>
+            <summary>{{ 'product_details' | t }}</summary>
+            <div class="starter-richtext">{{ product.description }}</div>
+          </details>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="starter-empty">
+        <h1 class="starter-heading starter-heading--small">{{ 'not_found' | t }}</h1>
+      </div>
+    {% endif %}
+  </div>
+</main>

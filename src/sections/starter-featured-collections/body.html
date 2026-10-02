@@ -1,0 +1,32 @@
+{% if settings.collections.size > 0 %}
+<section class="{% if settings.scheme != empty %}tf-scheme-{{ settings.scheme }} {% endif %}starter starter-section starter-section--border starter-collections">
+  <div class="starter-shell">
+    <header class="starter-featured__header">
+      <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+      <h2 class="starter-heading starter-heading--medium">{{ settings.heading }}</h2>
+    </header>
+    <div class="starter-grid starter-grid--entities">
+      {% for item in settings.collections -%}
+        <a class="starter-collection-card" href="{{ item.url }}">
+          <div class="starter-collection-card__media">
+            {% if item.image_url -%}
+              <img src="{{ item.image_url | image_url: width: 900 }}" alt="{{ item.name }}" srcset="{{ item.image_url | image_srcset: max: 1440 }}" sizes="(min-width: 901px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem) * 2) / 3), (min-width: 701px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem)) / 2), calc(min(100vw - 1.5rem, {{ theme.settings.content_width | default: 1248 }}px))" {{ item.image_url | image_loading }}>
+            {%- else -%}
+              {{- 'collection-1' | placeholder_svg -}}
+            {%- endif %}
+          </div>
+          <div class="starter-collection-card__label">
+            <span>{{ item.name }}</span>
+            {%- if item.product_count -%}
+              <span>
+                {{- item.product_count }}
+                {{ 'products' | t -}}
+              </span>
+            {%- endif %}
+          </div>
+        </a>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}

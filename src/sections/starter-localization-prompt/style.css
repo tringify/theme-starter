@@ -1,0 +1,29 @@
+.starter-localization {
+  position: fixed;
+  z-index: 90;
+  inset: auto 1rem 1rem;
+  background: transparent;
+}
+.starter-localization__card {
+  width: min(100%, 70rem);
+  margin-inline: auto;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  box-shadow: var(--starter-shadow);
+}
+.starter-localization__form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+  margin-block-start: 1.25rem;
+}
+@media (max-width: 700px) {
+  .starter-localization__form {
+    grid-template-columns: 1fr;
+  }
+  .starter-localization__form .starter-button {
+    width: 100%;
+  }
+}

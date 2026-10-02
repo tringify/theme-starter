@@ -1,0 +1,452 @@
+{
+  "default_locale": "en",
+  "name": "Tringify Starter",
+  "schema_version": 3,
+  "sections": [
+    {
+      "name": "starter-account",
+      "kind": "section",
+      "file": "sections/starter-account.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-blog",
+      "kind": "section",
+      "file": "sections/starter-blog.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-blog-category",
+      "kind": "section",
+      "file": "sections/starter-blog-category.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-blog-list",
+      "kind": "section",
+      "file": "sections/starter-blog-list.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-brand",
+      "kind": "section",
+      "file": "sections/starter-brand.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-brand-list",
+      "kind": "section",
+      "file": "sections/starter-brand-list.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-cart",
+      "kind": "section",
+      "file": "sections/starter-cart.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-category",
+      "kind": "section",
+      "file": "sections/starter-category.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-category-list",
+      "kind": "section",
+      "file": "sections/starter-category-list.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-collection",
+      "kind": "section",
+      "file": "sections/starter-collection.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-collection-list",
+      "kind": "section",
+      "file": "sections/starter-collection-list.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-coming-soon",
+      "kind": "section",
+      "file": "sections/starter-coming-soon.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-consent-banner",
+      "kind": "embed",
+      "file": "sections/starter-consent-banner.vasc",
+      "origin": "override",
+      "target": "global_overlay"
+    },
+    {
+      "name": "starter-content-blocks",
+      "kind": "section",
+      "file": "sections/starter-content-blocks.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-featured-collections",
+      "kind": "section",
+      "file": "sections/starter-featured-collections.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-featured-products",
+      "kind": "section",
+      "file": "sections/starter-featured-products.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-global-body-end",
+      "kind": "section",
+      "file": "sections/starter-global-body-end.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-global-body-start",
+      "kind": "section",
+      "file": "sections/starter-global-body-start.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-global-overlay",
+      "kind": "section",
+      "file": "sections/starter-global-overlay.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-home",
+      "kind": "section",
+      "file": "sections/starter-home.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-image-with-text",
+      "kind": "section",
+      "file": "sections/starter-image-with-text.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-localization-prompt",
+      "kind": "embed",
+      "file": "sections/starter-localization-prompt.vasc",
+      "origin": "override",
+      "target": "global_overlay"
+    },
+    {
+      "name": "starter-login",
+      "kind": "section",
+      "file": "sections/starter-login.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-maintenance",
+      "kind": "section",
+      "file": "sections/starter-maintenance.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-not-found",
+      "kind": "section",
+      "file": "sections/starter-not-found.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-page",
+      "kind": "section",
+      "file": "sections/starter-page.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-password",
+      "kind": "section",
+      "file": "sections/starter-password.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-policy",
+      "kind": "section",
+      "file": "sections/starter-policy.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-product",
+      "kind": "section",
+      "file": "sections/starter-product.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-register",
+      "kind": "section",
+      "file": "sections/starter-register.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-rich-text",
+      "kind": "section",
+      "file": "sections/starter-rich-text.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-search",
+      "kind": "section",
+      "file": "sections/starter-search.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-shop",
+      "kind": "section",
+      "file": "sections/starter-shop.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-track-order",
+      "kind": "section",
+      "file": "sections/starter-track-order.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-unavailable",
+      "kind": "section",
+      "file": "sections/starter-unavailable.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-vendor",
+      "kind": "section",
+      "file": "sections/starter-vendor.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-vendor-list",
+      "kind": "section",
+      "file": "sections/starter-vendor-list.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-wishlist",
+      "kind": "section",
+      "file": "sections/starter-wishlist.vasc",
+      "origin": "override"
+    }
+  ],
+  "source": "uploaded",
+  "status": "draft",
+  "surfaces": [
+    {
+      "surface_key": "account",
+      "required_sections": [
+        "starter-account"
+      ]
+    },
+    {
+      "surface_key": "blog",
+      "required_sections": [
+        "starter-blog"
+      ]
+    },
+    {
+      "surface_key": "blog_category",
+      "required_sections": [
+        "starter-blog-category"
+      ]
+    },
+    {
+      "surface_key": "blog_list",
+      "required_sections": [
+        "starter-blog-list"
+      ]
+    },
+    {
+      "surface_key": "brand",
+      "required_sections": [
+        "starter-brand"
+      ],
+      "allowed_sections": [
+        "starter-content-blocks"
+      ]
+    },
+    {
+      "surface_key": "brand_list",
+      "required_sections": [
+        "starter-brand-list"
+      ]
+    },
+    {
+      "surface_key": "cart",
+      "required_sections": [
+        "starter-cart"
+      ]
+    },
+    {
+      "surface_key": "category",
+      "required_sections": [
+        "starter-category"
+      ],
+      "allowed_sections": [
+        "starter-content-blocks"
+      ]
+    },
+    {
+      "surface_key": "category_list",
+      "required_sections": [
+        "starter-category-list"
+      ]
+    },
+    {
+      "surface_key": "collection",
+      "required_sections": [
+        "starter-collection"
+      ],
+      "allowed_sections": [
+        "starter-content-blocks"
+      ]
+    },
+    {
+      "surface_key": "collection_list",
+      "required_sections": [
+        "starter-collection-list"
+      ]
+    },
+    {
+      "surface_key": "coming_soon",
+      "required_sections": [
+        "starter-coming-soon"
+      ]
+    },
+    {
+      "surface_key": "global_body_end",
+      "required_sections": [
+        "starter-global-body-end"
+      ]
+    },
+    {
+      "surface_key": "global_body_start",
+      "required_sections": [
+        "starter-global-body-start"
+      ]
+    },
+    {
+      "surface_key": "global_overlay",
+      "required_sections": [
+        "starter-global-overlay",
+        "starter-consent-banner",
+        "starter-localization-prompt"
+      ]
+    },
+    {
+      "surface_key": "home",
+      "allowed_sections": [
+        "starter-home",
+        "starter-featured-products",
+        "starter-featured-collections",
+        "starter-image-with-text",
+        "starter-rich-text",
+        "starter-content-blocks"
+      ]
+    },
+    {
+      "surface_key": "login",
+      "required_sections": [
+        "starter-login"
+      ]
+    },
+    {
+      "surface_key": "maintenance",
+      "required_sections": [
+        "starter-maintenance"
+      ]
+    },
+    {
+      "surface_key": "not_found",
+      "required_sections": [
+        "starter-not-found"
+      ]
+    },
+    {
+      "surface_key": "page",
+      "required_sections": [
+        "starter-page"
+      ],
+      "allowed_sections": [
+        "starter-content-blocks"
+      ]
+    },
+    {
+      "surface_key": "password",
+      "required_sections": [
+        "starter-password"
+      ]
+    },
+    {
+      "surface_key": "policy",
+      "required_sections": [
+        "starter-policy"
+      ]
+    },
+    {
+      "surface_key": "product",
+      "required_sections": [
+        "starter-product"
+      ],
+      "allowed_sections": [
+        "starter-content-blocks"
+      ]
+    },
+    {
+      "surface_key": "register",
+      "required_sections": [
+        "starter-register"
+      ]
+    },
+    {
+      "surface_key": "search",
+      "required_sections": [
+        "starter-search"
+      ]
+    },
+    {
+      "surface_key": "shop",
+      "required_sections": [
+        "starter-shop"
+      ]
+    },
+    {
+      "surface_key": "track_order",
+      "required_sections": [
+        "starter-track-order"
+      ]
+    },
+    {
+      "surface_key": "unavailable",
+      "required_sections": [
+        "starter-unavailable"
+      ]
+    },
+    {
+      "surface_key": "vendor",
+      "required_sections": [
+        "starter-vendor"
+      ],
+      "allowed_sections": [
+        "starter-content-blocks"
+      ]
+    },
+    {
+      "surface_key": "vendor_list",
+      "required_sections": [
+        "starter-vendor-list"
+      ]
+    },
+    {
+      "surface_key": "wishlist",
+      "required_sections": [
+        "starter-wishlist"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+<footer class="{% if settings.scheme != empty %}tf-scheme-{{ settings.scheme }} {% endif %}starter starter-footer">
+  <div class="starter-shell starter-footer__main">
+    <div>
+      <p class="starter-footer__brand">{{ shop.name }}</p>
+      {% if settings.tagline %}
+        <p class="starter-muted starter-copy">{{ settings.tagline }}</p>
+      {% endif %}
+    </div>
+    <nav class="starter-footer__nav" aria-label="{{ 'footer_navigation' | t }}">
+      {% for item in settings.menu_resolved.items -%}
+        <a href="{{ item.url }}">{{ item.title }}</a>
+      {%- endfor %}
+    </nav>
+    {% if settings.show_newsletter %}
+      <div class="starter-footer__newsletter">
+        <h2 class="starter-heading starter-heading--small">{{ settings.newsletter_heading }}</h2>
+        <p class="starter-muted">{{ settings.newsletter_text }}</p>
+        {% form 'newsletter_subscribe', class: 'starter-footer__form' %}
+          <label class="starter-field"
+            ><span class="starter-label">{{ 'email' | t }}</span
+            ><input class="starter-input" type="email" name="email" autocomplete="email" required></label
+          ><button class="starter-button" type="submit">{{ settings.newsletter_button }}</button>
+        {% endform %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="starter-shell starter-footer__bottom">
+    <span>&copy; {{ shop.name }}</span>
+    <nav class="starter-footer__policies" aria-label="{{ 'policies' | t }}">
+      {% for item in policies -%}
+        <a href="{{ item.url }}">{{ item.title }}</a>
+      {%- endfor %}
+    </nav>
+  </div>
+</footer>

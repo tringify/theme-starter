@@ -1,0 +1,46 @@
+{
+  "name": "starter-vendor",
+  "kind": "section",
+  "ctx_needs": ["products", "vendor"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Catalog",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Vendor",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "columns",
+      "type": "range",
+      "default": 4,
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "editor": {
+        "label": "columns",
+        "group": "design"
+      }
+    },
+    {
+      "id": "show_vendor",
+      "type": "checkbox",
+      "default": true,
+      "editor": {
+        "label": "showVendor",
+        "group": "design"
+      }
+    }
+  ]
+}

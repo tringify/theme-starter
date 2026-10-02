@@ -1,0 +1,25 @@
+.starter-article-card a {
+  display: grid;
+  gap: 1rem;
+  text-decoration: none;
+}
+.starter-article-card__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text) 4%, var(--bg));
+}
+.starter-article-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.starter-article-card h2 {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 1.4rem;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.starter-article-card p {
+  margin: 0;
+  color: var(--text-muted);
+}
