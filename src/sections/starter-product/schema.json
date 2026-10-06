@@ -19,11 +19,11 @@
       "options": [
         {
           "value": "stack",
-          "label": "Stacked"
+          "label": "stacked"
         },
         {
           "value": "grid",
-          "label": "Grid"
+          "label": "grid"
         }
       ],
       "editor": {
@@ -38,11 +38,11 @@
       "options": [
         {
           "value": "contain",
-          "label": "Show Full Image"
+          "label": "showFullImage"
         },
         {
           "value": "cover",
-          "label": "Fill the Frame"
+          "label": "fillTheFrame"
         }
       ],
       "editor": {
@@ -57,15 +57,15 @@
       "options": [
         {
           "value": "square",
-          "label": "Square"
+          "label": "square"
         },
         {
           "value": "portrait",
-          "label": "Portrait"
+          "label": "portrait"
         },
         {
           "value": "landscape",
-          "label": "Landscape"
+          "label": "landscape"
         }
       ],
       "editor": {

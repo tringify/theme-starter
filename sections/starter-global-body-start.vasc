@@ -850,7 +850,7 @@
       "type": "image",
       "default": "",
       "editor": {
-        "label": "Logo",
+        "label": "logo",
         "group": "content"
       }
     },
@@ -859,7 +859,7 @@
       "type": "range",
       "default": 144,
       "editor": {
-        "label": "Logo Width",
+        "label": "logoWidth",
         "group": "design"
       },
       "min": 64,
@@ -872,17 +872,17 @@
       "type": "select",
       "default": "drawer",
       "editor": {
-        "label": "Desktop Navigation",
+        "label": "desktopNavigation",
         "group": "design"
       },
       "options": [
         {
           "value": "inline",
-          "label": "Inline Links"
+          "label": "inlineLinks"
         },
         {
           "value": "drawer",
-          "label": "Menu Icon"
+          "label": "menuIcon"
         }
       ]
     },
@@ -891,17 +891,17 @@
       "type": "select",
       "default": "start",
       "editor": {
-        "label": "Brand Alignment",
+        "label": "brandAlignment",
         "group": "design"
       },
       "options": [
         {
           "value": "start",
-          "label": "Start"
+          "label": "start"
         },
         {
           "value": "center",
-          "label": "Center"
+          "label": "center"
         }
       ]
     },
@@ -910,7 +910,7 @@
       "type": "checkbox",
       "default": true,
       "editor": {
-        "label": "Show Cart Count",
+        "label": "showCartCount",
         "group": "content"
       }
     }

@@ -659,22 +659,22 @@
   ],
   "presets": [
     {
-      "name": "Product Grid \u2014 Four Columns",
-      "category": "Products",
+      "name": "productGridFourColumns",
+      "category": "products",
       "settings": {
         "columns": 4
       }
     },
     {
-      "name": "Product Grid \u2014 Three Columns",
-      "category": "Products",
+      "name": "productGridThreeColumns",
+      "category": "products",
       "settings": {
         "columns": 3
       }
     },
     {
-      "name": "Product Grid \u2014 Two Columns",
-      "category": "Products",
+      "name": "productGridTwoColumns",
+      "category": "products",
       "settings": {
         "columns": 2
       }

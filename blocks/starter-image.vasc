@@ -9,7 +9,7 @@
       "type": "image",
       "default": "",
       "editor": {
-        "label": "Image",
+        "label": "image",
         "group": "content"
       }
     },
@@ -18,7 +18,7 @@
       "type": "text",
       "default": "",
       "editor": {
-        "label": "Image Alt Text",
+        "label": "imageAltText",
         "group": "content"
       }
     },
@@ -27,7 +27,7 @@
       "type": "text",
       "default": "",
       "editor": {
-        "label": "Caption",
+        "label": "caption",
         "group": "content"
       }
     }

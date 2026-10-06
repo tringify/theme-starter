@@ -680,11 +680,11 @@
       "options": [
         {
           "value": "split",
-          "label": "Split"
+          "label": "split"
         },
         {
           "value": "centered",
-          "label": "Centered"
+          "label": "centered"
         }
       ],
       "editor": {
@@ -784,15 +784,15 @@
   ],
   "presets": [
     {
-      "name": "Split Hero",
-      "category": "Banners",
+      "name": "splitHero",
+      "category": "banners",
       "settings": {
         "layout": "split"
       }
     },
     {
-      "name": "Centered Hero",
-      "category": "Banners",
+      "name": "centeredHero",
+      "category": "banners",
       "settings": {
         "layout": "centered",
         "eyebrow": "Everyday Favorites",
