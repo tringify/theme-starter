@@ -33,38 +33,38 @@
       "fields": [
         {
           "key": "bg",
-          "label": "Background"
+          "label": "background"
         },
         {
           "key": "text",
-          "label": "Text"
+          "label": "text"
         },
         {
           "key": "text-muted",
-          "label": "Muted Text"
+          "label": "mutedText"
         },
         {
           "key": "accent",
-          "label": "Accent"
+          "label": "accent"
         },
         {
           "key": "border",
-          "label": "Border"
+          "label": "border"
         },
         {
           "key": "btn",
-          "label": "Button"
+          "label": "button"
         },
         {
           "key": "btn-text",
-          "label": "Button Text"
+          "label": "buttonText"
         }
       ],
       "id": "schemes",
       "type": "color_scheme_group",
       "editor": {
-        "label": "Color Schemes",
-        "group": "Colors"
+        "label": "colorSchemes",
+        "group": "colors"
       }
     },
     {
@@ -72,8 +72,8 @@
       "type": "font_picker",
       "default": "system-sans",
       "editor": {
-        "label": "Body Font",
-        "group": "Typography"
+        "label": "bodyFont",
+        "group": "typography"
       }
     },
     {
@@ -81,8 +81,8 @@
       "type": "font_picker",
       "default": "system-sans",
       "editor": {
-        "label": "Heading Font",
-        "group": "Typography"
+        "label": "headingFont",
+        "group": "typography"
       }
     },
     {
@@ -90,8 +90,8 @@
       "type": "range",
       "default": 16,
       "editor": {
-        "label": "Body Text Size",
-        "group": "Typography"
+        "label": "bodyTextSize",
+        "group": "typography"
       },
       "min": 14,
       "max": 20,
@@ -103,8 +103,8 @@
       "type": "range",
       "default": 1248,
       "editor": {
-        "label": "Content Width",
-        "group": "Layout"
+        "label": "contentWidth",
+        "group": "layout"
       },
       "min": 960,
       "max": 1600,
@@ -116,8 +116,8 @@
       "type": "range",
       "default": 80,
       "editor": {
-        "label": "Section Spacing",
-        "group": "Layout"
+        "label": "sectionSpacing",
+        "group": "layout"
       },
       "min": 32,
       "max": 112,
@@ -129,8 +129,8 @@
       "type": "range",
       "default": 4,
       "editor": {
-        "label": "Corner Radius",
-        "group": "Shape"
+        "label": "cornerRadius",
+        "group": "shape"
       },
       "min": 0,
       "max": 24,
@@ -142,8 +142,8 @@
       "type": "range",
       "default": 4,
       "editor": {
-        "label": "Button Corner Radius",
-        "group": "Shape"
+        "label": "buttonCornerRadius",
+        "group": "shape"
       },
       "min": 0,
       "max": 32,
@@ -155,17 +155,17 @@
       "type": "select",
       "default": "underline",
       "editor": {
-        "label": "Content Links",
-        "group": "Typography"
+        "label": "contentLinks",
+        "group": "typography"
       },
       "options": [
         {
           "value": "underline",
-          "label": "Underlined"
+          "label": "underlined"
         },
         {
           "value": "plain",
-          "label": "Underline on Hover"
+          "label": "underlineOnHover"
         }
       ]
     }

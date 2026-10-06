@@ -21,11 +21,11 @@
       "options": [
         {
           "value": "left",
-          "label": "Left"
+          "label": "left"
         },
         {
           "value": "center",
-          "label": "Center"
+          "label": "center"
         }
       ],
       "editor": {
@@ -81,15 +81,15 @@
   ],
   "presets": [
     {
-      "name": "Rich Text — Centered",
-      "category": "Content",
+      "name": "richTextCentered",
+      "category": "content",
       "settings": {
         "alignment": "center"
       }
     },
     {
-      "name": "Rich Text — Left Aligned",
-      "category": "Content",
+      "name": "richTextLeftAligned",
+      "category": "content",
       "settings": {
         "alignment": "left"
       }

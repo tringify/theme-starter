@@ -8,7 +8,7 @@
       "type": "color_scheme",
       "default": "",
       "editor": {
-        "label": "Color Scheme",
+        "label": "colorScheme",
         "group": "design"
       }
     },
@@ -17,17 +17,17 @@
       "type": "select",
       "default": "center",
       "editor": {
-        "label": "Text Alignment",
+        "label": "alignment",
         "group": "design"
       },
       "options": [
         {
           "value": "start",
-          "label": "Start"
+          "label": "start"
         },
         {
           "value": "center",
-          "label": "Center"
+          "label": "center"
         }
       ]
     },
@@ -36,17 +36,17 @@
       "type": "select",
       "default": "reading",
       "editor": {
-        "label": "Content Width",
+        "label": "contentWidth",
         "group": "design"
       },
       "options": [
         {
           "value": "reading",
-          "label": "Reading Width"
+          "label": "readingWidth"
         },
         {
           "value": "full",
-          "label": "Full Width"
+          "label": "fullWidth"
         }
       ]
     }
@@ -59,8 +59,8 @@
   },
   "presets": [
     {
-      "name": "Story with Blocks",
-      "category": "Content",
+      "name": "storyWithBlocks",
+      "category": "content",
       "settings": {
         "alignment": "center",
         "width": "reading"
@@ -75,8 +75,8 @@
       ]
     },
     {
-      "name": "Empty Content Section",
-      "category": "Content",
+      "name": "emptyContentSection",
+      "category": "content",
       "settings": {
         "alignment": "start",
         "width": "full"

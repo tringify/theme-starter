@@ -626,11 +626,11 @@
       "options": [
         {
           "value": "left",
-          "label": "Image Left"
+          "label": "imageLeft"
         },
         {
           "value": "right",
-          "label": "Image Right"
+          "label": "imageRight"
         }
       ],
       "editor": {
@@ -712,15 +712,15 @@
   ],
   "presets": [
     {
-      "name": "Image with Text \u2014 Image Left",
-      "category": "Content",
+      "name": "imageWithTextImageLeft",
+      "category": "content",
       "settings": {
         "image_position": "left"
       }
     },
     {
-      "name": "Image with Text \u2014 Image Right",
-      "category": "Content",
+      "name": "imageWithTextImageRight",
+      "category": "content",
       "settings": {
         "image_position": "right"
       }

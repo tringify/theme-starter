@@ -30,8 +30,8 @@
   ],
   "presets": [
     {
-      "name": "Collection Grid",
-      "category": "Collections",
+      "name": "collectionGrid",
+      "category": "collections",
       "settings": {}
     }
   ],

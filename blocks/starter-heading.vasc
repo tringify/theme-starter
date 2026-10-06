@@ -9,7 +9,7 @@
       "type": "text",
       "default": "Make room for the everyday.",
       "editor": {
-        "label": "Heading",
+        "label": "heading",
         "group": "content"
       }
     },
@@ -18,21 +18,21 @@
       "type": "select",
       "default": "medium",
       "editor": {
-        "label": "Heading Size",
+        "label": "headingSize",
         "group": "design"
       },
       "options": [
         {
           "value": "small",
-          "label": "Small"
+          "label": "small"
         },
         {
           "value": "medium",
-          "label": "Medium"
+          "label": "medium"
         },
         {
           "value": "large",
-          "label": "Large"
+          "label": "large"
         }
       ]
     }

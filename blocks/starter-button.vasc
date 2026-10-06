@@ -9,7 +9,7 @@
       "type": "text",
       "default": "Explore the Collection",
       "editor": {
-        "label": "Button Label",
+        "label": "buttonLabel",
         "group": "content"
       }
     },
@@ -18,7 +18,7 @@
       "type": "url",
       "default": "",
       "editor": {
-        "label": "Button Link",
+        "label": "buttonLink",
         "group": "content"
       }
     },
@@ -27,17 +27,17 @@
       "type": "select",
       "default": "solid",
       "editor": {
-        "label": "Button Style",
+        "label": "buttonStyle",
         "group": "design"
       },
       "options": [
         {
           "value": "solid",
-          "label": "Solid"
+          "label": "solid"
         },
         {
           "value": "outline",
-          "label": "Outline"
+          "label": "outline"
         }
       ]
     }

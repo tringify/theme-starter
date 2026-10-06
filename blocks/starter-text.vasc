@@ -9,7 +9,7 @@
       "type": "richtext",
       "default": "<p>Discover useful objects for home, work, and wherever the day takes you.</p>",
       "editor": {
-        "label": "Text",
+        "label": "text",
         "group": "content"
       }
     }
