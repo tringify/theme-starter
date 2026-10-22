@@ -6,7 +6,7 @@ Starter provides 38 editable sections across every storefront surface: product d
 
 ## Requirements
 
-- The [Tringify CLI](https://github.com/tringify/tringify-cli). It downloads the theme tools it needs on first use.
+- The [Tringify CLI](https://github.com/tringify/cli). It downloads the theme tools it needs on first use.
 
 ## Create your theme
 
