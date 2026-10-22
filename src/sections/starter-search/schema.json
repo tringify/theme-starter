@@ -1,7 +1,7 @@
 {
   "name": "starter-search",
   "kind": "section",
-  "ctx_needs": ["routes", "search", "products"],
+  "ctx_needs": ["routes", "search", "products", "filters"],
   "settings": [
     {
       "id": "eyebrow",

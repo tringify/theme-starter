@@ -6,36 +6,37 @@ Starter provides 38 editable sections across every storefront surface: product d
 
 ## Requirements
 
-- [Tringify theme tools](https://github.com/tringify/theme-tools), which provide the `tringify-theme` command.
-- Python 3.10 or newer.
+- The [Tringify CLI](https://github.com/tringify/tringify-cli). It downloads the theme tools it needs on first use.
 
 ## Create your theme
 
-Select **Use this template** on GitHub to create your own repository from Starter, or clone it:
-
 ```sh
-git clone https://github.com/tringify/theme-starter
-tringify-theme init my-theme --from theme-starter --name "My Theme"
+tringify login
+tringify theme init my-theme --name "My Theme"
 cd my-theme
-tringify-theme preview
+tringify theme preview
 ```
 
-`init` creates a new directory, sets the theme name, builds the sections, and validates the result. Open the printed preview URL and edit the files under `src/sections/`; the preview rebuilds as you save.
+`init` copies this starter into a new directory, sets the theme name, builds the sections, and validates the result. Open the printed preview URL and edit the files under `src/sections/`; the preview rebuilds as you save. You can also select **Use this template** on GitHub and run `tringify theme init my-theme --from <your clone>`.
 
-When the theme is ready:
+Work against a development store with real products, and publish to your listing when the theme is ready:
 
 ```sh
-tringify-theme check
-tringify-theme package dist/my-theme.zip
+tringify store create --name "Theme Lab" --country IN --currency INR
+tringify theme dev --store STORE_ID --with-demo
+tringify theme check
+tringify theme publish --listing LISTING_ID --version 1.0.0 --notes "First release"
 ```
 
-Upload the ZIP in the Tringify Developer Portal under **Themes**, install it on a development store, and test it with that store's products. The [Build your first theme](https://dev-docs.tringify.com/themes/build-your-first-theme) guide walks through each step.
+`theme dev` syncs every saved change into an unpublished theme; the store's live theme is never changed. The [Build your first theme](https://dev-docs.tringify.com/themes/build-your-first-theme) guide walks through each step.
 
 ## Edit sections
 
 Each editable section has `body.html`, `style.css`, and `schema.json` under `src/sections/<name>/`. Shared styles live in `src/_shared.css`. Edit these source files, then build or package.
 
 Keep `src/.generated-sections.json` in version control. It identifies generated section files so the builder can remove obsolete outputs safely. Directly authored sections are preserved; do not edit generated `.vasc` files separately from their source.
+
+The phone field is shared: its markup, styles and script live in `partials/` and are copied into each section that marks a `partial:` place for them. Edit `partials/`, run `python3 scripts/sync_partials.py`, then `tringify theme build`. `--check` reports sections that are out of date.
 
 The builder updates the section index in `theme.json`. When adding or renaming a section, also update its surface permissions in `theme.json` and its instances in `templates/`.
 
@@ -76,7 +77,9 @@ The product's wishlist button uses `tf:action-success` and the returned `product
 
 ## Customer and password forms
 
-Sign-in and registration use the methods enabled in Customer Settings. When both methods are available, the preferred method appears first. The phone field uses the supplied countries and calling codes, supports search, and preserves the national number when the shopper changes the calling code. Countries that share a calling code are not inferred from that code alone.
+Sign-in and registration use the methods enabled in Customer Settings; registration offers phone only when phone registration is available. When both methods are available, the preferred method appears first.
+
+Every phone field (sign-in, registration, gift card recipient, and Notify Me by text) has a country button with flag and calling code that opens a searchable list of the store's phone countries. The shopper types the national number; a number typed or pasted with + or 00 selects its country. The form sends one E.164 number under the field's original name. Sign-in and registration start from the store's default phone country; storefront forms start from the shopper's country when it is a phone country. With one phone country the calling code is a fixed prefix. Without JavaScript the field takes a full + number.
 
 Verification uses the six-digit code form. Email newsletter consent appears unchecked during email registration only when the store enables it. Password-protected stores use the store-password form and display its returned errors.
 
@@ -109,8 +112,8 @@ Demo menus allow up to 12 sibling items, three levels, and 48 items in each comp
 Use both the author contract and a rendered example while building a section:
 
 ```sh
-tringify-theme contract
-tringify-theme context . --page product --entity ceramic-mug
+tringify theme contract
+tringify theme context --page product --entity ceramic-mug
 ```
 
 `contract` describes the fields and allowed values. `context` shows sample values for the selected page. Neither replaces testing with the store's own products. Check products with and without images, descriptions, vendors, variants, sale prices, and quantity limits. Optional text can be `null`; an empty string also needs an explicit blank check when you want to hide its surrounding markup.
@@ -131,7 +134,7 @@ Shopper messages are in `locales/en.json`. Editor labels are in `locales/en.sche
 
 The local preview covers every current route and supports responsive inspection with the bundled demo catalog. It does not replace a development-store test for stateful shopper actions.
 
-Upload your package in the Developer Portal and install it on a development store as an inactive theme, then use the store preview and editor. Verify section and style presets, real product options, prices, cart updates, customer access, localization, consent, and mobile layouts with that store's configuration.
+Run `tringify theme dev --store STORE_ID` or `tringify theme push --store STORE_ID` to add the theme to a development store as an unpublished theme, then use the store preview and editor. Verify section and style presets, real product options, prices, cart updates, customer access, localization, consent, and mobile layouts with that store's configuration.
 
 Passing validation confirms package compatibility. It does not assess appearance or shopper flows.
 

@@ -7,53 +7,415 @@
         <p class="starter-subheading">{{ brand.description }}</p>
       {% endif %}
     </header>
-    <div class="starter-grid" style="--starter-columns: {{ settings.columns }}">
-      {% for item in products.items %}
-        <article class="starter-card">
-          <a class="starter-card__link" href="{{ item.url }}">
-            <div class="starter-card__media">
-              {% if item.featured_image -%}
-                <img
-                  src="{{ item.featured_image.url | image_url: width: 720 }}"
-                  alt="{{ item.featured_image.alt_text | default: item.title }}"
-                 srcset="{{ item.featured_image.url | image_srcset: max: 1440 }}" sizes="(min-width: 901px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem) * {{ settings.columns | default: 4 | minus: 1 }}) / {{ settings.columns | default: 4 }}), (min-width: 701px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem)) / 2), calc((min(100vw - 1.5rem, {{ theme.settings.content_width | default: 1248 }}px) - 0.75rem) / 2)" {{ item.featured_image.url | image_loading }}>
-              {%- else -%}
-                {{- 'product-1' | placeholder_svg -}}
+    {% assign filter_items = filters.items | default: empty -%}
+    {%- assign filters_applied = filters.applied_count | default: 0 -%}
+    {%- assign has_filters = false -%}
+    {%- assign filter_count = filter_items.size | default: 0 -%}
+    {%- if filter_count > 0 or filters_applied > 0 -%}
+      {%- assign has_filters = true -%}
+    {%- endif %}
+    <div class="starter-listing__layout{% if has_filters %} starter-listing__layout--filtered{% endif %}">
+      {% if has_filters %}
+        <div class="starter-filters" data-starter-filters>
+          <div class="starter-filters__bar">
+            <button class="starter-button starter-button--secondary starter-filters__open" type="button" aria-expanded="false" aria-controls="starter-filters-panel" data-starter-filters-open>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+              {{ 'filters' | t }}
+              {%- if filters_applied > 0 %} <span class="starter-count">{{ filters_applied }}</span>{% endif %}
+            </button>
+          </div>
+          <div class="starter-filters__scrim" data-starter-filters-close></div>
+          <div class="starter-filters__panel" id="starter-filters-panel" role="region" aria-label="{{ 'filters' | t }}" tabindex="-1" data-starter-filters-panel>
+            <div class="starter-filters__head">
+              <h2 class="starter-filters__title">
+                {{ 'filters' | t }}
+                {%- if filters_applied > 0 %} <span class="starter-count">{{ filters_applied }}</span>{% endif %}
+              </h2>
+              {% if filters_applied > 0 -%}
+                <a class="starter-filters__clear" href="{{ filters.clear_url }}">{{ 'filter_clear_all' | t }}</a>
               {%- endif %}
+              <button class="starter-filters__close" type="button" aria-label="{{ 'filter_close' | t }}" data-starter-filters-close>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+              </button>
             </div>
-            <div class="starter-card__body">
-              {% if settings.show_vendor and item.vendor %}
-                <p class="starter-card__meta">{{ item.vendor }}</p>
-              {% endif %}
-              <h2 class="starter-card__title">{{ item.title }}</h2>
-              {% if item.price %}
-                <p class="starter-card__price">
-                  {% if item.price.on_sale -%}
-                    <del>{{ item.price.regular | money: isolate: true }}</del>
+            <div class="starter-filters__body">
+              {% for filter in filter_items %}
+                {%- assign filter_applied = filter.applied_count | default: 0 -%}
+                {%- assign option_role = 'checkbox' -%}
+                {%- if filter.allow_multiple == false -%}
+                  {%- assign option_role = 'radio' -%}
+                {%- endif -%}
+                {%- assign display = filter.display_type -%}
+                {%- if filter.filter_type == 'range' -%}
+                  {%- assign display = 'range' -%}
+                {%- endif %}
+                {% if display == 'toggle' %}
+                  <div class="starter-filter starter-filter--toggle">
+                    {% for value in filter.values %}
+                      {%- assign switch_label = value.label -%}
+                      {%- if filter.values.size == 1 -%}
+                        {%- assign switch_label = filter.label -%}
+                      {%- endif -%}
+                      {% if value.selectable %}
+                        <a class="starter-filter-switch" href="{{ value.url }}" rel="nofollow" role="switch" aria-checked="{{ value.selected }}">
+                      {% else %}
+                        <span class="starter-filter-switch is-disabled" role="switch" aria-checked="{{ value.selected }}" aria-disabled="true">
+                      {% endif %}
+                          <span class="starter-filter-switch__label">{{ switch_label }}{% if value.count_label %} <span class="starter-filter__count">{{ value.count_label }}</span>{% endif %}</span>
+                          <span class="starter-filter-switch__track" aria-hidden="true"><span></span></span>
+                      {% if value.selectable %}</a>{% else %}</span>{% endif %}
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <details class="starter-filter starter-filter--{{ display }}" open>
+                    <summary class="starter-filter__summary">
+                      <span>{{ filter.label }}</span>
+                      {%- if filter_applied > 0 %} <span class="starter-count">{{ filter_applied }}</span>{% endif %}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <div class="starter-filter__content">
+                      {% if display == 'range' and filter.range %}
+                        {%- assign range = filter.range -%}
+                        {%- assign is_price = false -%}
+                        {%- if filter.key == 'price' and filters.price -%}
+                          {%- assign is_price = true -%}
+                        {%- endif -%}
+                        {%- assign range_step = 'any' -%}
+                        {%- if range.integer -%}
+                          {%- assign range_step = 1 -%}
+                        {%- endif %}
+                        <form class="starter-filter-range" method="get" action="{{ range.action }}" data-starter-range>
+                          {% for input in range.inputs -%}
+                            <input type="hidden" name="{{ input.name }}" value="{{ input.value }}">
+                          {%- endfor %}
+                          {% if range.min and range.max %}
+                            <div class="starter-filter-range__slider" aria-hidden="true">
+                              <span class="starter-filter-range__fill" data-starter-range-fill></span>
+                              <input type="range" tabindex="-1" min="{{ range.min }}" max="{{ range.max }}" step="{{ range_step }}" value="{{ range.applied_min | default: range.min }}" data-starter-range-thumb="min">
+                              <input type="range" tabindex="-1" min="{{ range.min }}" max="{{ range.max }}" step="{{ range_step }}" value="{{ range.applied_max | default: range.max }}" data-starter-range-thumb="max">
+                            </div>
+                          {% endif %}
+                          <div class="starter-filter-range__inputs">
+                            <label class="starter-field">
+                              <span class="starter-label">{{ 'filter_min' | t }}{% if is_price %} <span class="starter-muted">{{ filters.price.currency_code }}</span>{% endif %}</span>
+                              <input class="starter-input" type="number" inputmode="decimal" name="{{ range.min_input }}" value="{{ range.applied_min }}" placeholder="{{ range.min }}" step="{{ range_step }}"{% if range.min %} min="{{ range.min }}"{% endif %}{% if range.max %} max="{{ range.max }}"{% endif %} data-starter-range-input="min">
+                            </label>
+                            <span class="starter-filter-range__dash" aria-hidden="true">–</span>
+                            <label class="starter-field">
+                              <span class="starter-label">{{ 'filter_max' | t }}{% if is_price %} <span class="starter-muted">{{ filters.price.currency_code }}</span>{% endif %}</span>
+                              <input class="starter-input" type="number" inputmode="decimal" name="{{ range.max_input }}" value="{{ range.applied_max }}" placeholder="{{ range.max }}" step="{{ range_step }}"{% if range.min %} min="{{ range.min }}"{% endif %}{% if range.max %} max="{{ range.max }}"{% endif %} data-starter-range-input="max">
+                            </label>
+                          </div>
+                          {% if is_price and filters.price.min_money and filters.price.max_money %}
+                            <p class="starter-card__meta">{{ filters.price.min_money | money: isolate: true }} – {{ filters.price.max_money | money: isolate: true }}</p>
+                          {% endif %}
+                          <div class="starter-filter-range__actions">
+                            <button class="starter-button starter-button--secondary" type="submit">{{ 'filter_apply' | t }}</button>
+                            {% if filter_applied > 0 -%}
+                              <a class="starter-filter__clear" href="{{ range.clear_url }}" rel="nofollow">{{ 'filter_clear' | t }}</a>
+                            {%- endif %}
+                          </div>
+                        </form>
+                      {% else %}
+                        {%- assign page = filter.values_page -%}
+                        {%- assign page_total = page.total | default: 0 -%}
+                        {%- assign page_limit = page.limit | default: 0 %}
+                        {% if page.search != empty or page_total > page_limit %}
+                          <form class="starter-filter__search" method="get" action="{{ page.action }}" role="search">
+                            {% for input in page.inputs -%}
+                              <input type="hidden" name="{{ input.name }}" value="{{ input.value }}">
+                            {%- endfor %}
+                            <label class="starter-field">
+                              <span class="starter-visually-hidden">{{ 'filter_search_values' | t: label: filter.label }}</span>
+                              <input class="starter-input" type="search" name="{{ page.search_input }}" value="{{ page.search }}" placeholder="{{ 'filter_search_values' | t: label: filter.label }}">
+                            </label>
+                            <button class="starter-filter__search-submit" type="submit" aria-label="{{ 'search' | t }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg></button>
+                          </form>
+                        {% endif %}
+                        <ul class="starter-filter__values starter-filter__values--{{ display }}" role="{% if option_role == 'radio' %}radiogroup{% else %}group{% endif %}" aria-label="{{ filter.label }}">
+                          {% for value in filter.values %}
+                            <li>
+                              {%- if value.selectable -%}
+                                <a class="starter-filter-option" href="{{ value.url }}" rel="nofollow" role="{{ option_role }}" aria-checked="{{ value.selected }}"
+                              {%- else -%}
+                                <span class="starter-filter-option is-disabled" role="{{ option_role }}" aria-checked="{{ value.selected }}" aria-disabled="true"
+                              {%- endif %}{% if display == 'swatch' %} title="{{ value.label }}"{% endif %}>
+                                {%- if display == 'pills' -%}
+                                  <span class="starter-filter-option__label">{{ value.label }}</span>
+                                {%- elsif display == 'swatch' -%}
+                                  <span class="starter-filter-option__swatch"{% if value.color != empty and value.image_url == empty %} style="background: {{ value.color }}"{% endif %}>
+                                    {%- if value.image_url != empty -%}
+                                      <img src="{{ value.image_url | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
+                                    {%- endif -%}
+                                  </span>
+                                  <span class="starter-filter-option__label">{{ value.label }}</span>
+                                {%- elsif display == 'image_swatch' -%}
+                                  <span class="starter-filter-option__tile">
+                                    {%- if value.image_url != empty -%}
+                                      <img src="{{ value.image_url | image_url: width: 320 }}" alt="" width="160" height="160" loading="lazy">
+                                    {%- else -%}
+                                      <span aria-hidden="true">{{ value.label | slice: 0, 1 | upcase }}</span>
+                                    {%- endif -%}
+                                  </span>
+                                  <span class="starter-filter-option__label">{{ value.label }}</span>
+                                {%- else -%}
+                                  <span class="starter-filter-option__box" aria-hidden="true"></span>
+                                  {%- if filter.filter_type == 'color' and value.color != empty %}<span class="starter-filter-option__dot" style="background: {{ value.color }}" aria-hidden="true"></span>{% endif -%}
+                                  <span class="starter-filter-option__label">{{ value.label }}</span>
+                                {%- endif -%}
+                                {%- if value.count_label %}<span class="starter-filter__count">{{ value.count_label }}</span>{% endif -%}
+                              {%- if value.selectable %}</a>{% else %}</span>{% endif -%}
+                            </li>
+                          {% endfor %}
+                        </ul>
+                        {% if page.has_previous or page.has_next or filter_applied > 0 %}
+                          <div class="starter-filter__more">
+                            {% if page.has_next and page.next_url != empty -%}
+                              <a href="{{ page.next_url }}" rel="nofollow">{{ 'filter_show_more' | t }}</a>
+                            {%- endif %}
+                            {% if page.has_previous and page.previous_url != empty -%}
+                              <a href="{{ page.previous_url }}" rel="nofollow">{{ 'filter_show_fewer' | t }}</a>
+                            {%- endif %}
+                            {% if filter_applied > 0 -%}
+                              <a class="starter-filter__clear" href="{{ filter.clear_url }}" rel="nofollow">{{ 'filter_clear' | t }}</a>
+                            {%- endif %}
+                          </div>
+                        {% endif %}
+                      {% endif %}
+                    </div>
+                  </details>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="starter-filters__foot">
+              <button class="starter-button starter-filters__done" type="button" data-starter-filters-close>{{ 'filter_show_results' | t }}</button>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <div class="starter-listing__results">
+        {% if filters_applied > 0 %}
+          <div class="starter-filters__active" aria-label="{{ 'filter_active' | t }}" role="group">
+            {% for filter in filter_items -%}
+              {%- if filter.filter_type == 'range' and filter.range -%}
+                {%- assign chip_min = filter.range.applied_min -%}
+                {%- assign chip_max = filter.range.applied_max -%}
+                {%- if chip_min != empty or chip_max != empty -%}
+                  <a class="starter-filters__chip" href="{{ filter.range.clear_url }}" rel="nofollow">
+                    <span>{{ filter.label }}:
+                      {% if chip_min != empty and chip_max != empty %}{{ chip_min }}–{{ chip_max }}{% elsif chip_min != empty %}{{ 'filter_from' | t: value: chip_min }}{% else %}{{ 'filter_up_to' | t: value: chip_max }}{% endif -%}
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+                    <span class="starter-visually-hidden">{{ 'filter_remove' | t }}</span>
+                  </a>
+                {%- endif -%}
+              {%- else -%}
+                {%- for value in filter.values -%}
+                  {%- if value.selected and value.selectable -%}
+                    <a class="starter-filters__chip" href="{{ value.url }}" rel="nofollow">
+                      <span>{{ filter.label }}: {{ value.label }}</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+                      <span class="starter-visually-hidden">{{ 'filter_remove' | t }}</span>
+                    </a>
                   {%- endif -%}
-                  {{- item.price.current | money: isolate: true }}
-                </p>
-              {% endif %}
-            </div>
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endfor %}
+            <a class="starter-filters__clear" href="{{ filters.clear_url }}">{{ 'filter_clear_all' | t }}</a>
+          </div>
+        {% endif %}
+      <div class="starter-grid" style="--starter-columns: {{ settings.columns }}">
+        {% for item in products.items %}
+          <article class="starter-card">
+            <a class="starter-card__link" href="{{ item.url }}">
+              <div class="starter-card__media">
+                {% if item.featured_image -%}
+                  <img
+                    src="{{ item.featured_image.url | image_url: width: 720 }}"
+                    alt="{{ item.featured_image.alt_text | default: item.title }}"
+                   srcset="{{ item.featured_image.url | image_srcset: max: 1440 }}" sizes="(min-width: 901px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem) * {{ settings.columns | default: 4 | minus: 1 }}) / {{ settings.columns | default: 4 }}), (min-width: 701px) calc((min(100vw - clamp(2rem, 6vw, 6rem), {{ theme.settings.content_width | default: 1248 }}px) - clamp(1rem, 2.4vw, 2rem)) / 2), calc((min(100vw - 1.5rem, {{ theme.settings.content_width | default: 1248 }}px) - 0.75rem) / 2)" {{ item.featured_image.url | image_loading }}>
+                {%- else -%}
+                  {{- 'product-1' | placeholder_svg -}}
+                {%- endif %}
+              </div>
+              <div class="starter-card__body">
+                {% if settings.show_vendor and item.vendor %}
+                  <p class="starter-card__meta">{{ item.vendor }}</p>
+                {% endif %}
+                <h2 class="starter-card__title">{{ item.title }}</h2>
+                {%- assign card_rating_count = item.rating.count | default: 0 -%}
+                {%- if card_rating_count > 0 %}
+                  {%- assign card_rating = item.rating.average | default: 0 | round: 1 -%}
+                  {%- assign card_rating_percent = card_rating | times: 20 %}
+                  <p class="starter-card__rating">
+                    <span class="starter-stars" style="--starter-rating: {{ card_rating_percent }}%" aria-hidden="true"></span>
+                    <span class="starter-visually-hidden">{{ 'card_rating' | t: rating: card_rating, count: card_rating_count }}</span>
+                    <span aria-hidden="true">{{ card_rating }} ({{ card_rating_count }})</span>
+                  </p>
+                {%- endif %}
+                {% if item.price %}
+                  <p class="starter-card__price">
+                    {% if item.price.on_sale -%}
+                      <del>{{ item.price.regular | money: isolate: true }}</del>
+                    {%- endif -%}
+                    {{- item.price.current | money: isolate: true }}
+                  </p>
+                {% endif %}
+              </div>
+            </a>
+          </article>
+        {% else %}
+          <p class="starter-empty">{{ 'empty' | t }}</p>
+        {% endfor %}
+      </div>
+      {% if products.pagination.has_prev or products.pagination.has_next %}
+      <nav class="starter-pagination" aria-label="{{ 'pagination' | t }}">
+        {% if products.pagination.has_prev and products.pagination.prev_url != empty -%}
+          <a class="starter-button starter-button--secondary" href="{{ products.pagination.prev_url }}">
+            {{- 'previous' | t -}}
           </a>
-        </article>
-      {% else %}
-        <p class="starter-empty">{{ 'empty' | t }}</p>
-      {% endfor %}
+        {%- endif -%}
+        {%- if products.pagination.has_next and products.pagination.next_url != empty -%}
+          <a class="starter-button starter-button--secondary" href="{{ products.pagination.next_url }}">
+            {{- 'next' | t -}}
+          </a>
+        {%- endif %}
+      </nav>
+      {% endif %}
+      </div>
     </div>
-    {% if products.pagination.has_prev or products.pagination.has_next %}
-    <nav class="starter-pagination" aria-label="{{ 'pagination' | t }}">
-      {% if products.pagination.has_prev and products.pagination.prev_url != empty -%}
-        <a class="starter-button starter-button--secondary" href="{{ products.pagination.prev_url }}">
-          {{- 'previous' | t -}}
-        </a>
-      {%- endif -%}
-      {%- if products.pagination.has_next and products.pagination.next_url != empty -%}
-        <a class="starter-button starter-button--secondary" href="{{ products.pagination.next_url }}">
-          {{- 'next' | t -}}
-        </a>
-      {%- endif %}
-    </nav>
-    {% endif %}
   </div>
 </main>
+
+<script>
+(function () {
+  "use strict";
+  var ready = "data-starter-filters-ready";
+  if (document.documentElement.hasAttribute(ready)) return;
+  document.documentElement.setAttribute(ready, "");
+
+  var drawer = window.matchMedia("(max-width: 900px)");
+  var lastTrigger = null;
+
+  function focusables(panel) {
+    return Array.prototype.filter.call(
+      panel.querySelectorAll("a[href], button, input, summary, [tabindex]:not([tabindex='-1'])"),
+      function (node) { return !node.disabled && node.offsetParent !== null; }
+    );
+  }
+
+  function setOpen(root, open) {
+    var panel = root.querySelector("[data-starter-filters-panel]");
+    var trigger = root.querySelector("[data-starter-filters-open]");
+    root.classList.toggle("is-open", open);
+    if (trigger) trigger.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) {
+      panel.setAttribute("role", "dialog");
+      panel.setAttribute("aria-modal", "true");
+      document.documentElement.style.overflow = "hidden";
+      lastTrigger = trigger;
+      panel.focus();
+    } else {
+      panel.setAttribute("role", "region");
+      panel.removeAttribute("aria-modal");
+      document.documentElement.style.overflow = "";
+      if (lastTrigger && drawer.matches) lastTrigger.focus();
+      lastTrigger = null;
+    }
+  }
+
+  document.addEventListener("click", function (event) {
+    var target = event.target;
+    if (!target.closest) return;
+    var open = target.closest("[data-starter-filters-open]");
+    if (open) {
+      setOpen(open.closest("[data-starter-filters]"), true);
+      return;
+    }
+    var close = target.closest("[data-starter-filters-close]");
+    if (close) setOpen(close.closest("[data-starter-filters]"), false);
+  });
+
+  document.addEventListener("keydown", function (event) {
+    var root = document.querySelector("[data-starter-filters].is-open");
+    if (!root) return;
+    if (event.key === "Escape") {
+      setOpen(root, false);
+      return;
+    }
+    if (event.key !== "Tab") return;
+    var items = focusables(root.querySelector("[data-starter-filters-panel]"));
+    if (!items.length) return;
+    var first = items[0];
+    var last = items[items.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !root.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  function closeOnDesktop() {
+    if (drawer.matches) return;
+    var root = document.querySelector("[data-starter-filters].is-open");
+    if (root) setOpen(root, false);
+  }
+  if (drawer.addEventListener) drawer.addEventListener("change", closeOnDesktop);
+
+  // Range sliders are a visual aid; the named number inputs carry the values.
+  function syncRange(form, source) {
+    var thumbs = { min: form.querySelector("[data-starter-range-thumb='min']"), max: form.querySelector("[data-starter-range-thumb='max']") };
+    var inputs = { min: form.querySelector("[data-starter-range-input='min']"), max: form.querySelector("[data-starter-range-input='max']") };
+    var fill = form.querySelector("[data-starter-range-fill]");
+    if (!thumbs.min || !thumbs.max) return;
+    var low = parseFloat(thumbs.min.min);
+    var high = parseFloat(thumbs.min.max);
+    if (source && source.hasAttribute("data-starter-range-thumb")) {
+      var side = source.getAttribute("data-starter-range-thumb");
+      var other = side === "min" ? thumbs.max : thumbs.min;
+      if (side === "min" && parseFloat(source.value) > parseFloat(other.value)) source.value = other.value;
+      if (side === "max" && parseFloat(source.value) < parseFloat(other.value)) source.value = other.value;
+      var atEdge = parseFloat(source.value) === (side === "min" ? low : high);
+      inputs[side].value = atEdge ? "" : source.value;
+    } else {
+      ["min", "max"].forEach(function (side) {
+        var value = parseFloat(inputs[side].value);
+        thumbs[side].value = isNaN(value) ? (side === "min" ? low : high) : Math.min(high, Math.max(low, value));
+      });
+    }
+    var span = high - low || 1;
+    var start = ((parseFloat(thumbs.min.value) - low) / span) * 100;
+    var end = ((parseFloat(thumbs.max.value) - low) / span) * 100;
+    if (fill) {
+      fill.style.insetInlineStart = start + "%";
+      fill.style.insetInlineEnd = (100 - end) + "%";
+    }
+  }
+
+  document.addEventListener("input", function (event) {
+    var form = event.target.closest && event.target.closest("[data-starter-range]");
+    if (form) syncRange(form, event.target);
+  });
+
+  document.addEventListener("submit", function (event) {
+    var form = event.target;
+    if (!form.matches || !form.matches("[data-starter-range]")) return;
+    var min = form.querySelector("[data-starter-range-input='min']");
+    var max = form.querySelector("[data-starter-range-input='max']");
+    if (min.value !== "" && max.value !== "" && parseFloat(min.value) > parseFloat(max.value)) {
+      var swap = min.value;
+      min.value = max.value;
+      max.value = swap;
+    }
+    // Empty bounds are left out so the listing URL stays clean.
+    [min, max].forEach(function (input) { input.disabled = input.value === ""; });
+    window.setTimeout(function () { min.disabled = false; max.disabled = false; }, 0);
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-starter-range]"), function (form) {
+    syncRange(form, null);
+  });
+})();
+</script>

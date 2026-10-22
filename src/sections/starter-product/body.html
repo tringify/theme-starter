@@ -35,18 +35,16 @@
             <span>{{ price.current | money: isolate: true }}</span>
           </p>
         {% endif %}
-        {% if product.rating and product.rating.count > 0 %}
-          <p
-            class="starter-product__rating"
-            aria-label="{{ product.rating.average }} out of 5, {{ product.rating.count }} {{ 'reviews' | t }}"
-          >
-            <span aria-hidden="true">★</span>
-            <strong>{{ product.rating.average }}</strong>
-            <span
-              >· {{ product.rating.count }}
-              {{ 'reviews' | t -}}
-            </span>
-          </p>
+        {%- assign rating_count = product.rating.count | default: 0 -%}
+        {%- if reviews.enabled and rating_count > 0 %}
+          {%- assign rating_average = product.rating.average | default: 0 | round: 1 -%}
+          {%- assign rating_percent = rating_average | times: 20 -%}
+          <a class="starter-product__rating" href="#starter-reviews">
+            <span class="starter-stars" style="--starter-rating: {{ rating_percent }}%" aria-hidden="true"></span>
+            <strong aria-hidden="true">{{ rating_average }}</strong>
+            <span class="starter-visually-hidden">{{ 'rating_out_of' | t: rating: rating_average }}</span>
+            <span>· {% if rating_count == 1 %}{{ 'reviews_count_one' | t }}{% else %}{{ 'reviews_count' | t: count: rating_count }}{% endif %}</span>
+          </a>
         {% endif %}
         {% if product.short_description %}
           <div class="starter-product__intro">{{ product.short_description }}</div>
@@ -113,23 +111,156 @@
           </form>
         {% endif %}
 
+        {%- assign phone_start_country = localization.country.iso_code -%}
         {% if available %}
           {% form 'cart_add', class: 'starter-product__buy' %}
             <input type="hidden" name="product_id" value="{{ product.id }}">
             {% if product.is_gift_card %}
-              <fieldset class="starter-gift-recipient">
-                <legend>{{ 'gift_card_delivery' | t }}</legend>
-                <label><input type="radio" name="gift_card_send_as_gift" value="false" checked> {{ 'gift_card_for_me' | t }}</label>
-                <label><input type="radio" name="gift_card_send_as_gift" value="true"> {{ 'gift_card_send_as_gift' | t }}</label>
-                <div class="starter-gift-recipient__fields">
-                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_name' | t }}</span><input class="starter-input" name="gift_card_recipient_name" autocomplete="off" maxlength="255"></label>
-                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_email' | t }}</span><input class="starter-input" name="gift_card_recipient_email" inputmode="email" autocomplete="off" maxlength="320"></label>
-                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_recipient_phone' | t }}</span><input class="starter-input" name="gift_card_recipient_phone" inputmode="tel" autocomplete="off" maxlength="32"></label>
-                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_message' | t }}</span><textarea class="starter-input" name="gift_card_recipient_message" rows="3" maxlength="2000"></textarea></label>
-                  <label class="starter-field"><span class="starter-label">{{ 'gift_card_schedule_utc' | t }}</span><input class="starter-input" name="gift_card_deliver_at" type="datetime-local"></label>
-                  <p>{{ 'gift_card_recipient_hint' | t }}</p>
+              <div class="starter-gift" data-starter-gift
+                data-contact-message="{{ 'gift_contact_required' | t }}">
+                <label class="starter-gift__toggle">
+                  <input class="starter-gift__toggle-input" type="checkbox" name="gift_card_send_as_gift" value="true" aria-controls="starter-gift-fields" data-starter-gift-toggle>
+                  <span class="starter-gift__switch" aria-hidden="true"><span></span></span>
+                  <span class="starter-gift__toggle-text">
+                    <span class="starter-gift__toggle-title">{{ 'gift_send_as_gift' | t }}</span>
+                    <span class="starter-gift__toggle-hint">{{ 'gift_send_as_gift_hint' | t }}</span>
+                  </span>
+                </label>
+                <div class="starter-gift__fields" id="starter-gift-fields" data-starter-gift-fields>
+                  <label class="starter-field starter-gift__wide">
+                    <span class="starter-label">{{ 'gift_recipient_name' | t }}</span>
+                    <input class="starter-input" type="text" name="gift_card_recipient_name" maxlength="255" autocomplete="off">
+                  </label>
+                  <label class="starter-field">
+                    <span class="starter-label">{{ 'gift_recipient_email' | t }}</span>
+                    <input class="starter-input" type="email" name="gift_card_recipient_email" inputmode="email" autocomplete="off" spellcheck="false" maxlength="320" placeholder="{{ 'email_example' | t }}" data-starter-gift-email>
+                  </label>
+                  <div class="starter-field" data-starter-gift-phone>
+                    {%- assign starter_phone_id = 'starter-gift-phone' -%}
+                    {%- assign starter_phone_name = 'gift_card_recipient_phone' -%}
+                    {%- assign starter_phone_value = '' -%}
+                    {%- assign starter_phone_label = 'gift_recipient_phone' | t -%}
+                    {%- assign starter_phone_required = false -%}
+                    {%- assign starter_phone_disabled = false -%}
+                    {%- assign starter_phone_country = phone_start_country -%}
+                    {%- assign starter_phone_autocomplete = 'off' -%}
+{%- comment -%}partial:phone-field{%- endcomment -%}
+{%- comment -%}
+  Phone field with a searchable country list from ctx.phone_countries. The section needs phone_countries and
+  customer_settings in ctx_needs. Assign every input before each use, since assigns carry over:
+  starter_phone_id (unique id), starter_phone_name (the field the hosted action takes), starter_phone_value (saved
+  number, E.164), starter_phone_label, starter_phone_required and starter_phone_disabled (true or false),
+  starter_phone_country (ISO code to start from when it is a phone country; otherwise the store's default phone
+  country, then the first one), starter_phone_autocomplete (blank: tel).
+  The phone script sends one E.164 number under starter_phone_name. Without it, the number field itself is sent and
+  takes a full + number; the hint shows the starting country's example in international form.
+{%- endcomment -%}
+{%- assign starter_phone_start = phone_countries.first -%}
+{%- for phone_country in phone_countries -%}
+  {%- if phone_country.iso_code == customer_settings.default_phone_country -%}{%- assign starter_phone_start = phone_country -%}{%- endif -%}
+{%- endfor -%}
+{%- if starter_phone_country != blank -%}
+  {%- for phone_country in phone_countries -%}
+    {%- if phone_country.iso_code == starter_phone_country -%}{%- assign starter_phone_start = phone_country -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign starter_phone_example = '' -%}
+{%- if starter_phone_start.example != blank -%}
+  {%- comment -%} The international form drops the national 0, except where the 0 is part of the number. {%- endcomment -%}
+  {%- assign starter_phone_national = starter_phone_start.example -%}
+  {%- assign starter_phone_lead = starter_phone_national | slice: 0 -%}
+  {%- if starter_phone_lead == '0' -%}
+    {%- unless 'IT SM VA CI CG GA' contains starter_phone_start.iso_code -%}
+      {%- assign starter_phone_national = starter_phone_national | remove_first: '0' -%}
+    {%- endunless -%}
+  {%- endif -%}
+  {%- assign starter_phone_example = starter_phone_start.dial_code | append: ' ' | append: starter_phone_national -%}
+{%- endif -%}
+{%- assign starter_phone_hint_id = starter_phone_id | append: '-hint' -%}
+{%- assign starter_phone_ac = starter_phone_autocomplete | default: 'tel' -%}
+<div
+  class="starter-phone-field"
+  data-starter-phone
+  data-default="{{ starter_phone_start.iso_code }}"
+  data-countries="{{ phone_countries | json | escape }}"
+  data-label-selected="{{ 'phone_country_selected' | t: country: '__COUNTRY__' }}"
+  data-label-example="{{ 'phone_example' | t: example: '__EXAMPLE__' }}"
+  data-invalid="{{ 'phone_invalid' | t }}"
+>
+  <label class="starter-label" for="{{ starter_phone_id }}">{{ starter_phone_label }}</label>
+  <p class="starter-phone__hint" id="{{ starter_phone_hint_id }}" data-starter-phone-hint{% if starter_phone_example == blank %} hidden{% endif %}>
+    {%- if starter_phone_example != blank -%}{{ 'phone_example' | t: example: starter_phone_example }}{%- endif -%}
+  </p>
+  <div class="starter-phone" data-starter-phone-row>
+    {%- if phone_countries.size > 0 %}
+      <button class="starter-phone__country" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="{{ starter_phone_id }}-picker" hidden data-starter-phone-country>
+        <span class="starter-phone__flag" aria-hidden="true" data-starter-phone-flag></span
+        ><bdi class="starter-phone__dial" dir="ltr" aria-hidden="true" data-starter-phone-dial></bdi>
+        <svg class="starter-phone__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+        <span class="starter-visually-hidden" data-starter-phone-selected></span>
+      </button>
+      <span class="starter-phone__country starter-phone__country--fixed" id="{{ starter_phone_id }}-prefix" hidden data-starter-phone-fixed>
+        <span class="starter-phone__flag" aria-hidden="true" data-starter-phone-flag></span
+        ><bdi class="starter-phone__dial" dir="ltr" aria-hidden="true" data-starter-phone-dial></bdi>
+        <span class="starter-visually-hidden" data-starter-phone-selected></span>
+      </span>
+    {%- endif %}
+    <input
+      class="starter-input starter-phone__number"
+      id="{{ starter_phone_id }}"
+      type="tel"
+      name="{{ starter_phone_name }}"
+      value="{{ starter_phone_value }}"
+      autocomplete="{{ starter_phone_ac }}"
+      inputmode="tel"
+      dir="ltr"
+      maxlength="24"
+      pattern="[+][1-9][\d \(\)\-\.]{5,22}"
+      title="{{ 'phone_invalid' | t }}"
+      {% if starter_phone_example != blank %}placeholder="{{ starter_phone_example }}"{% endif %}
+      aria-describedby="{{ starter_phone_hint_id }}"
+      {% if starter_phone_required %}required{% endif %}
+      {% if starter_phone_disabled %}disabled{% endif %}
+      data-starter-phone-number
+    >
+    <input type="hidden" value="{{ starter_phone_value }}" data-name="{{ starter_phone_name }}"{% if starter_phone_disabled %} disabled{% endif %} data-starter-phone-value>
+  </div>
+  {%- if phone_countries.size > 1 %}
+    <div class="starter-phone__picker" id="{{ starter_phone_id }}-picker" hidden data-starter-phone-picker>
+      <input
+        class="starter-input starter-phone__search"
+        type="search"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="{{ starter_phone_id }}-list"
+        aria-autocomplete="list"
+        aria-label="{{ 'search_countries' | t }}"
+        placeholder="{{ 'search_countries' | t }}"
+        autocomplete="off"
+        spellcheck="false"
+        data-starter-phone-search
+      >
+      <ul class="starter-phone__list" id="{{ starter_phone_id }}-list" role="listbox" aria-label="{{ 'countries' | t }}" data-starter-phone-list></ul>
+      <p class="starter-phone__empty" role="status" data-text="{{ 'no_countries' | t }}" data-starter-phone-empty></p>
+    </div>
+  {%- endif %}
+</div>
+{%- comment -%}/partial:phone-field{%- endcomment -%}
+                  </div>
+                  <p class="starter-gift__note starter-gift__wide">{{ 'gift_contact_hint' | t }}</p>
+                  <label class="starter-field starter-gift__wide">
+                    <span class="starter-label">{{ 'gift_message' | t }}</span>
+                    <textarea class="starter-input starter-gift__message" name="gift_card_recipient_message" rows="3" maxlength="2000" aria-describedby="starter-gift-count" data-starter-gift-message></textarea>
+                    <span class="starter-gift__hint starter-gift__count" id="starter-gift-count"><span data-starter-gift-count>0</span> / 2000</span>
+                  </label>
+                  <label class="starter-field starter-gift__wide">
+                    <span class="starter-label">{{ 'gift_send_on' | t }}</span>
+                    <input class="starter-input" type="datetime-local" aria-describedby="starter-gift-send-hint" data-starter-gift-when>
+                    <input type="hidden" name="gift_card_deliver_at" value="" disabled data-starter-gift-deliver>
+                    <span class="starter-gift__hint" id="starter-gift-send-hint">{{ 'gift_send_on_hint' | t }}</span>
+                  </label>
                 </div>
-              </fieldset>
+              </div>
             {% endif %}
             {%- if product.selected_variant -%}
               <input type="hidden" name="variant_id" value="{{ product.selected_variant.id }}">
@@ -149,6 +280,8 @@
             ><button
               class="starter-button starter-product__add"
               type="submit"
+              name="purchase_intent"
+              value="cart"
               {% if product.type == 'variable' and product.selection_complete != true %}
                 disabled
               {% endif %}
@@ -161,6 +294,190 @@
           {% endform %}
         {% else %}
           <p class="starter-product__unavailable">{{ 'unavailable' | t }}</p>
+          {%- comment -%}
+            Back-in-stock request for the sold-out selection. Options apply through the GET form above, so the page is
+            redrawn for each choice and variant_id is always the selected variant. A variable product with an incomplete
+            selection shows nothing until the shopper picks a sold-out combination.
+          {%- endcomment -%}
+          {%- assign notify_variant = product.selected_variant -%}
+          {%- assign notify_ready = true -%}
+          {%- assign notify_eligible = product.notify_me_eligible -%}
+          {%- if product.type == 'variable' -%}
+            {%- if product.selection_complete != true or notify_variant == blank -%}
+              {%- assign notify_ready = false -%}
+            {%- else -%}
+              {%- assign notify_eligible = notify_variant.notify_me_eligible -%}
+            {%- endif -%}
+          {%- endif -%}
+          {%- assign notify_mode = restock_notifications.mode | default: 'disabled' -%}
+          {%- if restock_notifications.enabled and notify_mode != 'disabled' and notify_ready and notify_eligible != false %}
+            {%- assign notify_sms = false -%}
+            {%- if notify_mode == 'email_input' and restock_notifications.sms_available -%}{%- assign notify_sms = true -%}{%- endif -%}
+            {%- assign notify_email_required = true -%}
+            {%- if customer.logged_in and restock_notifications.email_input_required != true -%}{%- assign notify_email_required = false -%}{%- endif %}
+            <div class="starter-notify" id="starter-notify-{{ product.id }}" data-starter-notify
+              data-failed="{{ 'notify_failed' | t }}"
+              data-saved="{{ 'notify_saved' | t }}">
+              <p class="starter-notify__title">
+                {%- if notify_sms -%}{{ 'notify_title_sms' | t }}{%- else -%}{{ 'notify_title' | t }}{%- endif -%}
+              </p>
+              {% if notify_mode == 'account_email' %}
+                <p class="starter-notify__text">
+                  {%- if customer.email != blank -%}
+                    {{ 'notify_account_to' | t: email: customer.email }}
+                  {%- else -%}
+                    {{ 'notify_account' | t }}
+                  {%- endif -%}
+                </p>
+                {% form 'cart_notify_me', class: 'starter-notify__form' %}
+                  <input type="hidden" name="product_id" value="{{ product.id }}">
+                  {%- if notify_variant -%}<input type="hidden" name="variant_id" value="{{ notify_variant.id }}">{%- endif -%}
+                  <input type="hidden" name="contact_type" value="email">
+                  <button class="starter-button starter-notify__account" type="submit">{{ 'notify_account_button' | t }}</button>
+                {% endform %}
+              {% elsif restock_notifications.login_required and customer.logged_in != true %}
+                <p class="starter-notify__text">{{ 'notify_sign_in' | t }}</p>
+                <a class="starter-button starter-button--secondary starter-notify__account" href="{{ routes.login_url }}">{{ 'login' | t }}</a>
+              {% else %}
+                <p class="starter-notify__text">{% if notify_sms %}{{ 'notify_text_sms' | t }}{% else %}{{ 'notify_text' | t }}{% endif %}</p>
+                {% form 'cart_notify_me', class: 'starter-notify__form' %}
+                  <input type="hidden" name="product_id" value="{{ product.id }}">
+                  {%- if notify_variant -%}<input type="hidden" name="variant_id" value="{{ notify_variant.id }}">{%- endif -%}
+                  {% if notify_sms %}
+                    <fieldset class="starter-notify__choice">
+                      <legend class="starter-visually-hidden">{{ 'notify_by' | t }}</legend>
+                      <label><input type="radio" name="contact_type" value="email" checked data-starter-notify-kind><span>{{ 'notify_by_email' | t }}</span></label>
+                      <label><input type="radio" name="contact_type" value="sms" data-starter-notify-kind><span>{{ 'notify_by_sms' | t }}</span></label>
+                    </fieldset>
+                  {% else %}
+                    <input type="hidden" name="contact_type" value="email">
+                  {% endif %}
+                  <div class="starter-notify__row">
+                    <label class="starter-field" data-starter-notify-field="email">
+                      <span class="starter-label">{{ 'email' | t }}</span>
+                      <input class="starter-input" type="email" name="email" autocomplete="email" inputmode="email" spellcheck="false" maxlength="256" placeholder="{{ 'email_example' | t }}"{% if notify_email_required %} required{% endif %}>
+                    </label>
+                    {%- if notify_sms %}
+                      <div class="starter-field" data-starter-notify-field="sms" hidden>
+                        {%- assign starter_phone_id = 'starter-notify-phone-' | append: product.id -%}
+                        {%- assign starter_phone_name = 'phone' -%}
+                        {%- assign starter_phone_value = '' -%}
+                        {%- assign starter_phone_label = 'notify_phone' | t -%}
+                        {%- assign starter_phone_required = true -%}
+                        {%- assign starter_phone_disabled = true -%}
+                        {%- assign starter_phone_country = phone_start_country -%}
+                        {%- assign starter_phone_autocomplete = '' -%}
+{%- comment -%}partial:phone-field{%- endcomment -%}
+{%- comment -%}
+  Phone field with a searchable country list from ctx.phone_countries. The section needs phone_countries and
+  customer_settings in ctx_needs. Assign every input before each use, since assigns carry over:
+  starter_phone_id (unique id), starter_phone_name (the field the hosted action takes), starter_phone_value (saved
+  number, E.164), starter_phone_label, starter_phone_required and starter_phone_disabled (true or false),
+  starter_phone_country (ISO code to start from when it is a phone country; otherwise the store's default phone
+  country, then the first one), starter_phone_autocomplete (blank: tel).
+  The phone script sends one E.164 number under starter_phone_name. Without it, the number field itself is sent and
+  takes a full + number; the hint shows the starting country's example in international form.
+{%- endcomment -%}
+{%- assign starter_phone_start = phone_countries.first -%}
+{%- for phone_country in phone_countries -%}
+  {%- if phone_country.iso_code == customer_settings.default_phone_country -%}{%- assign starter_phone_start = phone_country -%}{%- endif -%}
+{%- endfor -%}
+{%- if starter_phone_country != blank -%}
+  {%- for phone_country in phone_countries -%}
+    {%- if phone_country.iso_code == starter_phone_country -%}{%- assign starter_phone_start = phone_country -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign starter_phone_example = '' -%}
+{%- if starter_phone_start.example != blank -%}
+  {%- comment -%} The international form drops the national 0, except where the 0 is part of the number. {%- endcomment -%}
+  {%- assign starter_phone_national = starter_phone_start.example -%}
+  {%- assign starter_phone_lead = starter_phone_national | slice: 0 -%}
+  {%- if starter_phone_lead == '0' -%}
+    {%- unless 'IT SM VA CI CG GA' contains starter_phone_start.iso_code -%}
+      {%- assign starter_phone_national = starter_phone_national | remove_first: '0' -%}
+    {%- endunless -%}
+  {%- endif -%}
+  {%- assign starter_phone_example = starter_phone_start.dial_code | append: ' ' | append: starter_phone_national -%}
+{%- endif -%}
+{%- assign starter_phone_hint_id = starter_phone_id | append: '-hint' -%}
+{%- assign starter_phone_ac = starter_phone_autocomplete | default: 'tel' -%}
+<div
+  class="starter-phone-field"
+  data-starter-phone
+  data-default="{{ starter_phone_start.iso_code }}"
+  data-countries="{{ phone_countries | json | escape }}"
+  data-label-selected="{{ 'phone_country_selected' | t: country: '__COUNTRY__' }}"
+  data-label-example="{{ 'phone_example' | t: example: '__EXAMPLE__' }}"
+  data-invalid="{{ 'phone_invalid' | t }}"
+>
+  <label class="starter-label" for="{{ starter_phone_id }}">{{ starter_phone_label }}</label>
+  <p class="starter-phone__hint" id="{{ starter_phone_hint_id }}" data-starter-phone-hint{% if starter_phone_example == blank %} hidden{% endif %}>
+    {%- if starter_phone_example != blank -%}{{ 'phone_example' | t: example: starter_phone_example }}{%- endif -%}
+  </p>
+  <div class="starter-phone" data-starter-phone-row>
+    {%- if phone_countries.size > 0 %}
+      <button class="starter-phone__country" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="{{ starter_phone_id }}-picker" hidden data-starter-phone-country>
+        <span class="starter-phone__flag" aria-hidden="true" data-starter-phone-flag></span
+        ><bdi class="starter-phone__dial" dir="ltr" aria-hidden="true" data-starter-phone-dial></bdi>
+        <svg class="starter-phone__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+        <span class="starter-visually-hidden" data-starter-phone-selected></span>
+      </button>
+      <span class="starter-phone__country starter-phone__country--fixed" id="{{ starter_phone_id }}-prefix" hidden data-starter-phone-fixed>
+        <span class="starter-phone__flag" aria-hidden="true" data-starter-phone-flag></span
+        ><bdi class="starter-phone__dial" dir="ltr" aria-hidden="true" data-starter-phone-dial></bdi>
+        <span class="starter-visually-hidden" data-starter-phone-selected></span>
+      </span>
+    {%- endif %}
+    <input
+      class="starter-input starter-phone__number"
+      id="{{ starter_phone_id }}"
+      type="tel"
+      name="{{ starter_phone_name }}"
+      value="{{ starter_phone_value }}"
+      autocomplete="{{ starter_phone_ac }}"
+      inputmode="tel"
+      dir="ltr"
+      maxlength="24"
+      pattern="[+][1-9][\d \(\)\-\.]{5,22}"
+      title="{{ 'phone_invalid' | t }}"
+      {% if starter_phone_example != blank %}placeholder="{{ starter_phone_example }}"{% endif %}
+      aria-describedby="{{ starter_phone_hint_id }}"
+      {% if starter_phone_required %}required{% endif %}
+      {% if starter_phone_disabled %}disabled{% endif %}
+      data-starter-phone-number
+    >
+    <input type="hidden" value="{{ starter_phone_value }}" data-name="{{ starter_phone_name }}"{% if starter_phone_disabled %} disabled{% endif %} data-starter-phone-value>
+  </div>
+  {%- if phone_countries.size > 1 %}
+    <div class="starter-phone__picker" id="{{ starter_phone_id }}-picker" hidden data-starter-phone-picker>
+      <input
+        class="starter-input starter-phone__search"
+        type="search"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="{{ starter_phone_id }}-list"
+        aria-autocomplete="list"
+        aria-label="{{ 'search_countries' | t }}"
+        placeholder="{{ 'search_countries' | t }}"
+        autocomplete="off"
+        spellcheck="false"
+        data-starter-phone-search
+      >
+      <ul class="starter-phone__list" id="{{ starter_phone_id }}-list" role="listbox" aria-label="{{ 'countries' | t }}" data-starter-phone-list></ul>
+      <p class="starter-phone__empty" role="status" data-text="{{ 'no_countries' | t }}" data-starter-phone-empty></p>
+    </div>
+  {%- endif %}
+</div>
+{%- comment -%}/partial:phone-field{%- endcomment -%}
+                      </div>
+                    {%- endif %}
+                    <button class="starter-button" type="submit">{{ 'notify_submit' | t }}</button>
+                  </div>
+                {% endform %}
+              {% endif %}
+              <p class="starter-notify__message" role="status" aria-live="polite" data-starter-notify-message hidden></p>
+            </div>
+          {%- endif %}
         {% endif %}
 
         {% if wishlist.enabled %}
@@ -201,4 +518,879 @@
       </div>
     {% endif %}
   </div>
+  {%- if product and reviews.enabled %}
+    {%- assign review_count = reviews.stats.count | default: product.rating.count | default: 0 -%}
+    {%- assign review_average = reviews.stats.average | default: product.rating.average | default: 0 | round: 1 -%}
+    {%- assign review_percent = review_average | times: 20 -%}
+    {%- assign review_form = forms.review -%}
+    {%- assign review_gate = false -%}
+    {%- if customer.logged_in != true -%}
+      {%- if review_form.guests_allowed == false or review_form.purchase_required -%}{%- assign review_gate = true -%}{%- endif -%}
+    {%- endif -%}
+    {%- assign review_page = reviews.page | default: 1 -%}
+    <section class="starter-shell starter-reviews" id="starter-reviews" aria-labelledby="starter-reviews-title">
+      <div class="starter-reviews__aside">
+        <h2 class="starter-heading starter-heading--small" id="starter-reviews-title">{{ 'reviews_title' | t }}</h2>
+        {% if review_count > 0 %}
+          <div class="starter-reviews__summary">
+            <p class="starter-reviews__average" aria-hidden="true">{{ review_average }}</p>
+            <div>
+              <span class="starter-stars starter-stars--large" style="--starter-rating: {{ review_percent }}%" aria-hidden="true"></span>
+              <p class="starter-card__meta">
+                <span class="starter-visually-hidden">{{ 'rating_out_of' | t: rating: review_average }}. </span>
+                {%- if review_count == 1 -%}{{ 'reviews_based_on_one' | t }}{%- else -%}{{ 'reviews_based_on' | t: count: review_count }}{%- endif -%}
+              </p>
+            </div>
+          </div>
+        {% else %}
+          <p class="starter-reviews__empty">{{ 'reviews_empty' | t }}</p>
+        {% endif %}
+
+        {% if review_form.purchase_required %}
+          <p class="starter-reviews__note">{{ 'review_purchase_required' | t }}</p>
+        {% endif %}
+        <details class="starter-reviews__write"{% if review_count == 0 %} open{% endif %}>
+          <summary class="starter-button starter-button--secondary">{{ 'review_write' | t }}</summary>
+          <div class="starter-reviews__panel" data-starter-review
+            data-failed="{{ 'review_failed' | t }}"
+            data-sent="{{ 'review_sent' | t }}"
+            data-upload-failed="{{ 'review_photo_failed' | t }}"
+            data-upload-type="{{ 'review_photo_type' | t }}"
+            data-upload-size="{{ 'review_photo_size' | t }}"
+            data-remove="{{ 'review_photo_remove' | t }}">
+            {% if review_gate %}
+              <p class="starter-reviews__note">{{ 'review_sign_in' | t }}</p>
+              <a class="starter-button" href="{{ routes.login_url }}">{{ 'login' | t }}</a>
+            {% else %}
+              {%- assign title_max = review_form.title.max_length | default: 200 -%}
+              {%- assign title_min = review_form.title.min_length | default: 0 -%}
+              {%- assign name_max = review_form.reviewer_name.max_length | default: 100 -%}
+              {%- assign name_min = review_form.reviewer_name.min_length | default: 0 -%}
+              {%- assign email_max = review_form.reviewer_email.max_length | default: 255 -%}
+              {%- assign content_max = review_form.content.max_length | default: 5000 -%}
+              {%- assign content_min = review_form.content.min_length | default: 0 -%}
+              {%- assign photo_max = review_form.max_images | default: 0 -%}
+              {% form 'review_submit', class: 'starter-reviews__form' %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                {%- if product.selected_variant -%}<input type="hidden" name="variant_id" value="{{ product.selected_variant.id }}">{%- endif %}
+                <fieldset class="starter-rate">
+                  <legend class="starter-label">{{ 'review_rating' | t }}</legend>
+                  <div class="starter-rate__stars">
+                    {%- for star in (1..5) %}
+                      {%- if star == 1 -%}{%- assign star_label = 'review_star_one' | t -%}{%- else -%}{%- assign star_label = 'review_stars' | t: count: star -%}{%- endif %}
+                      <input class="starter-visually-hidden" type="radio" id="starter-rate-{{ star }}" name="rating" value="{{ star }}" required>
+                      <label for="starter-rate-{{ star }}" title="{{ star_label }}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg><span class="starter-visually-hidden">{{ star_label }}</span></label>
+                    {%- endfor %}
+                  </div>
+                </fieldset>
+                {% if customer.logged_in != true %}
+                  <div class="starter-reviews__pair">
+                    <label class="starter-field">
+                      <span class="starter-label">{{ 'review_name' | t }}{% unless review_form.reviewer_name.required %} <span class="starter-muted">{{ 'optional' | t }}</span>{% endunless %}</span>
+                      <input class="starter-input" type="text" name="reviewer_name" autocomplete="name" maxlength="{{ name_max }}"{% if name_min > 0 %} minlength="{{ name_min }}"{% endif %}{% if review_form.reviewer_name.required %} required{% endif %}>
+                    </label>
+                    <label class="starter-field">
+                      <span class="starter-label">{{ 'email' | t }}{% unless review_form.reviewer_email.required %} <span class="starter-muted">{{ 'optional' | t }}</span>{% endunless %}</span>
+                      <input class="starter-input" type="email" name="reviewer_email" autocomplete="email" inputmode="email" spellcheck="false" maxlength="{{ email_max }}"{% if review_form.reviewer_email.required %} required{% endif %} aria-describedby="starter-review-email-hint">
+                      <span class="starter-reviews__hint" id="starter-review-email-hint">{{ 'review_email_hint' | t }}</span>
+                    </label>
+                  </div>
+                {% endif %}
+                <label class="starter-field">
+                  <span class="starter-label">{{ 'review_title' | t }}{% unless review_form.title.required %} <span class="starter-muted">{{ 'optional' | t }}</span>{% endunless %}</span>
+                  <input class="starter-input" type="text" name="title" maxlength="{{ title_max }}"{% if title_min > 0 %} minlength="{{ title_min }}"{% endif %}{% if review_form.title.required %} required{% endif %}>
+                </label>
+                <label class="starter-field">
+                  <span class="starter-label">{{ 'review_content' | t }}</span>
+                  <textarea class="starter-textarea" name="content" rows="5" maxlength="{{ content_max }}"{% if content_min > 0 %} minlength="{{ content_min }}"{% endif %}{% if review_form.content.required != false %} required{% endif %} aria-describedby="starter-review-count" data-starter-review-content data-min="{{ content_min }}"></textarea>
+                  <span class="starter-reviews__hint starter-reviews__count" id="starter-review-count">
+                    {%- if content_min > 0 -%}<span>{{ 'review_content_min' | t: count: content_min }}</span>{%- endif -%}
+                    <span aria-live="polite"><span data-starter-review-count>0</span> / {{ content_max }}</span>
+                  </span>
+                </label>
+                {% if review_form.allow_images and photo_max > 0 %}
+                  <div class="starter-field starter-reviews__photos" data-starter-review-photos data-max="{{ photo_max }}" hidden>
+                    <span class="starter-label" id="starter-review-photos-label">{{ 'review_photos' | t }} <span class="starter-muted">{{ 'optional' | t }}</span></span>
+                    <div class="starter-reviews__thumbs" data-starter-review-thumbs>
+                      <label class="starter-reviews__add" data-starter-review-add>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        <span class="starter-visually-hidden">{{ 'review_photos_add' | t }}</span>
+                        <input class="starter-visually-hidden" type="file" accept="image/jpeg,image/png" multiple aria-labelledby="starter-review-photos-label" aria-describedby="starter-review-photos-hint" data-starter-review-file>
+                      </label>
+                    </div>
+                    <span class="starter-reviews__hint" id="starter-review-photos-hint">{% if photo_max == 1 %}{{ 'review_photos_hint_one' | t }}{% else %}{{ 'review_photos_hint' | t: count: photo_max }}{% endif %}</span>
+                    <input type="hidden" name="review_media_ids" value="" disabled data-starter-review-media>
+                  </div>
+                {% endif %}
+                <button class="starter-button starter-reviews__submit" type="submit" data-starter-review-submit>{{ 'review_submit' | t }}</button>
+              {% endform %}
+            {% endif %}
+            <p class="starter-reviews__message" role="status" aria-live="polite" data-starter-review-message hidden></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="starter-reviews__list">
+        {% for review in reviews.items %}
+          {%- assign review_stars = review.rating | default: 0 -%}
+          {%- assign review_stars_percent = review_stars | times: 20 %}
+          <article class="starter-review">
+            <header class="starter-review__head">
+              <span class="starter-stars" style="--starter-rating: {{ review_stars_percent }}%" role="img" aria-label="{{ 'rating_out_of' | t: rating: review_stars }}"></span>
+              <time class="starter-card__meta" datetime="{{ review.created_at_iso }}">{{ review.created_at }}</time>
+            </header>
+            {% if review.title != blank %}
+              <h3 class="starter-review__title">{{ review.title }}</h3>
+            {% endif %}
+            <p class="starter-review__content">{{ review.content | newline_to_br }}</p>
+            {% if review.images.size > 0 %}
+              <ul class="starter-review__images" role="list">
+                {% for image in review.images %}
+                  <li>
+                    <a href="{{ image.url }}" target="_blank" rel="noopener">
+                      <img src="{{ image.url | image_url: width: 240 }}" alt="{{ 'review_photo_alt' | t: name: review.reviewer_name }}" width="{{ image.width }}" height="{{ image.height }}" loading="lazy">
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+            <p class="starter-review__by">
+              <strong>{{ review.reviewer_name }}</strong>
+              {%- if review.verified_purchase %}
+                <span class="starter-review__badge">
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m3.5 8.5 3 3 6-7"/></svg>
+                  {{- 'review_verified' | t -}}
+                </span>
+              {%- endif %}
+            </p>
+            {% if review.store_response and review.store_response.content != blank %}
+              <div class="starter-review__reply">
+                <p class="starter-review__reply-by">
+                  {{- 'review_reply_from' | t: shop: shop.name -}}
+                  {%- if review.store_response.created_at != blank %}
+                    <time class="starter-card__meta" datetime="{{ review.store_response.created_at_iso }}">{{ review.store_response.created_at }}</time>
+                  {%- endif -%}
+                </p>
+                <p>{{ review.store_response.content | newline_to_br }}</p>
+              </div>
+            {% endif %}
+            {% form 'review_vote', class: 'starter-review__vote' %}
+              <input type="hidden" name="review_id" value="{{ review.id }}">
+              <input type="hidden" name="vote" value="helpful" data-starter-vote-value>
+              <input type="hidden" name="remove" value="true" disabled data-starter-vote-remove>
+              <button class="starter-button starter-button--secondary" type="submit" aria-pressed="false" data-starter-vote>
+                {{- 'review_helpful' | t }} <span class="starter-review__votes" data-starter-vote-count>{{ review.helpful_count | default: 0 }}</span>
+              </button>
+            {% endform %}
+          </article>
+        {% else %}
+          {% if review_count > 0 %}<p class="starter-reviews__empty">{{ 'reviews_none_here' | t }}</p>{% endif %}
+        {% endfor %}
+        {% if reviews.has_more or review_page > 1 %}
+          <nav class="starter-reviews__pages" aria-label="{{ 'reviews_pages' | t }}">
+            {% if review_page > 1 -%}
+              {%- assign review_prev = review_page | minus: 1 -%}
+              <a class="starter-button starter-button--secondary" href="{{ product.url }}?reviews_page={{ review_prev }}#starter-reviews">{{ 'reviews_newer' | t }}</a>
+            {%- endif %}
+            {% if reviews.has_more -%}
+              {%- assign review_next = review_page | plus: 1 -%}
+              <a class="starter-button starter-button--secondary" href="{{ product.url }}?reviews_page={{ review_next }}#starter-reviews">{{ 'reviews_more' | t }}</a>
+            {%- endif %}
+          </nav>
+        {% endif %}
+      </div>
+    </section>
+  {%- endif %}
 </main>
+{%- comment -%}partial:phone-script{%- endcomment -%}
+<script>
+(function () {
+  "use strict";
+  // Phone fields ([data-starter-phone]): a country button (flag and calling code) opens a searchable list of the
+  // store's phone countries. The visible field then takes the national number and a hidden field sends one E.164
+  // number (+ and digits) under the original name. A number typed or pasted with + or 00 moves to its country.
+  // Without this script, or without countries, the field itself is sent and takes a full + number.
+  var ready = "data-starter-phone-ready";
+  if (document.documentElement.hasAttribute(ready)) return;
+  document.documentElement.setAttribute(ready, "");
+
+  // Countries sharing a calling code: a number goes to the code's main country unless the current or default one shares it.
+  var MAIN = { "1": "US", "7": "RU", "39": "IT", "44": "GB", "47": "NO", "61": "AU", "212": "MA", "262": "RE", "290": "SH", "358": "FI", "590": "GP", "599": "CW" };
+  // National prefixes the international number drops: [prefix, national length after it (0: any)]. Most countries
+  // use a single 0; these keep their leading 0 (it is part of the number) or use another prefix.
+  var TRUNK = { IT: null, SM: null, VA: null, CI: null, CG: null, GA: null, HU: ["06", 0], RU: ["8", 10], KZ: ["8", 10], BY: ["80", 9], LT: ["8", 8], TM: ["8", 8], TJ: ["8", 9] };
+  var E164 = /^\+[1-9]\d{6,14}$/;
+  var TOP = typeof HTMLElement !== "undefined" && typeof HTMLElement.prototype.showPopover === "function";
+  var lists = {};
+  var openField = null;
+
+  function digits(text) {
+    return String(text || "").replace(/\D/g, "");
+  }
+
+  function fold(text) {
+    return String(text || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  }
+
+  function flagOf(country) {
+    if (country.flag) return country.flag;
+    var iso = String(country.iso_code || "").toUpperCase();
+    return /^[A-Z]{2}$/.test(iso) ? String.fromCodePoint(0x1f1e6 + iso.charCodeAt(0) - 65, 0x1f1e6 + iso.charCodeAt(1) - 65) : "";
+  }
+
+  // Fields on one page share one list; it is parsed and sorted once, by name in the page language.
+  function countriesOf(root) {
+    var raw = root.getAttribute("data-countries") || "[]";
+    if (lists[raw]) return lists[raw];
+    var list = [];
+    try {
+      list = JSON.parse(raw) || [];
+    } catch (error) {}
+    list = list.filter(function (country) {
+      return country && country.iso_code && country.name && /^\+\d+$/.test(country.dial_code || "");
+    });
+    var collator = window.Intl && Intl.Collator ? new Intl.Collator(document.documentElement.lang || undefined, { sensitivity: "base" }) : null;
+    list.sort(function (a, b) {
+      return collator ? collator.compare(a.name, b.name) : a.name < b.name ? -1 : 1;
+    });
+    lists[raw] = list;
+    return list;
+  }
+
+  // "+44 (0)7700 900123" or "0044 7700 900123" -> { country: GB, rest: "7700900123" }. While the code is still
+  // being typed (a longer code could match, or nothing follows it) it waits, unless final.
+  function detect(field, text, final) {
+    var compact = String(text || "").replace(/\(0\)/g, "").replace(/[^0-9+]/g, "");
+    var international = compact.charAt(0) === "+" ? compact.slice(1) : /^00/.test(compact) ? compact.slice(2) : null;
+    if (international === null) return null;
+    var number = digits(international);
+    var best = null;
+    var bestLength = 0;
+    if (!final && field.list.some(function (country) {
+      var code = digits(country.dial_code);
+      return code.length > number.length && code.indexOf(number) === 0;
+    })) return null;
+    function rank(country, code) {
+      return country === field.current ? 3 : country === field.start ? 2 : MAIN[code] === country.iso_code ? 1 : 0;
+    }
+    field.list.forEach(function (country) {
+      var code = digits(country.dial_code);
+      if (!code || number.indexOf(code) !== 0 || code.length < bestLength) return;
+      if (code.length > bestLength || rank(country, code) > rank(best, code)) {
+        best = country;
+        bestLength = code.length;
+      }
+    });
+    if (!best) return null;
+    var rest = number.slice(bestLength);
+    if (!final && !rest) return null;
+    return { country: best, rest: rest };
+  }
+
+  function national(country, number) {
+    var trunk = TRUNK.hasOwnProperty(country.iso_code) ? TRUNK[country.iso_code] : digits(country.dial_code) === "1" ? ["1", 10] : ["0", 0];
+    if (trunk && number.indexOf(trunk[0]) === 0 && (!trunk[1] || number.length === trunk[0].length + trunk[1])) return number.slice(trunk[0].length);
+    return number;
+  }
+
+  function e164(field) {
+    var compact = String(field.number.value || "").replace(/\(0\)/g, "").replace(/[^0-9+]/g, "");
+    var number = digits(compact);
+    if (!number) return "";
+    if (compact.charAt(0) === "+") return "+" + number;
+    if (/^00/.test(compact)) return "+" + number.slice(2);
+    return field.current.dial_code + national(field.current, number);
+  }
+
+  // The sent value follows the visible number; a number that cannot be a phone number is caught before sending.
+  function sync(field) {
+    var value = e164(field);
+    field.value.value = value;
+    field.number.setCustomValidity(value && !E164.test(value) ? field.root.getAttribute("data-invalid") || "" : "");
+  }
+
+  function load(field, text) {
+    var hit = detect(field, text, true);
+    if (hit) {
+      field.current = hit.country;
+      field.number.value = hit.rest;
+    } else {
+      field.number.value = String(text || "").trim();
+    }
+  }
+
+  function setup(root) {
+    if (root.starterPhone !== undefined) return root.starterPhone;
+    root.starterPhone = null;
+    var list = countriesOf(root);
+    if (!list.length) return null;
+    var field = {
+      root: root,
+      list: list,
+      number: root.querySelector("[data-starter-phone-number]"),
+      value: root.querySelector("[data-starter-phone-value]"),
+      button: root.querySelector("[data-starter-phone-country]"),
+      picker: root.querySelector("[data-starter-phone-picker]"),
+      search: root.querySelector("[data-starter-phone-search]"),
+      options: root.querySelector("[data-starter-phone-list]"),
+      row: root.querySelector("[data-starter-phone-row]"),
+      single: list.length === 1,
+      shown: [],
+      active: -1
+    };
+    var wanted = String(root.getAttribute("data-default") || "").toUpperCase();
+    field.start = list.filter(function (country) { return country.iso_code === wanted; })[0] || list[0];
+    field.current = field.start;
+    // Setting a hidden input's value rewrites its default, so the saved number is kept for a form reset.
+    field.saved = field.value.getAttribute("value") || field.number.getAttribute("value") || "";
+    load(field, field.saved);
+    // From here the visible field holds the national number and the hidden one is sent.
+    field.value.name = field.value.getAttribute("data-name");
+    field.number.removeAttribute("name");
+    field.number.removeAttribute("pattern");
+    field.number.removeAttribute("title");
+    if (field.number.getAttribute("autocomplete") === "tel") field.number.setAttribute("autocomplete", "tel-national");
+    if (field.single || !field.picker) {
+      // One country is a fixed prefix, read with the number.
+      var fixed = root.querySelector("[data-starter-phone-fixed]");
+      fixed.hidden = false;
+      if (field.button) field.button.remove();
+      field.button = null;
+      field.number.setAttribute("aria-describedby", (fixed.id + " " + (field.number.getAttribute("aria-describedby") || "")).trim());
+    } else {
+      field.button.hidden = false;
+      if (TOP) {
+        field.picker.setAttribute("popover", "manual");
+        field.picker.hidden = false;
+      }
+    }
+    root.classList.add("is-enhanced");
+    root.starterPhone = field;
+    choose(field, field.current, false);
+    return field;
+  }
+
+  function choose(field, country, focus) {
+    field.current = country;
+    var root = field.root;
+    var selected = (root.getAttribute("data-label-selected") || "").replace("__COUNTRY__", country.name + " (" + country.dial_code + ")");
+    Array.prototype.forEach.call(root.querySelectorAll("[data-starter-phone-flag]"), function (node) { node.textContent = flagOf(country); });
+    Array.prototype.forEach.call(root.querySelectorAll("[data-starter-phone-dial]"), function (node) { node.textContent = country.dial_code; });
+    Array.prototype.forEach.call(root.querySelectorAll("[data-starter-phone-selected]"), function (node) { node.textContent = selected; });
+    var hint = root.querySelector("[data-starter-phone-hint]");
+    if (hint) {
+      hint.textContent = country.example ? (root.getAttribute("data-label-example") || "").replace("__EXAMPLE__", country.example) : "";
+      hint.hidden = !country.example;
+    }
+    if (country.example) field.number.setAttribute("placeholder", country.example);
+    else field.number.removeAttribute("placeholder");
+    sync(field);
+    if (focus) field.number.focus();
+  }
+
+  function render(field) {
+    var raw = field.search.value.trim();
+    var query = fold(raw);
+    var queryDigits = digits(raw);
+    var word = new RegExp("[\\s(\\-]" + query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    // Names starting with the search come first, then names with a word starting with it, then the rest.
+    function rank(country) {
+      var name = fold(country.name);
+      if (country.iso_code.toLowerCase() === query || name.indexOf(query) === 0) return 0;
+      return word.test(name) ? 1 : 2;
+    }
+    field.shown = field.list.filter(function (country) {
+      return !raw || fold(country.name).indexOf(query) !== -1 || country.iso_code.toLowerCase() === query || (queryDigits && digits(country.dial_code).indexOf(queryDigits) === 0);
+    });
+    if (query && !queryDigits) {
+      field.shown = field.shown
+        .map(function (country, index) { return [rank(country), index, country]; })
+        .sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; })
+        .map(function (entry) { return entry[2]; });
+    }
+    var fragment = document.createDocumentFragment();
+    field.shown.forEach(function (country) {
+      var option = document.createElement("li");
+      option.id = field.options.id + "-" + country.iso_code;
+      option.className = "starter-phone__option" + (country === field.current ? " is-current" : "");
+      option.setAttribute("role", "option");
+      option.setAttribute("aria-selected", "false");
+      option.setAttribute("data-iso", country.iso_code);
+      var flag = document.createElement("span");
+      flag.className = "starter-phone__flag";
+      flag.setAttribute("aria-hidden", "true");
+      flag.textContent = flagOf(country);
+      var name = document.createElement("span");
+      name.className = "starter-phone__name";
+      name.textContent = country.name;
+      var dial = document.createElement("bdi");
+      dial.className = "starter-phone__option-dial";
+      dial.setAttribute("dir", "ltr");
+      dial.textContent = country.dial_code;
+      option.appendChild(flag);
+      option.appendChild(name);
+      option.appendChild(dial);
+      fragment.appendChild(option);
+    });
+    field.options.replaceChildren(fragment);
+    var empty = field.root.querySelector("[data-starter-phone-empty]");
+    empty.textContent = field.shown.length ? "" : empty.getAttribute("data-text");
+    var at = raw ? 0 : field.shown.indexOf(field.current);
+    activate(field, field.shown.length ? Math.max(0, at) : -1);
+  }
+
+  function activate(field, index) {
+    var options = field.options.children;
+    field.active = index;
+    for (var i = 0; i < options.length; i++) {
+      options[i].setAttribute("aria-selected", i === index ? "true" : "false");
+      options[i].classList.toggle("is-active", i === index);
+    }
+    if (index >= 0 && options[index]) {
+      field.search.setAttribute("aria-activedescendant", options[index].id);
+      options[index].scrollIntoView({ block: "nearest" });
+    } else {
+      field.search.removeAttribute("aria-activedescendant");
+    }
+  }
+
+  // In the top layer the list is never clipped by a panel or drawer. It opens under the field, or above it when
+  // there is more room there, at least 18rem wide and kept inside the window on the field's starting edge.
+  function place(field) {
+    if (!TOP) return;
+    var rect = field.row.getBoundingClientRect();
+    var height = window.innerHeight;
+    var width = document.documentElement.clientWidth;
+    var below = height - rect.bottom - 12;
+    var above = rect.top - 12;
+    var up = below < 260 && above > below;
+    var size = Math.min(Math.max(rect.width, 288), width - 16);
+    var x = getComputedStyle(field.root).direction === "rtl" ? rect.right - size : rect.left;
+    var style = field.picker.style;
+    style.left = Math.min(Math.max(8, x), width - 8 - size) + "px";
+    style.width = size + "px";
+    if (up) {
+      style.top = "auto";
+      style.bottom = height - rect.top + 6 + "px";
+    } else {
+      style.bottom = "auto";
+      style.top = rect.bottom + 6 + "px";
+    }
+    style.setProperty("--starter-phone-room", Math.max(140, (up ? above : below) - 80) + "px");
+  }
+
+  function isOpen(field) {
+    return !!field && (TOP ? field.picker.matches(":popover-open") : !field.picker.hidden);
+  }
+
+  function open(field) {
+    if (openField && openField !== field) close(openField, false);
+    openField = field;
+    field.button.setAttribute("aria-expanded", "true");
+    if (TOP) {
+      field.picker.showPopover();
+      place(field);
+    } else {
+      field.picker.hidden = false;
+    }
+    field.search.value = "";
+    render(field);
+    field.search.focus();
+  }
+
+  function close(field, back) {
+    if (!isOpen(field)) return;
+    if (TOP) field.picker.hidePopover();
+    else field.picker.hidden = true;
+    field.button.setAttribute("aria-expanded", "false");
+    if (openField === field) openField = null;
+    if (back) field.button.focus();
+  }
+
+  function fieldOf(node) {
+    var root = node && node.closest && node.closest("[data-starter-phone]");
+    return root ? setup(root) : null;
+  }
+
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest && event.target.closest("[data-starter-phone-country]");
+    if (button) {
+      var field = fieldOf(button);
+      if (field) {
+        if (isOpen(field)) close(field, true);
+        else open(field);
+      }
+      return;
+    }
+    var option = event.target.closest && event.target.closest(".starter-phone__option");
+    if (option) {
+      var owner = fieldOf(option);
+      var country = owner && owner.list.filter(function (entry) { return entry.iso_code === option.getAttribute("data-iso"); })[0];
+      if (country) {
+        close(owner, false);
+        choose(owner, country, true);
+      }
+      return;
+    }
+    if (openField && !openField.root.contains(event.target)) close(openField, false);
+  });
+
+  document.addEventListener("input", function (event) {
+    var target = event.target;
+    if (!target.hasAttribute) return;
+    if (target.hasAttribute("data-starter-phone-search")) {
+      var field = fieldOf(target);
+      if (field) render(field);
+      return;
+    }
+    if (target.hasAttribute("data-starter-phone-number")) {
+      var owner = fieldOf(target);
+      if (!owner) return;
+      var hit = !owner.single && detect(owner, owner.number.value, false);
+      if (hit) {
+        owner.number.value = hit.rest;
+        choose(owner, hit.country, false);
+      } else {
+        sync(owner);
+      }
+    }
+  });
+
+  document.addEventListener("focusout", function (event) {
+    if (!event.target.hasAttribute || !event.target.hasAttribute("data-starter-phone-number")) return;
+    var field = fieldOf(event.target);
+    var hit = field && !field.single && detect(field, field.number.value, true);
+    if (hit) {
+      field.number.value = hit.rest;
+      choose(field, hit.country, false);
+    }
+  });
+
+  // Escape closes only the list: caught on the window before a drawer or dialog sees it.
+  window.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape" || !openField || !openField.root.contains(event.target)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    close(openField, true);
+  }, true);
+
+  document.addEventListener("keydown", function (event) {
+    if (!event.target.hasAttribute || !event.target.hasAttribute("data-starter-phone-search")) return;
+    var field = fieldOf(event.target);
+    if (!field) return;
+    var count = field.shown.length;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (count) activate(field, (field.active + 1) % count);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (count) activate(field, (field.active - 1 + count) % count);
+    } else if (event.key === "Home" && count) {
+      event.preventDefault();
+      activate(field, 0);
+    } else if (event.key === "End" && count) {
+      event.preventDefault();
+      activate(field, count - 1);
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      var country = field.shown[field.active];
+      if (country) {
+        close(field, false);
+        choose(field, country, true);
+      }
+    } else if (event.key === "Tab") {
+      close(field, false);
+    }
+  });
+
+  window.addEventListener("resize", function () { if (openField) place(openField); });
+  window.addEventListener("scroll", function () { if (openField) place(openField); }, { capture: true, passive: true });
+
+  // The sent value is current at submit, whatever changed the number (autofill included). Capture runs before
+  // the hosted bridge and the theme's own form checks read the form.
+  document.addEventListener("submit", function (event) {
+    var form = event.target;
+    if (!form || !form.querySelectorAll) return;
+    Array.prototype.forEach.call(form.querySelectorAll("[data-starter-phone]"), function (root) {
+      var field = setup(root);
+      if (field) sync(field);
+    });
+  }, true);
+
+  // A reset form goes back to its saved number (or none), under that number's country.
+  document.addEventListener("reset", function (event) {
+    var form = event.target;
+    if (!form || !form.querySelectorAll) return;
+    setTimeout(function () {
+      Array.prototype.forEach.call(form.querySelectorAll("[data-starter-phone]"), function (root) {
+        var field = setup(root);
+        if (!field) return;
+        field.current = field.start;
+        load(field, field.saved);
+        choose(field, field.current, false);
+      });
+    });
+  }, true);
+
+  function all() {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-starter-phone]"), setup);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", all);
+  else all();
+  // Sections redrawn after a hosted action bring new fields.
+  var frame = 0;
+  new MutationObserver(function () {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(all);
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
+{%- comment -%}/partial:phone-script{%- endcomment -%}
+<script>
+(function () {
+  "use strict";
+  var ready = "data-starter-gift-ready";
+  if (document.documentElement.hasAttribute(ready)) return;
+  document.documentElement.setAttribute(ready, "");
+
+  function pad(value) {
+    return (value < 10 ? "0" : "") + value;
+  }
+
+  function localValue(date) {
+    return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate()) + "T" + pad(date.getHours()) + ":" + pad(date.getMinutes());
+  }
+
+  // datetime-local has no zone; send the shopper's own offset for that moment.
+  function withOffset(value) {
+    var match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?/.exec(value || "");
+    if (!match) return "";
+    var date = new Date(+match[1], +match[2] - 1, +match[3], +match[4], +match[5], +(match[6] || 0));
+    if (isNaN(date.getTime())) return "";
+    var offset = -date.getTimezoneOffset();
+    var sign = offset < 0 ? "-" : "+";
+    offset = Math.abs(offset);
+    return match[1] + "-" + match[2] + "-" + match[3] + "T" + match[4] + ":" + match[5] + ":" + (match[6] || "00") + sign + pad(Math.floor(offset / 60)) + ":" + pad(offset % 60);
+  }
+
+  function part(root, name) {
+    return root.querySelector("[data-starter-gift-" + name + "]");
+  }
+
+  // An empty send time is left out, so the card goes right after payment.
+  function writeDelivery(root) {
+    var deliver = part(root, "deliver");
+    deliver.value = withOffset(part(root, "when").value);
+    deliver.disabled = !part(root, "toggle").checked || !deliver.value;
+  }
+
+  // The phone field checks its own number; the sent value is whichever of its inputs carries the name.
+  function validate(root) {
+    var email = part(root, "email");
+    var phone = part(root, "phone").querySelector("input[name]");
+    var on = part(root, "toggle").checked;
+    var phoneValue = phone ? phone.value.trim() : "";
+    email.setCustomValidity(on && !email.value.trim() && !phoneValue ? root.getAttribute("data-contact-message") : "");
+  }
+
+  function sync(root) {
+    var on = part(root, "toggle").checked;
+    var fields = part(root, "fields");
+    fields.hidden = !on;
+    Array.prototype.forEach.call(fields.querySelectorAll("input, textarea"), function (input) {
+      input.disabled = !on;
+    });
+    if (on) part(root, "when").min = localValue(new Date());
+    writeDelivery(root);
+    validate(root);
+  }
+
+  document.addEventListener("change", function (event) {
+    var root = event.target.closest && event.target.closest("[data-starter-gift]");
+    if (!root) return;
+    if (event.target.hasAttribute("data-starter-gift-toggle")) sync(root);
+    if (event.target.hasAttribute("data-starter-gift-when")) writeDelivery(root);
+  });
+
+  document.addEventListener("input", function (event) {
+    var root = event.target.closest && event.target.closest("[data-starter-gift]");
+    if (!root) return;
+    if (event.target.hasAttribute("data-starter-gift-when")) writeDelivery(root);
+    if (event.target.hasAttribute("data-starter-gift-message")) part(root, "count").textContent = event.target.value.length;
+    validate(root);
+  });
+
+  document.addEventListener("focusin", function (event) {
+    if (event.target.hasAttribute && event.target.hasAttribute("data-starter-gift-when")) event.target.min = localValue(new Date());
+  });
+
+  // Capture runs before the hosted bridge reads the form, for every submit button.
+  document.addEventListener("submit", function (event) {
+    var root = event.target.querySelector && event.target.querySelector("[data-starter-gift]");
+    if (!root) return;
+    writeDelivery(root);
+    validate(root);
+    if (!event.target.checkValidity()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      event.target.reportValidity();
+    }
+  }, true);
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-starter-gift]"), sync);
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+  var ready = "data-starter-review-ready";
+  if (document.documentElement.hasAttribute(ready)) return;
+  document.documentElement.setAttribute(ready, "");
+
+  // The bridge envelope carries the store's localized copy; the theme only places it.
+  function messageOf(result) {
+    result = result || {};
+    var errors = (result.user_errors || []).map(function (error) { return error && error.message; }).filter(Boolean);
+    if (errors.length) return errors.join(" ");
+    if (typeof result.response === "string") return result.response;
+    return (result.response && result.response.message) || result.message || "";
+  }
+
+  function say(node, text, ok) {
+    if (!node) return;
+    node.textContent = text;
+    node.hidden = !text;
+    node.classList.toggle("is-error", !ok);
+  }
+
+  function reviewPanel(form) {
+    return form && form.closest && form.closest("[data-starter-review]");
+  }
+
+  function count(textarea) {
+    var out = textarea.form && textarea.form.querySelector("[data-starter-review-count]");
+    if (!out) return;
+    var min = Number(textarea.getAttribute("data-min")) || 0;
+    out.textContent = textarea.value.length;
+    out.closest(".starter-reviews__count").classList.toggle("is-short", textarea.value.length > 0 && textarea.value.length < min);
+  }
+
+  function photoIds(box) {
+    var ids = Array.prototype.map.call(box.querySelectorAll("[data-media-id]"), function (thumb) {
+      return thumb.getAttribute("data-media-id");
+    });
+    var field = box.querySelector("[data-starter-review-media]");
+    field.value = ids.join(",");
+    field.disabled = !ids.length;
+    box.querySelector("[data-starter-review-add]").hidden = box.querySelectorAll(".starter-reviews__thumb").length >= Number(box.getAttribute("data-max"));
+    var submit = box.closest("form").querySelector("[data-starter-review-submit]");
+    if (submit) submit.disabled = box.querySelectorAll(".starter-reviews__thumb.is-loading").length > 0;
+  }
+
+  function addPhotos(input) {
+    var box = input.closest("[data-starter-review-photos]");
+    var panel = reviewPanel(input);
+    var message = panel.querySelector("[data-starter-review-message]");
+    var room = Number(box.getAttribute("data-max")) - box.querySelectorAll(".starter-reviews__thumb").length;
+    var files = Array.prototype.slice.call(input.files || [], 0, Math.max(room, 0));
+    input.value = "";
+    say(message, "", true);
+    files.forEach(function (file) {
+      if (file.type !== "image/jpeg" && file.type !== "image/png") return say(message, panel.getAttribute("data-upload-type"), false);
+      if (file.size > 8388608) return say(message, panel.getAttribute("data-upload-size"), false);
+      var thumb = document.createElement("div");
+      thumb.className = "starter-reviews__thumb is-loading";
+      var image = document.createElement("img");
+      image.alt = "";
+      thumb.appendChild(image);
+      // A data URL, so the store's image policy allows the local preview.
+      var reader = new FileReader();
+      reader.onload = function () { image.src = reader.result; };
+      reader.readAsDataURL(file);
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "starter-reviews__remove";
+      remove.setAttribute("aria-label", panel.getAttribute("data-remove"));
+      remove.setAttribute("data-starter-review-remove", "");
+      remove.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>';
+      thumb.appendChild(remove);
+      box.querySelector("[data-starter-review-thumbs]").insertBefore(thumb, box.querySelector("[data-starter-review-add]"));
+      photoIds(box);
+      window.tringify.reviews.uploadMedia(file).then(function (result) {
+        if (!thumb.isConnected) return;
+        thumb.classList.remove("is-loading");
+        if (result && result.success && result.media_id) {
+          thumb.setAttribute("data-media-id", result.media_id);
+        } else {
+          thumb.remove();
+          say(message, (result && result.message) || panel.getAttribute("data-upload-failed"), false);
+        }
+        photoIds(box);
+      });
+    });
+  }
+
+  document.addEventListener("input", function (event) {
+    if (event.target.hasAttribute && event.target.hasAttribute("data-starter-review-content")) count(event.target);
+  });
+
+  document.addEventListener("change", function (event) {
+    if (event.target.hasAttribute && event.target.hasAttribute("data-starter-review-file")) addPhotos(event.target);
+  });
+
+  document.addEventListener("click", function (event) {
+    var remove = event.target.closest && event.target.closest("[data-starter-review-remove]");
+    if (!remove) return;
+    var box = remove.closest("[data-starter-review-photos]");
+    remove.closest(".starter-reviews__thumb").remove();
+    photoIds(box);
+    box.querySelector("[data-starter-review-file]").focus();
+  });
+
+  // Capture runs before the hosted bridge reads the form: a second press of Helpful takes the vote back.
+  document.addEventListener("submit", function (event) {
+    var vote = event.target.querySelector && event.target.querySelector("[data-starter-vote]");
+    if (vote) event.target.querySelector("[data-starter-vote-remove]").disabled = vote.getAttribute("aria-pressed") !== "true";
+  }, true);
+
+  document.addEventListener("tf:action-success", function (event) {
+    var detail = event.detail || {};
+    var result = detail.result || {};
+    if (detail.action === "review_vote") {
+      var vote = detail.form && detail.form.querySelector("[data-starter-vote]");
+      if (!vote) return;
+      vote.setAttribute("aria-pressed", vote.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      if (result.helpful_count != null) vote.querySelector("[data-starter-vote-count]").textContent = result.helpful_count;
+      return;
+    }
+    var panel = detail.action === "review_submit" && reviewPanel(detail.form);
+    if (!panel) return;
+    detail.form.hidden = true;
+    say(panel.querySelector("[data-starter-review-message]"), messageOf(result) || panel.getAttribute("data-sent"), true);
+  });
+
+  document.addEventListener("tf:action-error", function (event) {
+    var detail = event.detail || {};
+    var result = detail.result || {};
+    var panel = detail.action === "review_submit" && reviewPanel(detail.form);
+    if (!panel) return;
+    event.preventDefault();
+    Array.prototype.forEach.call(detail.form.querySelectorAll("[aria-invalid]"), function (input) { input.removeAttribute("aria-invalid"); });
+    (result.user_errors || []).forEach(function (error) {
+      var input = error && error.field && detail.form.querySelector('[name="' + String(error.field).replace(/["\\]/g, "") + '"]');
+      if (input && input.type !== "hidden") input.setAttribute("aria-invalid", "true");
+    });
+    say(panel.querySelector("[data-starter-review-message]"), messageOf(result) || panel.getAttribute("data-failed"), false);
+  });
+
+  // Photos upload through the storefront bridge; without it the field stays hidden.
+  function showPhotos() {
+    if (!window.tringify || !window.tringify.reviews || !window.tringify.reviews.uploadMedia) return;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-starter-review-photos]"), function (box) {
+      box.hidden = false;
+    });
+  }
+  showPhotos();
+  window.addEventListener("load", showPhotos);
+})();
+</script>

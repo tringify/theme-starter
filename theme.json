@@ -1,6 +1,7 @@
 {
   "default_locale": "en",
   "name": "Tringify Starter",
+  "version": "1.0.2",
   "schema_version": 3,
   "sections": [
     {

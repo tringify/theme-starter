@@ -64,6 +64,76 @@
     var dismiss = event.target.closest && event.target.closest("[data-starter-feedback-dismiss]");
     if (dismiss) dismiss.closest("[data-starter-feedback]").hidden = true;
   });
+
+  // Back-in-stock forms (product page and sold-out cart lines): email or text, then the store's own reply.
+  // The phone field checks its own number.
+
+  function notifyBox(node) {
+    return node && node.closest && node.closest("[data-starter-notify]");
+  }
+
+  function notifyMessage(result) {
+    result = result || {};
+    var errors = (result.user_errors || []).map(function (error) { return error && error.message; }).filter(Boolean);
+    if (errors.length) return errors.join(" ");
+    if (typeof result.response === "string") return result.response;
+    return (result.response && result.response.message) || result.message || "";
+  }
+
+  function notifySay(box, text, ok) {
+    var node = box.querySelector("[data-starter-notify-message]");
+    node.textContent = text;
+    node.hidden = !text;
+    node.classList.toggle("is-error", !ok);
+  }
+
+  function notifyKind(box) {
+    var kind = box.querySelector("[data-starter-notify-kind]:checked");
+    var sms = !!kind && kind.value === "sms";
+    Array.prototype.forEach.call(box.querySelectorAll("[data-starter-notify-field]"), function (field) {
+      var on = field.getAttribute("data-starter-notify-field") === (sms ? "sms" : "email");
+      field.hidden = !on;
+      Array.prototype.forEach.call(field.querySelectorAll("input"), function (input) {
+        input.disabled = !on;
+      });
+    });
+  }
+
+  document.addEventListener("change", function (event) {
+    if (event.target.hasAttribute && event.target.hasAttribute("data-starter-notify-kind")) notifyKind(notifyBox(event.target));
+  });
+
+  document.addEventListener("submit", function (event) {
+    var box = notifyBox(event.target);
+    if (!box) return;
+    if (!event.target.checkValidity()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      event.target.reportValidity();
+    }
+  }, true);
+
+  document.addEventListener("tf:action-success", function (event) {
+    var detail = event.detail || {};
+    var box = detail.action === "cart_notify_me" && notifyBox(detail.form);
+    if (!box) return;
+    // A redrawn section is found again by the form's id.
+    if (!box.isConnected && box.id) box = document.getElementById(box.id);
+    if (!box) return;
+    var form = box.querySelector("form");
+    if (form) form.hidden = true;
+    notifySay(box, notifyMessage(detail.result) || box.getAttribute("data-saved"), true);
+  });
+
+  document.addEventListener("tf:action-error", function (event) {
+    var detail = event.detail || {};
+    var box = detail.action === "cart_notify_me" && notifyBox(detail.form);
+    if (!box) return;
+    event.preventDefault();
+    notifySay(box, notifyMessage(detail.result) || box.getAttribute("data-failed"), false);
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-starter-notify]"), notifyKind);
 })();
 </script>
 {% if form_error %}

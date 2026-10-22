@@ -1,7 +1,7 @@
 {
   "name": "starter-category",
   "kind": "section",
-  "ctx_needs": ["products", "category"],
+  "ctx_needs": ["products", "category", "filters"],
   "settings": [
     {
       "id": "eyebrow",

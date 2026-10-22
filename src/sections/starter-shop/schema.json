@@ -1,7 +1,7 @@
 {
   "name": "starter-shop",
   "kind": "section",
-  "ctx_needs": ["products"],
+  "ctx_needs": ["products", "filters"],
   "settings": [
     {
       "id": "eyebrow",

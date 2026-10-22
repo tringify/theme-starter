@@ -3,7 +3,16 @@
   "kind": "section",
   "ctx_needs": [
     "product",
-    "wishlist"
+    "wishlist",
+    "restock_notifications",
+    "reviews",
+    "forms",
+    "customer",
+    "routes",
+    "shop",
+    "phone_countries",
+    "customer_settings",
+    "localization"
   ],
   "settings": [
     {

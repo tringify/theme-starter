@@ -1,7 +1,7 @@
 {
   "name": "starter-cart",
   "kind": "section",
-  "ctx_needs": ["cart", "routes"],
+  "ctx_needs": ["cart", "routes", "restock_notifications", "customer", "phone_countries", "customer_settings", "localization"],
   "settings": [
     {
       "id": "eyebrow",

@@ -1,7 +1,7 @@
 {
   "name": "starter-vendor",
   "kind": "section",
-  "ctx_needs": ["products", "vendor"],
+  "ctx_needs": ["products", "vendor", "filters"],
   "settings": [
     {
       "id": "eyebrow",
