@@ -1052,7 +1052,7 @@ button.starter-phone__country:focus-visible {
     <p class="starter-message" role="status">{{ auth_notice.message }}</p>
   {% endif %}
 
-  {% if customer_settings.accounts_available %}
+  
     {% if auth_form.otp_step == 'verify' %}
       <div class="starter-auth__identity">
         <span>
@@ -1309,9 +1309,7 @@ button.starter-phone__country:focus-visible {
         <p>{{ 'sign_in_unavailable' | t }}</p>
       {% endunless %}
     {% endif %}
-  {% else %}
-    <p>{{ 'sign_in_unavailable' | t }}</p>
-  {% endif %}
+  
   <a class="starter-auth__back" href="{{ routes.root_url }}">{{ 'back_to_store' | t }}</a>
 </main>
 <script>
