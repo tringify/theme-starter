@@ -1,0 +1,100 @@
+{%- comment -%}
+  Phone field with a searchable country list from ctx.phone_countries. The section needs phone_countries and
+  customer_settings in ctx_needs. Assign every input before each use, since assigns carry over:
+  starter_phone_id (unique id), starter_phone_name (the field the hosted action takes), starter_phone_value (saved
+  number, E.164), starter_phone_label, starter_phone_required and starter_phone_disabled (true or false),
+  starter_phone_country (ISO code to start from when it is a phone country; otherwise the store's default phone
+  country, then the first one), starter_phone_autocomplete (blank: tel).
+  The phone script sends one E.164 number under starter_phone_name. Without it, the number field itself is sent and
+  takes a full + number; the hint shows the starting country's example in international form.
+{%- endcomment -%}
+{%- assign starter_phone_start = phone_countries.first -%}
+{%- for phone_country in phone_countries -%}
+  {%- if phone_country.iso_code == customer_settings.default_phone_country -%}{%- assign starter_phone_start = phone_country -%}{%- endif -%}
+{%- endfor -%}
+{%- if starter_phone_country != blank -%}
+  {%- for phone_country in phone_countries -%}
+    {%- if phone_country.iso_code == starter_phone_country -%}{%- assign starter_phone_start = phone_country -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign starter_phone_example = '' -%}
+{%- if starter_phone_start.example != blank -%}
+  {%- comment -%} The international form drops the national 0, except where the 0 is part of the number. {%- endcomment -%}
+  {%- assign starter_phone_national = starter_phone_start.example -%}
+  {%- assign starter_phone_lead = starter_phone_national | slice: 0 -%}
+  {%- if starter_phone_lead == '0' -%}
+    {%- unless 'IT SM VA CI CG GA' contains starter_phone_start.iso_code -%}
+      {%- assign starter_phone_national = starter_phone_national | remove_first: '0' -%}
+    {%- endunless -%}
+  {%- endif -%}
+  {%- assign starter_phone_example = starter_phone_start.dial_code | append: ' ' | append: starter_phone_national -%}
+{%- endif -%}
+{%- assign starter_phone_hint_id = starter_phone_id | append: '-hint' -%}
+{%- assign starter_phone_ac = starter_phone_autocomplete | default: 'tel' -%}
+<div
+  class="starter-phone-field"
+  data-starter-phone
+  data-default="{{ starter_phone_start.iso_code }}"
+  data-countries="{{ phone_countries | json | escape }}"
+  data-label-selected="{{ 'phone_country_selected' | t: country: '__COUNTRY__' }}"
+  data-label-example="{{ 'phone_example' | t: example: '__EXAMPLE__' }}"
+  data-invalid="{{ 'phone_invalid' | t }}"
+>
+  <label class="starter-label" for="{{ starter_phone_id }}">{{ starter_phone_label }}</label>
+  <p class="starter-phone__hint" id="{{ starter_phone_hint_id }}" data-starter-phone-hint{% if starter_phone_example == blank %} hidden{% endif %}>
+    {%- if starter_phone_example != blank -%}{{ 'phone_example' | t: example: starter_phone_example }}{%- endif -%}
+  </p>
+  <div class="starter-phone" data-starter-phone-row>
+    {%- if phone_countries.size > 0 %}
+      <button class="starter-phone__country" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="{{ starter_phone_id }}-picker" hidden data-starter-phone-country>
+        <span class="starter-phone__flag" aria-hidden="true" data-starter-phone-flag></span
+        ><bdi class="starter-phone__dial" dir="ltr" aria-hidden="true" data-starter-phone-dial></bdi>
+        <svg class="starter-phone__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+        <span class="starter-visually-hidden" data-starter-phone-selected></span>
+      </button>
+      <span class="starter-phone__country starter-phone__country--fixed" id="{{ starter_phone_id }}-prefix" hidden data-starter-phone-fixed>
+        <span class="starter-phone__flag" aria-hidden="true" data-starter-phone-flag></span
+        ><bdi class="starter-phone__dial" dir="ltr" aria-hidden="true" data-starter-phone-dial></bdi>
+        <span class="starter-visually-hidden" data-starter-phone-selected></span>
+      </span>
+    {%- endif %}
+    <input
+      class="starter-input starter-phone__number"
+      id="{{ starter_phone_id }}"
+      type="tel"
+      name="{{ starter_phone_name }}"
+      value="{{ starter_phone_value }}"
+      autocomplete="{{ starter_phone_ac }}"
+      inputmode="tel"
+      dir="ltr"
+      maxlength="24"
+      pattern="[+][1-9][\d \(\)\-\.]{5,22}"
+      title="{{ 'phone_invalid' | t }}"
+      {% if starter_phone_example != blank %}placeholder="{{ starter_phone_example }}"{% endif %}
+      aria-describedby="{{ starter_phone_hint_id }}"
+      {% if starter_phone_required %}required{% endif %}
+      {% if starter_phone_disabled %}disabled{% endif %}
+      data-starter-phone-number
+    >
+    <input type="hidden" value="{{ starter_phone_value }}" data-name="{{ starter_phone_name }}"{% if starter_phone_disabled %} disabled{% endif %} data-starter-phone-value>
+  </div>
+  {%- if phone_countries.size > 1 %}
+    <div class="starter-phone__picker" id="{{ starter_phone_id }}-picker" hidden data-starter-phone-picker>
+      <input
+        class="starter-input starter-phone__search"
+        type="search"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="{{ starter_phone_id }}-list"
+        aria-autocomplete="list"
+        aria-label="{{ 'search_countries' | t }}"
+        placeholder="{{ 'search_countries' | t }}"
+        autocomplete="off"
+        spellcheck="false"
+        data-starter-phone-search
+      >
+      <ul class="starter-phone__list" id="{{ starter_phone_id }}-list" role="listbox" aria-label="{{ 'countries' | t }}" data-starter-phone-list></ul>
+      <p class="starter-phone__empty" role="status" data-text="{{ 'no_countries' | t }}" data-starter-phone-empty></p>
+    </div>
+  {%- endif %}
+</div>

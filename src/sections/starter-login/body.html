@@ -1,3 +1,4 @@
+{%- assign auth_phone_available = customer_settings.phone_login_available -%}
 <main
   class="starter starter-auth"
   data-preferred-method="{{ auth_form.provider | default: customer_settings.preferred_auth_method }}"
@@ -120,7 +121,7 @@
         {% endform %}
       </div>
     {% else %}
-      {% if customer_settings.email_login_available and customer_settings.phone_login_available %}
+      {% if customer_settings.email_login_available and auth_phone_available %}
         <div class="starter-auth__switcher" role="group" aria-label="{{ 'sign_in_method' | t }}" hidden>
           <button type="button" data-method="email" aria-pressed="false">{{ 'email' | t }}</button>
           <button type="button" data-method="phone" aria-pressed="false">{{ 'phone' | t }}</button>
@@ -146,79 +147,129 @@
           {% endform %}
         </div>
       {% endif %}
-      {% if customer_settings.phone_login_available %}
+      {% if auth_phone_available %}
         <div class="starter-auth__method" data-method-panel="phone">
-          {% assign country_options = phone_countries | sort: 'name' %}
-          {% assign first_country = country_options | first %}
-          {% assign default_dial = first_country.dial_code %}
-          {% assign default_flag = first_country.flag %}
-          {% for country in country_options %}
-            {% if country.iso_code == customer_settings.default_phone_country %}
-              {% assign default_dial = country.dial_code %}
-              {% assign default_flag = country.flag %}
-            {% endif %}
-          {% endfor %}
           {% form 'auth_code_send' %}
             <input type="hidden" name="provider" value="phone">
-            <label for="starter-phone">{{ 'phone' | t }}</label>
-            <div class="starter-phone">
-              {% if country_options.size > 0 %}
-                <details class="starter-phone__country">
-                  <summary aria-label="{{ 'choose_country' | t }}" data-label="{{ 'choose_country' | t }}">
-                    <span data-country-flag>{{ default_flag }}</span
-                    ><span class="starter-phone__chevron" aria-hidden="true">⌄</span>
-                  </summary>
-                  <div class="starter-phone__picker">
-                    <label for="starter-country-search">{{ 'choose_country' | t }}</label>
-                    <input
-                      id="starter-country-search"
-                      type="search"
-                      data-country-search
-                      placeholder="{{ 'search_countries' | t }}"
-                      autocomplete="off"
-                    >
-                    <ul aria-label="{{ 'countries' | t }}">
-                      {% for country in country_options %}
-                        <li>
-                          <button
-                            type="button"
-                            data-country="{{ country.iso_code }}"
-                            data-dial="{{ country.dial_code }}"
-                            data-flag="{{ country.flag }}"
-                          >
-                            <span aria-hidden="true">{{ country.flag }}</span>
-                            <span data-country-name>{{ country.name }}</span>
-                            <span class="starter-phone__dial">{{ country.dial_code }}</span>
-                          </button>
-                        </li>
-                      {% endfor %}
-                    </ul>
-                    <p data-country-empty hidden>{{ 'no_countries' | t }}</p>
-                  </div>
-                </details>
-              {% endif %}
-              <input
-                id="starter-phone"
-                name="phone_number"
-                type="tel"
-                dir="ltr"
-                autocomplete="tel"
-                inputmode="tel"
-                value="{{ auth_form.phone_number | default: default_dial }}"
-                data-current-dial="{{ default_dial }}"
-                data-current-country="{{ customer_settings.default_phone_country }}"
-                pattern="[+][0-9]{6,15}"
-                maxlength="16"
-                required
-                aria-describedby="starter-phone-help"
-              >
-            </div>
-            <p id="starter-phone-help" class="starter-field-help">{{ 'phone_help' | t }}</p>
+            {%- assign starter_phone_dial = '' -%}
+            {%- for phone_country in phone_countries -%}
+              {%- if phone_country.iso_code == customer_settings.default_phone_country -%}{%- assign starter_phone_dial = phone_country.dial_code -%}{%- endif -%}
+            {%- endfor -%}
+            {%- assign starter_phone_id = 'starter-phone' -%}
+            {%- assign starter_phone_name = 'phone_number' -%}
+            {%- assign starter_phone_value = auth_form.phone_number | default: starter_phone_dial -%}
+            {%- assign starter_phone_label = 'phone' | t -%}
+            {%- assign starter_phone_required = true -%}
+            {%- assign starter_phone_disabled = false -%}
+            {%- assign starter_phone_country = '' -%}
+            {%- assign starter_phone_autocomplete = '' -%}
+{%- comment -%}partial:phone-field{%- endcomment -%}
+{%- comment -%}
+  Phone field with a searchable country list from ctx.phone_countries. The section needs phone_countries and
+  customer_settings in ctx_needs. Assign every input before each use, since assigns carry over:
+  starter_phone_id (unique id), starter_phone_name (the field the hosted action takes), starter_phone_value (saved
+  number, E.164), starter_phone_label, starter_phone_required and starter_phone_disabled (true or false),
+  starter_phone_country (ISO code to start from when it is a phone country; otherwise the store's default phone
+  country, then the first one), starter_phone_autocomplete (blank: tel).
+  The phone script sends one E.164 number under starter_phone_name. Without it, the number field itself is sent and
+  takes a full + number; the hint shows the starting country's example in international form.
+{%- endcomment -%}
+{%- assign starter_phone_start = phone_countries.first -%}
+{%- for phone_country in phone_countries -%}
+  {%- if phone_country.iso_code == customer_settings.default_phone_country -%}{%- assign starter_phone_start = phone_country -%}{%- endif -%}
+{%- endfor -%}
+{%- if starter_phone_country != blank -%}
+  {%- for phone_country in phone_countries -%}
+    {%- if phone_country.iso_code == starter_phone_country -%}{%- assign starter_phone_start = phone_country -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign starter_phone_example = '' -%}
+{%- if starter_phone_start.example != blank -%}
+  {%- comment -%} The international form drops the national 0, except where the 0 is part of the number. {%- endcomment -%}
+  {%- assign starter_phone_national = starter_phone_start.example -%}
+  {%- assign starter_phone_lead = starter_phone_national | slice: 0 -%}
+  {%- if starter_phone_lead == '0' -%}
+    {%- unless 'IT SM VA CI CG GA' contains starter_phone_start.iso_code -%}
+      {%- assign starter_phone_national = starter_phone_national | remove_first: '0' -%}
+    {%- endunless -%}
+  {%- endif -%}
+  {%- assign starter_phone_example = starter_phone_start.dial_code | append: ' ' | append: starter_phone_national -%}
+{%- endif -%}
+{%- assign starter_phone_hint_id = starter_phone_id | append: '-hint' -%}
+{%- assign starter_phone_ac = starter_phone_autocomplete | default: 'tel' -%}
+<div
+  class="starter-phone-field"
+  data-starter-phone
+  data-default="{{ starter_phone_start.iso_code }}"
+  data-countries="{{ phone_countries | json | escape }}"
+  data-label-selected="{{ 'phone_country_selected' | t: country: '__COUNTRY__' }}"
+  data-label-example="{{ 'phone_example' | t: example: '__EXAMPLE__' }}"
+  data-invalid="{{ 'phone_invalid' | t }}"
+>
+  <label class="starter-label" for="{{ starter_phone_id }}">{{ starter_phone_label }}</label>
+  <p class="starter-phone__hint" id="{{ starter_phone_hint_id }}" data-starter-phone-hint{% if starter_phone_example == blank %} hidden{% endif %}>
+    {%- if starter_phone_example != blank -%}{{ 'phone_example' | t: example: starter_phone_example }}{%- endif -%}
+  </p>
+  <div class="starter-phone" data-starter-phone-row>
+    {%- if phone_countries.size > 0 %}
+      <button class="starter-phone__country" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="{{ starter_phone_id }}-picker" hidden data-starter-phone-country>
+        <span class="starter-phone__flag" aria-hidden="true" data-starter-phone-flag></span
+        ><bdi class="starter-phone__dial" dir="ltr" aria-hidden="true" data-starter-phone-dial></bdi>
+        <svg class="starter-phone__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+        <span class="starter-visually-hidden" data-starter-phone-selected></span>
+      </button>
+      <span class="starter-phone__country starter-phone__country--fixed" id="{{ starter_phone_id }}-prefix" hidden data-starter-phone-fixed>
+        <span class="starter-phone__flag" aria-hidden="true" data-starter-phone-flag></span
+        ><bdi class="starter-phone__dial" dir="ltr" aria-hidden="true" data-starter-phone-dial></bdi>
+        <span class="starter-visually-hidden" data-starter-phone-selected></span>
+      </span>
+    {%- endif %}
+    <input
+      class="starter-input starter-phone__number"
+      id="{{ starter_phone_id }}"
+      type="tel"
+      name="{{ starter_phone_name }}"
+      value="{{ starter_phone_value }}"
+      autocomplete="{{ starter_phone_ac }}"
+      inputmode="tel"
+      dir="ltr"
+      maxlength="24"
+      pattern="[+][1-9][\d \(\)\-\.]{5,22}"
+      title="{{ 'phone_invalid' | t }}"
+      {% if starter_phone_example != blank %}placeholder="{{ starter_phone_example }}"{% endif %}
+      aria-describedby="{{ starter_phone_hint_id }}"
+      {% if starter_phone_required %}required{% endif %}
+      {% if starter_phone_disabled %}disabled{% endif %}
+      data-starter-phone-number
+    >
+    <input type="hidden" value="{{ starter_phone_value }}" data-name="{{ starter_phone_name }}"{% if starter_phone_disabled %} disabled{% endif %} data-starter-phone-value>
+  </div>
+  {%- if phone_countries.size > 1 %}
+    <div class="starter-phone__picker" id="{{ starter_phone_id }}-picker" hidden data-starter-phone-picker>
+      <input
+        class="starter-input starter-phone__search"
+        type="search"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="{{ starter_phone_id }}-list"
+        aria-autocomplete="list"
+        aria-label="{{ 'search_countries' | t }}"
+        placeholder="{{ 'search_countries' | t }}"
+        autocomplete="off"
+        spellcheck="false"
+        data-starter-phone-search
+      >
+      <ul class="starter-phone__list" id="{{ starter_phone_id }}-list" role="listbox" aria-label="{{ 'countries' | t }}" data-starter-phone-list></ul>
+      <p class="starter-phone__empty" role="status" data-text="{{ 'no_countries' | t }}" data-starter-phone-empty></p>
+    </div>
+  {%- endif %}
+</div>
+{%- comment -%}/partial:phone-field{%- endcomment -%}
             <button class="starter-primary" type="submit">{{ 'send_code' | t }}</button>
           {% endform %}
         </div>
       {% endif %}
-      {% unless customer_settings.email_login_available or customer_settings.phone_login_available %}
+      {% unless customer_settings.email_login_available or auth_phone_available %}
         <p>{{ 'sign_in_unavailable' | t }}</p>
       {% endunless %}
     {% endif %}
@@ -252,117 +303,449 @@
         if (button) select(button.dataset.method);
       });
     }
-    const picker = root.querySelector('.starter-phone__country');
-    const phone = root.querySelector('#starter-phone');
-    if (picker && phone) {
-      const search = picker.querySelector('[data-country-search]');
-      const choices = [...picker.querySelectorAll('li')];
-      const list = picker.querySelector('ul');
-      choices.sort((a, b) =>
-        a
-          .querySelector('[data-country-name]')
-          .textContent.localeCompare(
-            b.querySelector('[data-country-name]').textContent,
-            document.documentElement.lang || undefined,
-          ),
-      );
-      choices.forEach((item) => list.appendChild(item));
-      const dialChoices = choices
-        .map((item) => item.querySelector('[data-dial]'))
-        .sort((a, b) => b.dataset.dial.length - a.dataset.dial.length);
-      const summary = picker.querySelector('summary');
-      const matchNumber = () => {
-        const value = phone.value.replace(/[\s().-]/g, '');
-        const selected = dialChoices.find((button) => button.dataset.country === phone.dataset.currentCountry);
-        const longest = dialChoices.find((button) => value.startsWith(button.dataset.dial));
-        if (
-          selected &&
-          value.startsWith(selected.dataset.dial) &&
-          (!longest || longest.dataset.dial.length === selected.dataset.dial.length)
-        )
-          return selected;
-        return longest && dialChoices.filter((button) => button.dataset.dial === longest.dataset.dial).length === 1
-          ? longest
-          : undefined;
-      };
-      const syncCountry = () => {
-        const selected = matchNumber();
-        phone.dataset.currentDial = selected?.dataset.dial || '';
-        phone.dataset.currentCountry = selected?.dataset.country || '';
-        picker.querySelector('[data-country-flag]').textContent = selected?.dataset.flag || '🌐';
-        summary.setAttribute(
-          'aria-label',
-          summary.dataset.label + (selected ? ': ' + selected.querySelector('[data-country-name]').textContent : ''),
-        );
-      };
-      syncCountry();
-      phone.addEventListener('input', syncCountry);
-      const place = () => {
-        const rect = phone.getBoundingClientRect();
-        const viewport = window.visualViewport;
-        const top = viewport ? viewport.offsetTop : 0;
-        const bottom = top + (viewport ? viewport.height : window.innerHeight);
-        const below = bottom - rect.bottom - 12;
-        const above = rect.top - top - 12;
-        const openAbove = below < 240 && above > below;
-        picker.dataset.side = openAbove ? 'above' : 'below';
-        const panel = picker.querySelector('.starter-phone__picker');
-        const chrome = panel.getBoundingClientRect().height - list.getBoundingClientRect().height;
-        list.style.maxHeight = Math.max(80, Math.min(240, (openAbove ? above : below) - chrome)) + 'px';
-      };
-      const filter = () => {
-        const query = search.value.trim().toLocaleLowerCase();
-        choices.forEach((item) => {
-          item.hidden = !item.textContent.toLocaleLowerCase().includes(query);
-        });
-        picker.querySelector('[data-country-empty]').hidden = choices.some((item) => !item.hidden);
-      };
-      picker.addEventListener('toggle', () => {
-        if (picker.open) {
-          filter();
-          list.scrollTop = 0;
-          place();
-          search.focus({ preventScroll: true });
-          window.addEventListener('resize', place);
-          window.visualViewport?.addEventListener('resize', place);
-        } else {
-          search.value = '';
-          filter();
-          window.removeEventListener('resize', place);
-          window.visualViewport?.removeEventListener('resize', place);
-        }
-      });
-      picker.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-          event.preventDefault();
-          picker.open = false;
-          picker.querySelector('summary').focus();
-        }
-        if (event.key === 'Enter' && event.target === search) event.preventDefault();
-      });
-      search.addEventListener('input', () => {
-        filter();
-        place();
-      });
-      picker.addEventListener('click', (event) => {
-        const button = event.target.closest('[data-dial]');
-        if (!button) return;
-        let number = phone.value.replace(/[^+0-9]/g, '');
-        const previous = dialChoices.find((choice) => number.startsWith(choice.dataset.dial));
-        if (previous) number = number.slice(previous.dataset.dial.length);
-        phone.value = button.dataset.dial + number.replace(/[^0-9]/g, '');
-        phone.dataset.currentCountry = button.dataset.country;
-        syncCountry();
-        phone.dispatchEvent(new Event('input', { bubbles: true }));
-        picker.open = false;
-        phone.focus();
-      });
-      picker.addEventListener('focusout', (event) => {
-        if (event.relatedTarget && !picker.contains(event.relatedTarget)) picker.open = false;
-      });
-      root.addEventListener('pointerdown', (event) => {
-        if (!picker.contains(event.target)) picker.open = false;
-      });
-    }
   })();
 </script>
+{%- comment -%}partial:phone-script{%- endcomment -%}
+<script>
+(function () {
+  "use strict";
+  // Phone fields ([data-starter-phone]): a country button (flag and calling code) opens a searchable list of the
+  // store's phone countries. The visible field then takes the national number and a hidden field sends one E.164
+  // number (+ and digits) under the original name. A number typed or pasted with + or 00 moves to its country.
+  // Without this script, or without countries, the field itself is sent and takes a full + number.
+  var ready = "data-starter-phone-ready";
+  if (document.documentElement.hasAttribute(ready)) return;
+  document.documentElement.setAttribute(ready, "");
+
+  // Countries sharing a calling code: a number goes to the code's main country unless the current or default one shares it.
+  var MAIN = { "1": "US", "7": "RU", "39": "IT", "44": "GB", "47": "NO", "61": "AU", "212": "MA", "262": "RE", "290": "SH", "358": "FI", "590": "GP", "599": "CW" };
+  // National prefixes the international number drops: [prefix, national length after it (0: any)]. Most countries
+  // use a single 0; these keep their leading 0 (it is part of the number) or use another prefix.
+  var TRUNK = { IT: null, SM: null, VA: null, CI: null, CG: null, GA: null, HU: ["06", 0], RU: ["8", 10], KZ: ["8", 10], BY: ["80", 9], LT: ["8", 8], TM: ["8", 8], TJ: ["8", 9] };
+  var E164 = /^\+[1-9]\d{6,14}$/;
+  var TOP = typeof HTMLElement !== "undefined" && typeof HTMLElement.prototype.showPopover === "function";
+  var lists = {};
+  var openField = null;
+
+  function digits(text) {
+    return String(text || "").replace(/\D/g, "");
+  }
+
+  function fold(text) {
+    return String(text || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  }
+
+  function flagOf(country) {
+    if (country.flag) return country.flag;
+    var iso = String(country.iso_code || "").toUpperCase();
+    return /^[A-Z]{2}$/.test(iso) ? String.fromCodePoint(0x1f1e6 + iso.charCodeAt(0) - 65, 0x1f1e6 + iso.charCodeAt(1) - 65) : "";
+  }
+
+  // Fields on one page share one list; it is parsed and sorted once, by name in the page language.
+  function countriesOf(root) {
+    var raw = root.getAttribute("data-countries") || "[]";
+    if (lists[raw]) return lists[raw];
+    var list = [];
+    try {
+      list = JSON.parse(raw) || [];
+    } catch (error) {}
+    list = list.filter(function (country) {
+      return country && country.iso_code && country.name && /^\+\d+$/.test(country.dial_code || "");
+    });
+    var collator = window.Intl && Intl.Collator ? new Intl.Collator(document.documentElement.lang || undefined, { sensitivity: "base" }) : null;
+    list.sort(function (a, b) {
+      return collator ? collator.compare(a.name, b.name) : a.name < b.name ? -1 : 1;
+    });
+    lists[raw] = list;
+    return list;
+  }
+
+  // "+44 (0)7700 900123" or "0044 7700 900123" -> { country: GB, rest: "7700900123" }. While the code is still
+  // being typed (a longer code could match, or nothing follows it) it waits, unless final.
+  function detect(field, text, final) {
+    var compact = String(text || "").replace(/\(0\)/g, "").replace(/[^0-9+]/g, "");
+    var international = compact.charAt(0) === "+" ? compact.slice(1) : /^00/.test(compact) ? compact.slice(2) : null;
+    if (international === null) return null;
+    var number = digits(international);
+    var best = null;
+    var bestLength = 0;
+    if (!final && field.list.some(function (country) {
+      var code = digits(country.dial_code);
+      return code.length > number.length && code.indexOf(number) === 0;
+    })) return null;
+    function rank(country, code) {
+      return country === field.current ? 3 : country === field.start ? 2 : MAIN[code] === country.iso_code ? 1 : 0;
+    }
+    field.list.forEach(function (country) {
+      var code = digits(country.dial_code);
+      if (!code || number.indexOf(code) !== 0 || code.length < bestLength) return;
+      if (code.length > bestLength || rank(country, code) > rank(best, code)) {
+        best = country;
+        bestLength = code.length;
+      }
+    });
+    if (!best) return null;
+    var rest = number.slice(bestLength);
+    if (!final && !rest) return null;
+    return { country: best, rest: rest };
+  }
+
+  function national(country, number) {
+    var trunk = TRUNK.hasOwnProperty(country.iso_code) ? TRUNK[country.iso_code] : digits(country.dial_code) === "1" ? ["1", 10] : ["0", 0];
+    if (trunk && number.indexOf(trunk[0]) === 0 && (!trunk[1] || number.length === trunk[0].length + trunk[1])) return number.slice(trunk[0].length);
+    return number;
+  }
+
+  function e164(field) {
+    var compact = String(field.number.value || "").replace(/\(0\)/g, "").replace(/[^0-9+]/g, "");
+    var number = digits(compact);
+    if (!number) return "";
+    if (compact.charAt(0) === "+") return "+" + number;
+    if (/^00/.test(compact)) return "+" + number.slice(2);
+    return field.current.dial_code + national(field.current, number);
+  }
+
+  // The sent value follows the visible number; a number that cannot be a phone number is caught before sending.
+  function sync(field) {
+    var value = e164(field);
+    field.value.value = value;
+    field.number.setCustomValidity(value && !E164.test(value) ? field.root.getAttribute("data-invalid") || "" : "");
+  }
+
+  function load(field, text) {
+    var hit = detect(field, text, true);
+    if (hit) {
+      field.current = hit.country;
+      field.number.value = hit.rest;
+    } else {
+      field.number.value = String(text || "").trim();
+    }
+  }
+
+  function setup(root) {
+    if (root.starterPhone !== undefined) return root.starterPhone;
+    root.starterPhone = null;
+    var list = countriesOf(root);
+    if (!list.length) return null;
+    var field = {
+      root: root,
+      list: list,
+      number: root.querySelector("[data-starter-phone-number]"),
+      value: root.querySelector("[data-starter-phone-value]"),
+      button: root.querySelector("[data-starter-phone-country]"),
+      picker: root.querySelector("[data-starter-phone-picker]"),
+      search: root.querySelector("[data-starter-phone-search]"),
+      options: root.querySelector("[data-starter-phone-list]"),
+      row: root.querySelector("[data-starter-phone-row]"),
+      single: list.length === 1,
+      shown: [],
+      active: -1
+    };
+    var wanted = String(root.getAttribute("data-default") || "").toUpperCase();
+    field.start = list.filter(function (country) { return country.iso_code === wanted; })[0] || list[0];
+    field.current = field.start;
+    // Setting a hidden input's value rewrites its default, so the saved number is kept for a form reset.
+    field.saved = field.value.getAttribute("value") || field.number.getAttribute("value") || "";
+    load(field, field.saved);
+    // From here the visible field holds the national number and the hidden one is sent.
+    field.value.name = field.value.getAttribute("data-name");
+    field.number.removeAttribute("name");
+    field.number.removeAttribute("pattern");
+    field.number.removeAttribute("title");
+    if (field.number.getAttribute("autocomplete") === "tel") field.number.setAttribute("autocomplete", "tel-national");
+    if (field.single || !field.picker) {
+      // One country is a fixed prefix, read with the number.
+      var fixed = root.querySelector("[data-starter-phone-fixed]");
+      fixed.hidden = false;
+      if (field.button) field.button.remove();
+      field.button = null;
+      field.number.setAttribute("aria-describedby", (fixed.id + " " + (field.number.getAttribute("aria-describedby") || "")).trim());
+    } else {
+      field.button.hidden = false;
+      if (TOP) {
+        field.picker.setAttribute("popover", "manual");
+        field.picker.hidden = false;
+      }
+    }
+    root.classList.add("is-enhanced");
+    root.starterPhone = field;
+    choose(field, field.current, false);
+    return field;
+  }
+
+  function choose(field, country, focus) {
+    field.current = country;
+    var root = field.root;
+    var selected = (root.getAttribute("data-label-selected") || "").replace("__COUNTRY__", country.name + " (" + country.dial_code + ")");
+    Array.prototype.forEach.call(root.querySelectorAll("[data-starter-phone-flag]"), function (node) { node.textContent = flagOf(country); });
+    Array.prototype.forEach.call(root.querySelectorAll("[data-starter-phone-dial]"), function (node) { node.textContent = country.dial_code; });
+    Array.prototype.forEach.call(root.querySelectorAll("[data-starter-phone-selected]"), function (node) { node.textContent = selected; });
+    var hint = root.querySelector("[data-starter-phone-hint]");
+    if (hint) {
+      hint.textContent = country.example ? (root.getAttribute("data-label-example") || "").replace("__EXAMPLE__", country.example) : "";
+      hint.hidden = !country.example;
+    }
+    if (country.example) field.number.setAttribute("placeholder", country.example);
+    else field.number.removeAttribute("placeholder");
+    sync(field);
+    if (focus) field.number.focus();
+  }
+
+  function render(field) {
+    var raw = field.search.value.trim();
+    var query = fold(raw);
+    var queryDigits = digits(raw);
+    var word = new RegExp("[\\s(\\-]" + query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    // Names starting with the search come first, then names with a word starting with it, then the rest.
+    function rank(country) {
+      var name = fold(country.name);
+      if (country.iso_code.toLowerCase() === query || name.indexOf(query) === 0) return 0;
+      return word.test(name) ? 1 : 2;
+    }
+    field.shown = field.list.filter(function (country) {
+      return !raw || fold(country.name).indexOf(query) !== -1 || country.iso_code.toLowerCase() === query || (queryDigits && digits(country.dial_code).indexOf(queryDigits) === 0);
+    });
+    if (query && !queryDigits) {
+      field.shown = field.shown
+        .map(function (country, index) { return [rank(country), index, country]; })
+        .sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; })
+        .map(function (entry) { return entry[2]; });
+    }
+    var fragment = document.createDocumentFragment();
+    field.shown.forEach(function (country) {
+      var option = document.createElement("li");
+      option.id = field.options.id + "-" + country.iso_code;
+      option.className = "starter-phone__option" + (country === field.current ? " is-current" : "");
+      option.setAttribute("role", "option");
+      option.setAttribute("aria-selected", "false");
+      option.setAttribute("data-iso", country.iso_code);
+      var flag = document.createElement("span");
+      flag.className = "starter-phone__flag";
+      flag.setAttribute("aria-hidden", "true");
+      flag.textContent = flagOf(country);
+      var name = document.createElement("span");
+      name.className = "starter-phone__name";
+      name.textContent = country.name;
+      var dial = document.createElement("bdi");
+      dial.className = "starter-phone__option-dial";
+      dial.setAttribute("dir", "ltr");
+      dial.textContent = country.dial_code;
+      option.appendChild(flag);
+      option.appendChild(name);
+      option.appendChild(dial);
+      fragment.appendChild(option);
+    });
+    field.options.replaceChildren(fragment);
+    var empty = field.root.querySelector("[data-starter-phone-empty]");
+    empty.textContent = field.shown.length ? "" : empty.getAttribute("data-text");
+    var at = raw ? 0 : field.shown.indexOf(field.current);
+    activate(field, field.shown.length ? Math.max(0, at) : -1);
+  }
+
+  function activate(field, index) {
+    var options = field.options.children;
+    field.active = index;
+    for (var i = 0; i < options.length; i++) {
+      options[i].setAttribute("aria-selected", i === index ? "true" : "false");
+      options[i].classList.toggle("is-active", i === index);
+    }
+    if (index >= 0 && options[index]) {
+      field.search.setAttribute("aria-activedescendant", options[index].id);
+      options[index].scrollIntoView({ block: "nearest" });
+    } else {
+      field.search.removeAttribute("aria-activedescendant");
+    }
+  }
+
+  // In the top layer the list is never clipped by a panel or drawer. It opens under the field, or above it when
+  // there is more room there, at least 18rem wide and kept inside the window on the field's starting edge.
+  function place(field) {
+    if (!TOP) return;
+    var rect = field.row.getBoundingClientRect();
+    var height = window.innerHeight;
+    var width = document.documentElement.clientWidth;
+    var below = height - rect.bottom - 12;
+    var above = rect.top - 12;
+    var up = below < 260 && above > below;
+    var size = Math.min(Math.max(rect.width, 288), width - 16);
+    var x = getComputedStyle(field.root).direction === "rtl" ? rect.right - size : rect.left;
+    var style = field.picker.style;
+    style.left = Math.min(Math.max(8, x), width - 8 - size) + "px";
+    style.width = size + "px";
+    if (up) {
+      style.top = "auto";
+      style.bottom = height - rect.top + 6 + "px";
+    } else {
+      style.bottom = "auto";
+      style.top = rect.bottom + 6 + "px";
+    }
+    style.setProperty("--starter-phone-room", Math.max(140, (up ? above : below) - 80) + "px");
+  }
+
+  function isOpen(field) {
+    return !!field && (TOP ? field.picker.matches(":popover-open") : !field.picker.hidden);
+  }
+
+  function open(field) {
+    if (openField && openField !== field) close(openField, false);
+    openField = field;
+    field.button.setAttribute("aria-expanded", "true");
+    if (TOP) {
+      field.picker.showPopover();
+      place(field);
+    } else {
+      field.picker.hidden = false;
+    }
+    field.search.value = "";
+    render(field);
+    field.search.focus();
+  }
+
+  function close(field, back) {
+    if (!isOpen(field)) return;
+    if (TOP) field.picker.hidePopover();
+    else field.picker.hidden = true;
+    field.button.setAttribute("aria-expanded", "false");
+    if (openField === field) openField = null;
+    if (back) field.button.focus();
+  }
+
+  function fieldOf(node) {
+    var root = node && node.closest && node.closest("[data-starter-phone]");
+    return root ? setup(root) : null;
+  }
+
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest && event.target.closest("[data-starter-phone-country]");
+    if (button) {
+      var field = fieldOf(button);
+      if (field) {
+        if (isOpen(field)) close(field, true);
+        else open(field);
+      }
+      return;
+    }
+    var option = event.target.closest && event.target.closest(".starter-phone__option");
+    if (option) {
+      var owner = fieldOf(option);
+      var country = owner && owner.list.filter(function (entry) { return entry.iso_code === option.getAttribute("data-iso"); })[0];
+      if (country) {
+        close(owner, false);
+        choose(owner, country, true);
+      }
+      return;
+    }
+    if (openField && !openField.root.contains(event.target)) close(openField, false);
+  });
+
+  document.addEventListener("input", function (event) {
+    var target = event.target;
+    if (!target.hasAttribute) return;
+    if (target.hasAttribute("data-starter-phone-search")) {
+      var field = fieldOf(target);
+      if (field) render(field);
+      return;
+    }
+    if (target.hasAttribute("data-starter-phone-number")) {
+      var owner = fieldOf(target);
+      if (!owner) return;
+      var hit = !owner.single && detect(owner, owner.number.value, false);
+      if (hit) {
+        owner.number.value = hit.rest;
+        choose(owner, hit.country, false);
+      } else {
+        sync(owner);
+      }
+    }
+  });
+
+  document.addEventListener("focusout", function (event) {
+    if (!event.target.hasAttribute || !event.target.hasAttribute("data-starter-phone-number")) return;
+    var field = fieldOf(event.target);
+    var hit = field && !field.single && detect(field, field.number.value, true);
+    if (hit) {
+      field.number.value = hit.rest;
+      choose(field, hit.country, false);
+    }
+  });
+
+  // Escape closes only the list: caught on the window before a drawer or dialog sees it.
+  window.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape" || !openField || !openField.root.contains(event.target)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    close(openField, true);
+  }, true);
+
+  document.addEventListener("keydown", function (event) {
+    if (!event.target.hasAttribute || !event.target.hasAttribute("data-starter-phone-search")) return;
+    var field = fieldOf(event.target);
+    if (!field) return;
+    var count = field.shown.length;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (count) activate(field, (field.active + 1) % count);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (count) activate(field, (field.active - 1 + count) % count);
+    } else if (event.key === "Home" && count) {
+      event.preventDefault();
+      activate(field, 0);
+    } else if (event.key === "End" && count) {
+      event.preventDefault();
+      activate(field, count - 1);
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      var country = field.shown[field.active];
+      if (country) {
+        close(field, false);
+        choose(field, country, true);
+      }
+    } else if (event.key === "Tab") {
+      close(field, false);
+    }
+  });
+
+  window.addEventListener("resize", function () { if (openField) place(openField); });
+  window.addEventListener("scroll", function () { if (openField) place(openField); }, { capture: true, passive: true });
+
+  // The sent value is current at submit, whatever changed the number (autofill included). Capture runs before
+  // the hosted bridge and the theme's own form checks read the form.
+  document.addEventListener("submit", function (event) {
+    var form = event.target;
+    if (!form || !form.querySelectorAll) return;
+    Array.prototype.forEach.call(form.querySelectorAll("[data-starter-phone]"), function (root) {
+      var field = setup(root);
+      if (field) sync(field);
+    });
+  }, true);
+
+  // A reset form goes back to its saved number (or none), under that number's country.
+  document.addEventListener("reset", function (event) {
+    var form = event.target;
+    if (!form || !form.querySelectorAll) return;
+    setTimeout(function () {
+      Array.prototype.forEach.call(form.querySelectorAll("[data-starter-phone]"), function (root) {
+        var field = setup(root);
+        if (!field) return;
+        field.current = field.start;
+        load(field, field.saved);
+        choose(field, field.current, false);
+      });
+    });
+  }, true);
+
+  function all() {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-starter-phone]"), setup);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", all);
+  else all();
+  // Sections redrawn after a hosted action bring new fields.
+  var frame = 0;
+  new MutationObserver(function () {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(all);
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
+{%- comment -%}/partial:phone-script{%- endcomment -%}

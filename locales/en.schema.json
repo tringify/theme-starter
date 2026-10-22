@@ -96,6 +96,8 @@
   "sectionName.starter-text": "Text",
   "sectionName.starter-button": "Button",
   "sectionName.starter-image": "Image",
+  "fieldGroup.Collections": "Collections",
+  "sectionName.starter-unavailable": "Unavailable",
   "fieldGroup.banners": "Banners",
   "fieldGroup.collections": "Collections",
   "fieldGroup.colors": "Colors",
@@ -161,6 +163,5 @@
   "sectionName.richTextCentered": "Rich Text — Centered",
   "sectionName.richTextLeftAligned": "Rich Text — Left Aligned",
   "sectionName.splitHero": "Split Hero",
-  "sectionName.storyWithBlocks": "Story with Blocks",
-  "sectionName.starter-unavailable": "Unavailable"
+  "sectionName.storyWithBlocks": "Story with Blocks"
 }

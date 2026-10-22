@@ -31,6 +31,16 @@
                 <p class="starter-card__meta">{{ item.vendor }}</p>
               {% endif %}
               <h3 class="starter-card__title">{{ item.title }}</h3>
+              {%- assign card_rating_count = item.rating.count | default: 0 -%}
+              {%- if card_rating_count > 0 %}
+                {%- assign card_rating = item.rating.average | default: 0 | round: 1 -%}
+                {%- assign card_rating_percent = card_rating | times: 20 %}
+                <p class="starter-card__rating">
+                  <span class="starter-stars" style="--starter-rating: {{ card_rating_percent }}%" aria-hidden="true"></span>
+                  <span class="starter-visually-hidden">{{ 'card_rating' | t: rating: card_rating, count: card_rating_count }}</span>
+                  <span aria-hidden="true">{{ card_rating }} ({{ card_rating_count }})</span>
+                </p>
+              {%- endif %}
               {% if item.price %}
                 <p class="starter-card__price">
                   {% if item.price.on_sale -%}
