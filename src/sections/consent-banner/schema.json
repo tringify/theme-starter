@@ -1,13 +1,18 @@
 {
-  "name": "starter-localization-prompt",
+  "name": "consent-banner",
   "kind": "embed",
   "target": "global_overlay",
-  "ctx_needs": ["localization", "localization_prompt"],
+  "ctx_needs": [
+    "consent",
+    "policies",
+    "design_mode",
+    "csrf_token"
+  ],
   "settings": [
     {
       "id": "eyebrow",
       "type": "text",
-      "default": "Location",
+      "default": "Privacy",
       "editor": {
         "label": "eyebrow",
         "group": "content"
@@ -16,7 +21,7 @@
     {
       "id": "heading",
       "type": "text",
-      "default": "Shop in your region",
+      "default": "Your privacy, your choice",
       "editor": {
         "label": "heading",
         "group": "content"
@@ -25,21 +30,12 @@
     {
       "id": "message",
       "type": "textarea",
-      "default": "Switch your country or language to see the right prices and delivery options.",
+      "default": "We use cookies to run the store. With your permission we also use them to measure visits and improve what we show you.",
       "editor": {
         "label": "message",
         "group": "content"
       }
-    },
-    {
-      "id": "button_label",
-      "type": "text",
-      "default": "Update",
-      "editor": {
-        "label": "buttonLabel",
-        "group": "content"
-      }
     }
   ],
-  "icon": "globe"
+  "icon": "shield"
 }

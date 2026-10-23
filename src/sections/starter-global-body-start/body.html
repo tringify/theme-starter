@@ -7,8 +7,8 @@
   --starter-body-size: {{ theme.settings.body_size | default: 16 }}px;
 }
 {% if theme.settings.content_link_style == 'plain' %}
-.starter-richtext a, .starter-copy a:not(.starter-button), .starter-footer__nav a, .starter-footer__policies a { text-decoration: none; }
-.starter-richtext a:hover, .starter-copy a:not(.starter-button):hover, .starter-footer__nav a:hover, .starter-footer__policies a:hover { text-decoration: underline; }
+.starter-richtext a, .starter-copy a:not(.starter-button), .starter-footer__nav a, .starter-footer__policies a, .starter-footer__cookie { text-decoration: none; }
+.starter-richtext a:hover, .starter-copy a:not(.starter-button):hover, .starter-footer__nav a:hover, .starter-footer__policies a:hover, .starter-footer__cookie:hover { text-decoration: underline; }
 {% endif %}
 </style>
 <header class="{% if settings.scheme != empty %}tf-scheme-{{ settings.scheme }} {% endif %}starter starter-header starter-header--{{ settings.navigation_layout }} starter-header--brand-{{ settings.brand_alignment }}{% if settings.sticky_header %} starter-header--sticky{% endif %}">

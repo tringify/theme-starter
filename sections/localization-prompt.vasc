@@ -667,84 +667,202 @@
 .starter-localization {
   position: fixed;
   z-index: 90;
-  inset: auto 1rem 1rem;
-  background: transparent;
-}
-.starter-localization__card {
-  width: min(100%, 70rem);
-  margin-inline: auto;
-  padding: 1.5rem;
+  inset: auto auto 1.5rem 1.5rem;
+  width: min(24rem, calc(100vw - 3rem));
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem 1.5rem;
   border: 1px solid var(--border);
   background: var(--bg);
   box-shadow: var(--starter-shadow);
 }
+.starter-localization[hidden] {
+  display: none;
+}
+/* The cookie banner goes first; the prompt follows once the visitor has made a choice. */
+html:has([data-starter-consent]:not([hidden])) .starter-localization:not([data-editor]) {
+  display: none;
+}
+.starter-localization__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-block-end: 0.25rem;
+}
+.starter-localization__head .starter-eyebrow {
+  margin: 0;
+}
+.starter-localization__close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  margin: -0.5rem -0.75rem -0.5rem 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.starter-localization__close svg {
+  width: 20px;
+  height: 20px;
+}
+.starter-localization__country {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: var(--starter-radius);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.starter-localization__flag {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.starter-localization__message {
+  margin: 0.875rem 0 0;
+  font-size: 0.875rem;
+}
 .starter-localization__form {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 0.75rem;
-  align-items: end;
+  gap: 0.875rem;
   margin-block-start: 1.25rem;
 }
-@media (max-width: 700px) {
-  .starter-localization__form {
-    grid-template-columns: 1fr;
+.starter-localization__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+@media (max-width: 639px) {
+  .starter-localization {
+    inset: auto 1rem 1rem;
+    width: auto;
   }
-  .starter-localization__form .starter-button {
-    width: 100%;
+  .starter-localization__actions .starter-button:not(.starter-button--text) {
+    flex: 1 1 100%;
   }
 }
 </style>
-{% if localization_prompt.should_show %}
-  <div class="starter starter-localization" role="dialog" aria-label="{{ settings.heading }}">
-    <div class="starter-localization__card">
-      <div>
+{%- comment -%}
+  The platform decides whether this prompt shows (localization_prompt.should_show covers the prompt mode, a matching
+  country and the merchant's dismissal days) and records a dismissal. The editor keeps a hidden copy that opens when
+  the merchant selects this section.
+{%- endcomment -%}
+{%- assign lp = localization_prompt -%}
+{%- if lp.should_show or design_mode -%}
+  {%- assign suggested = nil -%}
+  {%- for country in localization.available_countries -%}
+    {%- if country.iso_code == lp.suggested_country_code -%}{%- assign suggested = country -%}{%- break -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if suggested == nil and design_mode -%}
+    {%- for country in localization.available_countries -%}
+      {%- unless country.selected -%}{%- assign suggested = country -%}{%- break -%}{%- endunless -%}
+    {%- endfor -%}
+    {%- if suggested == nil -%}{%- assign suggested = localization.country -%}{%- endif -%}
+  {%- endif -%}
+  {%- if suggested -%}
+    <div
+      class="starter starter-localization"
+      data-starter-lp
+      role="dialog"
+      aria-labelledby="starter-lp-title"
+      aria-describedby="starter-lp-message"
+      {% if design_mode %}data-editor{% endif %}
+      {% unless lp.should_show and design_mode != true %}hidden{% endunless %}
+    >
+      <div class="starter-localization__head">
         <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
-        <h2 class="starter-heading starter-heading--small">{{ settings.heading }}</h2>
-        <p class="starter-muted">{{ settings.message }}</p>
+        <button class="starter-localization__close" type="button" data-starter-lp-dismiss aria-label="{{ 'close' | t }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
       </div>
+      <h2 class="starter-heading starter-heading--small" id="starter-lp-title">{{ settings.heading }}</h2>
+      <p class="starter-localization__country">
+        <span class="starter-localization__flag" aria-hidden="true">{{ suggested.flag }}</span>
+        <span>{{ suggested.name }} · {{ suggested.currency_code }}</span>
+      </p>
+      <p class="starter-muted starter-localization__message" id="starter-lp-message">{{ settings.message }}</p>
       {% form 'localization_set', class: 'starter-localization__form' %}
-        <label class="starter-field"
-          ><span class="starter-label">{{ 'country_or_region' | t }}</span
-          ><select class="starter-select" name="country_code">
-            {% for country in localization.available_countries %}
-              <option
-                value="{{ country.iso_code }}"
-                {% if country.iso_code == localization_prompt.suggested_country_code %}
-                  selected
-                {% endif %}
-              >
-                {{ country.flag }}
-                {{ country.name }} · {{ country.currency_code }}
-              </option>
-            {% endfor %}
-          </select></label
-        ><label class="starter-field"
-          ><span class="starter-label">{{ 'language' | t }}</span
-          ><select class="starter-select" name="locale">
-            {% for language in localization.available_languages %}
-              <option
-                value="{{ language.iso_code }}"
-                {% if language.selected %}
-                  selected
-                {% endif %}
-              >
-                {{ language.name }}
-              </option>
-            {% endfor %}
-          </select></label
-        ><button class="starter-button" type="submit">{{ settings.button_label }}</button>
+        <input type="hidden" name="country_code" value="{{ suggested.iso_code }}">
+        {%- if localization.available_languages.size > 1 -%}
+          <label class="starter-field"
+            ><span class="starter-label">{{ 'language' | t }}</span
+            ><select class="starter-select" name="locale" data-starter-lp-language>
+              {%- for language in localization.available_languages -%}
+                <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.selected %} selected{% endif %}>
+                  {{- language.native_name | default: language.name -}}
+                </option>
+              {%- endfor -%}
+            </select></label
+          >
+        {%- endif -%}
+        <div class="starter-localization__actions">
+          <button class="starter-button" type="submit">{{ 'localization_shop_in' | t: country: suggested.name }}</button>
+          <button class="starter-button starter-button--text" type="button" data-starter-lp-dismiss>{{ 'localization_stay' | t }}</button>
+        </div>
       {% endform %}
     </div>
-  </div>
-{% endif %}
+    <script>
+      (function () {
+        "use strict";
+        var prompt = document.currentScript.previousElementSibling;
+        if (!prompt || prompt.hasAttribute("data-starter-lp-ready")) return;
+        prompt.setAttribute("data-starter-lp-ready", "");
+        var editor = prompt.hasAttribute("data-editor");
+
+        // The platform records the dismissal for the number of days the merchant chose.
+        function dismiss() {
+          if (!editor && window.tringify && window.tringify.localization) window.tringify.localization.dismissPrompt().catch(function () {});
+          prompt.hidden = true;
+        }
+        prompt.addEventListener("click", function (event) {
+          if (event.target.closest("[data-starter-lp-dismiss]")) dismiss();
+        });
+        prompt.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") dismiss();
+        });
+
+        // An unchanged language is left out so the new country brings its own default language.
+        var language = prompt.querySelector("[data-starter-lp-language]");
+        var initial = language ? language.value : null;
+        prompt.querySelector("form").addEventListener("submit", function () {
+          if (language && language.value === initial) language.disabled = true;
+        });
+
+        if (editor) {
+          var marker = prompt.closest("[data-tf-section-id]");
+          var id = marker ? marker.getAttribute("data-tf-section-id") : "";
+          function mine(detail) {
+            return !!detail && (id ? detail.id === id : detail.type === "localization-prompt");
+          }
+          document.addEventListener("tf:section-selected", function (event) {
+            if (mine(event.detail)) prompt.hidden = false;
+          });
+          document.addEventListener("tf:section-deselected", function (event) {
+            if (mine(event.detail)) prompt.hidden = true;
+          });
+        }
+      })();
+    </script>
+  {%- endif -%}
+{%- endif -%}
 {% schema %}
 {
-  "name": "starter-localization-prompt",
+  "name": "localization-prompt",
   "kind": "embed",
   "target": "global_overlay",
   "ctx_needs": [
     "localization",
-    "localization_prompt"
+    "localization_prompt",
+    "design_mode",
+    "csrf_token"
   ],
   "settings": [
     {
@@ -768,18 +886,9 @@
     {
       "id": "message",
       "type": "textarea",
-      "default": "Switch your country or language to see the right prices and delivery options.",
+      "default": "See prices in your currency and the delivery options for your country.",
       "editor": {
         "label": "message",
-        "group": "content"
-      }
-    },
-    {
-      "id": "button_label",
-      "type": "text",
-      "default": "Update",
-      "editor": {
-        "label": "buttonLabel",
         "group": "content"
       }
     }

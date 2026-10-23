@@ -5,6 +5,20 @@
   "schema_version": 3,
   "sections": [
     {
+      "name": "consent-banner",
+      "kind": "embed",
+      "file": "sections/consent-banner.vasc",
+      "origin": "override",
+      "target": "global_overlay"
+    },
+    {
+      "name": "localization-prompt",
+      "kind": "embed",
+      "file": "sections/localization-prompt.vasc",
+      "origin": "override",
+      "target": "global_overlay"
+    },
+    {
       "name": "starter-account",
       "kind": "section",
       "file": "sections/starter-account.vasc",
@@ -77,13 +91,6 @@
       "origin": "override"
     },
     {
-      "name": "starter-consent-banner",
-      "kind": "embed",
-      "file": "sections/starter-consent-banner.vasc",
-      "origin": "override",
-      "target": "global_overlay"
-    },
-    {
       "name": "starter-content-blocks",
       "kind": "section",
       "file": "sections/starter-content-blocks.vasc",
@@ -130,13 +137,6 @@
       "kind": "section",
       "file": "sections/starter-image-with-text.vasc",
       "origin": "override"
-    },
-    {
-      "name": "starter-localization-prompt",
-      "kind": "embed",
-      "file": "sections/starter-localization-prompt.vasc",
-      "origin": "override",
-      "target": "global_overlay"
     },
     {
       "name": "starter-login",
@@ -335,8 +335,8 @@
       "surface_key": "global_overlay",
       "required_sections": [
         "starter-global-overlay",
-        "starter-consent-banner",
-        "starter-localization-prompt"
+        "consent-banner",
+        "localization-prompt"
       ]
     },
     {

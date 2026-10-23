@@ -9,12 +9,12 @@
     {
       "position": 1,
       "settings": {},
-      "type": "starter-consent-banner"
+      "type": "consent-banner"
     },
     {
       "position": 2,
       "settings": {},
-      "type": "starter-localization-prompt"
+      "type": "localization-prompt"
     }
   ]
 }

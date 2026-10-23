@@ -1,0 +1,113 @@
+{%- comment -%}
+  Shown while the store requires consent and the visitor has not chosen yet. The categories, their order and the
+  policies come from Store Admin. The banner stays in the page, hidden, so the footer link and the editor can reopen it.
+{%- endcomment -%}
+{%- if consent.required or design_mode -%}
+  {%- assign consent_policy_count = 0 -%}
+  {%- for policy in policies -%}
+    {%- if policy.type == 'privacy' or policy.type == 'privacy_policy' or policy.type == 'cookie' or policy.type == 'cookie_policy' -%}{%- assign consent_policy_count = consent_policy_count | plus: 1 -%}{%- endif -%}
+  {%- endfor -%}
+  <div
+    class="starter starter-consent"
+    data-starter-consent
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="starter-consent-title"
+    {% if design_mode %}data-editor{% endif %}
+    {% unless consent.required and consent.given != true and design_mode != true %}hidden{% endunless %}
+  >
+    <div class="starter-consent__card">
+      <div class="starter-consent__copy">
+        <p class="starter-eyebrow">{{ settings.eyebrow }}</p>
+        <h2 class="starter-heading starter-heading--small" id="starter-consent-title">{{ settings.heading }}</h2>
+        <p class="starter-muted">{{ settings.message }}</p>
+        {%- if consent_policy_count > 0 -%}
+          <p class="starter-consent__policies">
+            {%- for policy in policies -%}
+              {%- if policy.type == 'privacy' or policy.type == 'privacy_policy' or policy.type == 'cookie' or policy.type == 'cookie_policy' -%}
+                <a href="{{ policy.url }}">{{ policy.title }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </p>
+        {%- endif -%}
+      </div>
+      <div class="starter-consent__actions">
+        {%- if consent.available_categories.size > 0 -%}
+          <details class="starter-consent__choose" data-starter-consent-choose>
+            <summary class="starter-button starter-button--text">{{ 'consent_choose' | t }}</summary>
+            {% form 'consent_give', class: 'starter-consent__options' %}
+              <label
+                ><input type="checkbox" checked disabled><span>{{ 'consent_category_essential' | t }}</span></label
+              >
+              {%- for category in consent.available_categories -%}
+                {%- assign category_key = 'consent_category_' | append: category -%}
+                <label
+                  ><input type="checkbox" name="categories" value="{{ category }}"{% if consent.categories contains category %} checked{% endif %}
+                  ><span>{{ category_key | t }}</span></label
+                >
+              {%- endfor -%}
+              <button class="starter-button starter-button--secondary" type="submit">{{ 'consent_save' | t }}</button>
+            {% endform %}
+          </details>
+          {% form 'consent_give', class: 'starter-consent__form' %}
+            <button class="starter-button starter-button--secondary" type="submit">{{ 'consent_reject_optional' | t }}</button>
+          {% endform %}
+        {%- endif -%}
+        {% form 'consent_give', class: 'starter-consent__form' %}
+          <button class="starter-button" type="submit" name="accept_all" value="1">{{ 'consent_accept_all' | t }}</button>
+        {% endform %}
+        {%- if consent.given -%}
+          {% form 'consent_withdraw', class: 'starter-consent__form' %}
+            <button class="starter-button starter-button--text" type="submit">{{ 'consent_withdraw' | t }}</button>
+          {% endform %}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+      var banner = document.currentScript.previousElementSibling;
+      if (!banner || banner.hasAttribute("data-starter-consent-ready")) return;
+      banner.setAttribute("data-starter-consent-ready", "");
+      var choose = banner.querySelector("[data-starter-consent-choose]");
+
+      function open() {
+        banner.hidden = false;
+        if (choose) choose.open = true;
+      }
+      function close() {
+        banner.hidden = true;
+        if (choose) choose.open = false;
+      }
+
+      // The footer's cookie preferences link reopens the banner with the categories showing.
+      document.addEventListener("click", function (event) {
+        var trigger = event.target.closest && event.target.closest("[data-starter-consent-open]");
+        if (!trigger) return;
+        event.preventDefault();
+        open();
+      });
+
+      // When the hosted bridge saves the choice without a page load, the banner closes.
+      document.addEventListener("tf:action-success", function (event) {
+        var action = event.detail && event.detail.action;
+        if (action === "consent_give" || action === "consent_withdraw") close();
+      });
+
+      if (banner.hasAttribute("data-editor")) {
+        var marker = banner.closest("[data-tf-section-id]");
+        var id = marker ? marker.getAttribute("data-tf-section-id") : "";
+        function mine(detail) {
+          return !!detail && (id ? detail.id === id : detail.type === "consent-banner");
+        }
+        document.addEventListener("tf:section-selected", function (event) {
+          if (mine(event.detail)) open();
+        });
+        document.addEventListener("tf:section-deselected", function (event) {
+          if (mine(event.detail)) close();
+        });
+      }
+    })();
+  </script>
+{%- endif -%}

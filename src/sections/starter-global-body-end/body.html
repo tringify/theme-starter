@@ -30,6 +30,9 @@
       {% for item in policies -%}
         <a href="{{ item.url }}">{{ item.title }}</a>
       {%- endfor %}
+      {%- if consent.required %}
+        <button class="starter-footer__cookie" type="button" data-starter-consent-open>{{ 'cookie_preferences' | t }}</button>
+      {%- endif %}
     </nav>
   </div>
 </footer>

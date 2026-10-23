@@ -173,5 +173,20 @@
   "review_helpful": "Helpful",
   "phone_country_selected": "Country or region: {{ country }}",
   "phone_example": "For example: {{ example }}",
-  "phone_invalid": "Enter the full phone number with its country code."
+  "phone_invalid": "Enter the full phone number with its country code.",
+  "close": "Close",
+  "localization_shop_in": "Shop in {{ country }}",
+  "localization_stay": "Stay here",
+  "consent_choose": "Choose cookies",
+  "consent_category_essential": "Essential (always on)",
+  "consent_category_analytics": "Analytics",
+  "consent_category_advertising": "Advertising",
+  "consent_category_advertising_data": "Advertising data",
+  "consent_category_personalized_advertising": "Personalized advertising",
+  "consent_category_personalization": "Personalization",
+  "consent_save": "Save choices",
+  "consent_reject_optional": "Essential only",
+  "consent_accept_all": "Accept all",
+  "consent_withdraw": "Withdraw consent",
+  "cookie_preferences": "Cookie preferences"
 }

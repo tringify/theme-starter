@@ -1,0 +1,36 @@
+{
+  "name": "localization-prompt",
+  "kind": "embed",
+  "target": "global_overlay",
+  "ctx_needs": ["localization", "localization_prompt", "design_mode", "csrf_token"],
+  "settings": [
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "default": "Location",
+      "editor": {
+        "label": "eyebrow",
+        "group": "content"
+      }
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "default": "Shop in your region",
+      "editor": {
+        "label": "heading",
+        "group": "content"
+      }
+    },
+    {
+      "id": "message",
+      "type": "textarea",
+      "default": "See prices in your currency and the delivery options for your country.",
+      "editor": {
+        "label": "message",
+        "group": "content"
+      }
+    }
+  ],
+  "icon": "globe"
+}

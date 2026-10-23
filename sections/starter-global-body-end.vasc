@@ -667,6 +667,16 @@
 .starter-footer__newsletter > p {
   margin-block: 0.65rem 1rem;
 }
+.starter-footer__cookie {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
 </style>
 <footer class="{% if settings.scheme != empty %}tf-scheme-{{ settings.scheme }} {% endif %}starter starter-footer">
   <div class="starter-shell starter-footer__main">
@@ -700,6 +710,9 @@
       {% for item in policies -%}
         <a href="{{ item.url }}">{{ item.title }}</a>
       {%- endfor %}
+      {%- if consent.required %}
+        <button class="starter-footer__cookie" type="button" data-starter-consent-open>{{ 'cookie_preferences' | t }}</button>
+      {%- endif %}
     </nav>
   </div>
 </footer>
@@ -709,7 +722,8 @@
   "kind": "section",
   "ctx_needs": [
     "shop",
-    "policies"
+    "policies",
+    "consent"
   ],
   "settings": [
     {
