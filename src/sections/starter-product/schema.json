@@ -16,12 +16,6 @@
   ],
   "settings": [
     {
-      "id": "show_buy_now",
-      "type": "checkbox",
-      "default": true,
-      "editor": {"label": "showBuyNow", "group": "content"}
-    },
-    {
       "id": "gallery_layout",
       "type": "select",
       "default": "stack",
@@ -81,15 +75,49 @@
         "label": "imageRatio",
         "group": "design"
       }
-    },
-    {
-      "id": "show_vendor",
-      "type": "checkbox",
-      "default": true,
-      "editor": {
-        "label": "showVendor",
-        "group": "content"
-      }
     }
-  ]
+  ],
+  "blocks": {
+    "default": ["title", "price", "rating", "buy_buttons", "description"],
+    "types": [
+      {
+        "type": "title",
+        "editor": {"label": "title"},
+        "settings": [
+          {"id": "show_vendor", "type": "checkbox", "default": true, "editor": {"label": "showVendor", "group": "content"}},
+          {"id": "show_short_description", "type": "checkbox", "default": true, "editor": {"label": "showShortDescription", "group": "content"}}
+        ]
+      },
+      {
+        "type": "price",
+        "editor": {"label": "price"},
+        "settings": [
+          {"id": "show_tax_note", "type": "checkbox", "default": true, "editor": {"label": "showTaxNote", "group": "content"}}
+        ]
+      },
+      {
+        "type": "rating",
+        "editor": {"label": "rating"},
+        "settings": [
+          {"id": "show_review_count", "type": "checkbox", "default": true, "editor": {"label": "showReviewCount", "group": "content"}}
+        ]
+      },
+      {
+        "type": "buy_buttons",
+        "editor": {"label": "buyButtons"},
+        "settings": [
+          {"id": "show_buy_now", "type": "checkbox", "default": true, "editor": {"label": "showBuyNow", "group": "content"}},
+          {"id": "show_wishlist", "type": "checkbox", "default": true, "editor": {"label": "showWishlist", "group": "content"}}
+        ]
+      },
+      {
+        "type": "description",
+        "editor": {"label": "description"},
+        "settings": [
+          {"id": "open", "type": "checkbox", "default": true, "editor": {"label": "openByDefault", "group": "content"}}
+        ]
+      }
+    ],
+    "accept_app_blocks": true
+  }
 }

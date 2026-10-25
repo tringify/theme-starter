@@ -55,6 +55,10 @@ The theme includes two whole-theme style presets:
 
 Both presets include matching light and inverse color schemes. They are starting points and remain editable in Store Admin.
 
+## Product page blocks and app blocks
+
+The product section lays out its details as blocks: title, price, rating, buy buttons and description. Merchants reorder, hide and set them in the editor. The section also accepts app blocks, so a merchant can place an installed app's block, such as an instalments line, where they want it. `tringify app block preview` shows an app's blocks after the price block by default.
+
 ## Reusable content blocks
 
 **Content Blocks** can be added to home, product, page, collection, category, brand, and vendor templates. It supports up to 12 ordered blocks. Add, reorder, hide, or remove blocks in the editor; their order is the reading order on the storefront. An empty section renders no surrounding space.

@@ -3,7 +3,15 @@
   "sections": [
     {
       "position": 0,
-      "settings": {},
+      "settings": {
+        "blocks": [
+          {"id": "starter-product__0", "type": "title", "settings": {}},
+          {"id": "starter-product__1", "type": "price", "settings": {}},
+          {"id": "starter-product__2", "type": "rating", "settings": {}},
+          {"id": "starter-product__3", "type": "buy_buttons", "settings": {}},
+          {"id": "starter-product__4", "type": "description", "settings": {}}
+        ]
+      },
       "type": "starter-product"
     }
   ]

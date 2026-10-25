@@ -154,5 +154,13 @@
   "sectionName.richTextCentered": "Rich Text — Centered",
   "sectionName.richTextLeftAligned": "Rich Text — Left Aligned",
   "sectionName.splitHero": "Split Hero",
-  "sectionName.storyWithBlocks": "Story with Blocks"
+  "sectionName.storyWithBlocks": "Story with Blocks",
+  "fieldLabel.price": "Price",
+  "fieldLabel.rating": "Rating",
+  "fieldLabel.buyButtons": "Buy buttons",
+  "fieldLabel.showShortDescription": "Show short description",
+  "fieldLabel.showTaxNote": "Show tax note",
+  "fieldLabel.showReviewCount": "Show review count",
+  "fieldLabel.showWishlist": "Show wishlist button",
+  "fieldLabel.openByDefault": "Open by default"
 }
