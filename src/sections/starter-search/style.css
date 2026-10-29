@@ -52,7 +52,7 @@
 .starter-filters__clear,
 .starter-filter__clear,
 .starter-filter__more a {
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
   font-size: 0.8125rem;
   text-decoration: underline;
   text-underline-offset: 0.2em;
@@ -93,8 +93,8 @@
   min-width: 1.35rem;
   min-height: 1.35rem;
   padding-inline: 0.35rem;
-  background: var(--btn, #111111);
-  color: var(--btn-text, #ffffff);
+  background: var(--btn);
+  color: var(--btn-text);
   font-size: 0.6875rem;
   letter-spacing: 0;
 }
@@ -113,7 +113,7 @@
 .starter-filter__count {
   margin-inline-start: auto;
   padding-inline-start: 0.5rem;
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
@@ -186,9 +186,9 @@ a.starter-filter-option:hover .starter-filter-option__box {
   border-color: var(--text);
 }
 .starter-filter__values--pills .starter-filter-option[aria-checked="true"] {
-  border-color: var(--btn, #111111);
-  background: var(--btn, #111111);
-  color: var(--btn-text, #ffffff);
+  border-color: var(--btn);
+  background: var(--btn);
+  color: var(--btn-text);
 }
 .starter-filter__values--pills .starter-filter__count {
   margin: 0;
@@ -257,7 +257,7 @@ a.starter-filter-option:hover .starter-filter-option__swatch {
   border: 1px solid var(--border);
   border-radius: var(--starter-radius);
   background: color-mix(in srgb, var(--text) 4%, var(--bg));
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
   font-size: 1.25rem;
   font-weight: 600;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -317,11 +317,11 @@ a.starter-filter-option:hover .starter-filter-option__tile {
   transition: transform 0.2s ease;
 }
 .starter-filter-switch[aria-checked="true"] .starter-filter-switch__track {
-  border-color: var(--btn, #111111);
-  background: var(--btn, #111111);
+  border-color: var(--btn);
+  background: var(--btn);
 }
 .starter-filter-switch[aria-checked="true"] .starter-filter-switch__track span {
-  background: var(--btn-text, #ffffff);
+  background: var(--btn-text);
   transform: translateX(1rem);
 }
 [dir="rtl"] .starter-filter-switch[aria-checked="true"] .starter-filter-switch__track span {
@@ -406,7 +406,7 @@ a.starter-filter-option:hover .starter-filter-option__tile {
 }
 .starter-filter-range__dash {
   padding-block-end: 0.75rem;
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
 }
 .starter-filter-range__actions,
 .starter-filter__more {
@@ -438,7 +438,7 @@ a.starter-filter-option:hover .starter-filter-option__tile {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
   cursor: pointer;
 }
 .starter-filter__search-submit svg {

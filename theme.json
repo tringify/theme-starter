@@ -1,7 +1,7 @@
 {
   "default_locale": "en",
   "name": "Tringify Starter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "schema_version": 3,
   "sections": [
     {
@@ -106,6 +106,12 @@
       "name": "starter-featured-products",
       "kind": "section",
       "file": "sections/starter-featured-products.vasc",
+      "origin": "override"
+    },
+    {
+      "name": "starter-gift-card",
+      "kind": "section",
+      "file": "sections/starter-gift-card.vasc",
       "origin": "override"
     },
     {
@@ -447,6 +453,12 @@
       "surface_key": "wishlist",
       "required_sections": [
         "starter-wishlist"
+      ]
+    },
+    {
+      "surface_key": "gift_card",
+      "required_sections": [
+        "starter-gift-card"
       ]
     }
   ]

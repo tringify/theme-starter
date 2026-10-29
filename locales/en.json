@@ -188,5 +188,13 @@
   "consent_reject_optional": "Essential only",
   "consent_accept_all": "Accept all",
   "consent_withdraw": "Withdraw consent",
-  "cookie_preferences": "Cookie preferences"
+  "cookie_preferences": "Cookie preferences",
+  "gift_card_title": "Gift Card",
+  "gift_card_check_title": "Check a balance",
+  "gift_card_intro": "Enter the code from your Gift Card to see what is left to spend.",
+  "gift_card_code": "Gift Card code",
+  "gift_card_check": "Check balance",
+  "gift_card_balance": "Balance",
+  "gift_card_initial_value": "Initial value",
+  "gift_card_shop": "Start shopping"
 }

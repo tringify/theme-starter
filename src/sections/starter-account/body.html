@@ -15,7 +15,7 @@
           <p>{{ customer.email }}</p>
         {% endif -%}
         {%- if customer.phone %}
-          <p>{{ customer.phone }}</p>
+          <p dir="ltr">{{ customer.phone_display }}</p>
         {% endif %}
         {% form 'logout' %}
           <button class="starter-button starter-button--secondary" type="submit">{{ 'logout' | t }}</button>

@@ -1,0 +1,50 @@
+{%- comment -%}
+  The Gift Card page: /gift-cards checks a balance; /gift-cards/view/{token} opens one card from the delivery email or text message.
+  gift_card is null until a lookup succeeds, and code is set only on the view link. The platform words every status, expiry and
+  error: print them as given.
+{%- endcomment -%}
+<main class="starter starter-section starter-gift-card">
+  <div class="starter-shell starter-gift-card__shell">
+    <h1 class="starter-heading">{{ 'gift_card_title' | t }}</h1>
+    {%- if form_error and form_error.message != blank %}
+      <p class="starter-gift-card__error" role="alert">{{ form_error.message }}</p>
+    {%- endif %}
+    {%- if gift_card %}
+      <article class="starter-gift-card__card" aria-labelledby="starter-gift-card-balance">
+        <p class="starter-gift-card__code">
+          {%- if gift_card.code != blank -%}
+            <span class="starter-label">{{ 'gift_card_code' | t }}</span> <bdi dir="ltr">{{ gift_card.code }}</bdi>
+          {%- else -%}
+            <bdi dir="ltr">{{ gift_card.code_masked }}</bdi>
+          {%- endif -%}
+        </p>
+        <p class="starter-gift-card__status">{{ gift_card.status_label }}</p>
+        <p class="starter-gift-card__balance"><span id="starter-gift-card-balance">{{ 'gift_card_balance' | t }}</span> <strong>{{ gift_card.balance.formatted }}</strong></p>
+        <p class="starter-card__meta">{{ 'gift_card_initial_value' | t }} {{ gift_card.initial_value.formatted }}</p>
+        {%- if gift_card.expires_at_label != blank %}
+          <p class="starter-card__meta">{{ gift_card.expires_at_label }}</p>
+        {%- endif %}
+        {%- if gift_card.message != blank %}
+          <blockquote class="starter-gift-card__message">{{ gift_card.message }}</blockquote>
+        {%- endif %}
+        <a class="starter-button" href="{{ gift_card.shop_url }}">{{ 'gift_card_shop' | t }}</a>
+      </article>
+    {%- endif %}
+    <section class="starter-gift-card__lookup">
+      <h2 class="starter-heading starter-heading--small">{{ 'gift_card_check_title' | t }}</h2>
+      <p class="starter-subheading">{{ 'gift_card_intro' | t }}</p>
+      {% form 'gift_card_lookup' %}
+        <label class="starter-field"
+          ><span class="starter-label">{{ 'gift_card_code' | t }}</span
+          ><input
+            class="starter-input"
+            name="code"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+            maxlength="{{ forms.gift_card.code.max_length }}"{% if forms.gift_card.code.required %} required{% endif %}></label
+        ><button class="starter-button" type="submit">{{ 'gift_card_check' | t }}</button>
+      {% endform %}
+    </section>
+  </div>
+</main>

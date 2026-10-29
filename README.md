@@ -2,7 +2,7 @@
 
 An editable Vascula theme for building Tringify storefronts. Use it as the starting point for your own theme.
 
-Starter provides 38 editable sections across every storefront surface: product discovery, product options, cart actions, customer access, content, legal pages, store states, localization prompts, consent controls, and reusable home-page sections.
+Starter provides 39 editable sections across every storefront surface: product discovery, product options, cart actions, customer access, content, legal pages, store states, localization prompts, consent controls, and reusable home-page sections.
 
 ## Requirements
 
@@ -79,6 +79,12 @@ Cart and wishlist actions show a dismissible confirmation with a link to the upd
 
 The product's wishlist button uses `tf:action-success` and the returned `product_session_state.product.wishlist.direct_saved` value to update its label. The shopper's selected options and quantity remain unchanged. This form saves the product itself; a saved variant does not make the product-only form say Remove from Wishlist.
 
+## Gift Cards
+
+The product section offers sending a Gift Card product as a gift: recipient name, email or phone, message and an optional send time, posted with Add to cart and Buy now only while the switch is on. Every field's `maxlength` and the message counter come from `forms.cart_add`; the theme writes no limits. A cart line for a gift shows who it is for (`phone_display`, never the raw `phone`) and when it sends (`deliver_at_display`, written by the platform in store time with the store's timezone named, in the shopper's language). Never format these times in the theme.
+
+**Gift Card** (`templates/gift_card.json`, section `starter-gift-card`) is the platform's `/gift-cards` page: a balance check posting `gift_card_lookup`, and the card opened from the delivery email's view link. It prints the platform's status, expiry and error text as given, the full code only when `gift_card.code` is set, and binds the code input to `forms.gift_card.code`. See [Gift Cards in your theme](https://dev-docs.tringify.com/themes/gift-cards).
+
 ## Customer and password forms
 
 Sign-in and registration use the methods enabled in Customer Settings; registration offers phone only when phone registration is available. When both methods are available, the preferred method appears first.
@@ -132,7 +138,7 @@ Keep developer instructions in this README or the documentation. Shopper-facing 
 
 ## Text and editor labels
 
-Shopper messages are in `locales/en.json`. Editor labels are in `locales/en.schema.json`. Keep both namespaces readable and translated when adding a language. Use sentence case for descriptions and title case for section, preset, and control names.
+Shopper messages are in `locales/en.json`. Editor labels are in `locales/en.schema.json`, with the same keys in `de.schema.json`, `es.schema.json`, `fr.schema.json` and `it.schema.json` (they start as English text; `check` requires every label in all five). Keep both namespaces readable and translated when adding a language. Use sentence case for descriptions and title case for section, preset, and control names.
 
 ## Preview and import
 

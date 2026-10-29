@@ -19,7 +19,7 @@
 }
 .starter-auth__header > p:last-child,
 .starter-field-help {
-  color: var(--text-muted, #595959);
+  color: var(--text-muted);
 }
 .starter-auth form {
   display: block;
@@ -34,10 +34,10 @@
   display: block;
   width: 100%;
   min-height: 3rem;
-  border: 1px solid var(--border, #bdbdbd);
+  border: 1px solid var(--border);
   border-radius: var(--starter-radius);
-  background: var(--bg, #fff);
-  color: var(--text, #111);
+  background: var(--bg);
+  color: var(--text);
   padding: 0.75rem;
   font: inherit;
   box-sizing: border-box;
@@ -52,10 +52,10 @@
   margin-block-start: 1.25rem;
   padding: 0.875rem 1rem;
   min-height: 3rem;
-  border: 1px solid var(--btn, #111);
+  border: 1px solid var(--btn);
   border-radius: var(--starter-radius);
-  background: var(--btn, #111);
-  color: var(--btn-text, #fff);
+  background: var(--btn);
+  color: var(--btn-text);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -71,7 +71,7 @@
 .starter-auth__switcher {
   display: flex;
   padding: 0.25rem;
-  border: 1px solid var(--border, #bdbdbd);
+  border: 1px solid var(--border);
   border-radius: var(--starter-radius);
   gap: 0.25rem;
   margin-block-end: 1.25rem;
@@ -81,14 +81,14 @@
   min-height: 2.5rem;
   border: 0;
   border-radius: var(--starter-radius);
-  background: var(--bg, #fff);
-  color: var(--text, #111);
+  background: var(--bg);
+  color: var(--text);
   font: inherit;
   cursor: pointer;
 }
 .starter-auth__switcher button[aria-pressed="true"] {
-  background: var(--btn, #111);
-  color: var(--btn-text, #fff);
+  background: var(--btn);
+  color: var(--btn-text);
 }
 .starter-auth__identity {
   display: flex;
@@ -103,7 +103,7 @@
 .starter-auth__back,
 .starter-text-button {
   font-size: 0.875rem;
-  color: var(--text, #111);
+  color: var(--text);
   text-underline-offset: 0.2em;
 }
 .starter-auth__back {
@@ -141,29 +141,29 @@
   flex: 0 0 1.25rem;
   width: 1.25rem;
   height: 1.25rem;
-  border: 1px solid var(--text-muted, #777);
+  border: 1px solid var(--text-muted);
   border-radius: var(--starter-radius);
-  background: var(--bg, #fff);
+  background: var(--bg);
   padding: 0;
   margin: 0.0625rem 0 0;
   cursor: pointer;
 }
 .starter-check input:checked {
-  background: var(--btn, #111);
-  border-color: var(--btn, #111);
+  background: var(--btn);
+  border-color: var(--btn);
 }
 .starter-check input:checked::after {
   content: "";
   display: block;
   width: 0.3rem;
   height: 0.6rem;
-  border: solid var(--btn-text, #fff);
+  border: solid var(--btn-text);
   border-width: 0 2px 2px 0;
   transform: translate(0.4rem, 0.17rem) rotate(45deg);
 }
 .starter-message {
   padding: 1rem;
-  border-inline-start: 2px solid var(--text, #111);
+  border-inline-start: 2px solid var(--text);
   background: color-mix(in srgb, var(--text) 4%, var(--bg));
   font-size: 0.875rem;
   line-height: 1.5;
@@ -187,7 +187,7 @@
 }
 .starter-phone__hint {
   margin: 0;
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
   font-size: 0.75rem;
   line-height: 1.45;
 }
@@ -195,15 +195,15 @@
   display: flex;
   align-items: stretch;
   min-width: 0;
-  border: 1px solid var(--border, #cfcfcf);
+  border: 1px solid var(--border);
   border-radius: var(--starter-radius);
-  background: var(--bg, #ffffff);
+  background: var(--bg);
 }
 .starter-phone:focus-within {
-  border-color: var(--text, #111111);
+  border-color: var(--text);
 }
 .starter-phone:has(.starter-phone__number:focus-visible) {
-  outline: 2px solid var(--accent, #111111);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 .starter .starter-phone .starter-phone__number:focus-visible {
@@ -227,10 +227,10 @@
   margin: 0;
   padding: 0 0.625rem 0 0.75rem;
   border: 0;
-  border-inline-end: 1px solid var(--border, #cfcfcf);
+  border-inline-end: 1px solid var(--border);
   border-radius: var(--starter-radius) 0 0 var(--starter-radius);
   background: transparent;
-  color: var(--text, #111111);
+  color: var(--text);
   font-size: 0.875rem;
   font-weight: 600;
   white-space: nowrap;
@@ -251,7 +251,7 @@ button.starter-phone__country:focus-visible {
   outline-offset: -2px;
 }
 .starter-phone__country--fixed {
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
 }
 .starter-phone__flag {
   font-size: 1.125rem;
@@ -260,7 +260,7 @@ button.starter-phone__country:focus-visible {
 .starter-phone__chevron {
   width: 1rem;
   height: 1rem;
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
   transition: transform 0.2s ease;
 }
 [aria-expanded="true"] > .starter-phone__chevron {
@@ -273,10 +273,10 @@ button.starter-phone__country:focus-visible {
   inset-block-start: calc(100% + 0.375rem);
   margin: 0;
   padding: 0.5rem;
-  border: 1px solid var(--border, #cfcfcf);
+  border: 1px solid var(--border);
   border-radius: var(--starter-radius);
-  background: var(--bg, #ffffff);
-  color: var(--text, #111111);
+  background: var(--bg);
+  color: var(--text);
   box-shadow: var(--starter-shadow);
   font-size: 0.875rem;
   line-height: 1.4;
@@ -321,10 +321,10 @@ button.starter-phone__country:focus-visible {
   background: color-mix(in srgb, var(--text) 6%, var(--bg));
 }
 .starter-phone__option.is-active {
-  box-shadow: inset 2px 0 0 var(--text, #111111);
+  box-shadow: inset 2px 0 0 var(--text);
 }
 .starter-phone__option.is-active:dir(rtl) {
-  box-shadow: inset -2px 0 0 var(--text, #111111);
+  box-shadow: inset -2px 0 0 var(--text);
 }
 .starter-phone__option.is-current .starter-phone__name {
   font-weight: 600;
@@ -334,13 +334,13 @@ button.starter-phone__country:focus-visible {
   min-width: 0;
 }
 .starter-phone__option-dial {
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 .starter-phone__empty {
   margin: 0;
-  color: var(--text-muted, #686868);
+  color: var(--text-muted);
 }
 .starter-phone__empty:not(:empty) {
   padding: 0.75rem 0.625rem;

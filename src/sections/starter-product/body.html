@@ -153,11 +153,11 @@
                       <div class="starter-gift__fields" id="starter-gift-fields" data-starter-gift-fields>
                         <label class="starter-field starter-gift__wide">
                           <span class="starter-label">{{ 'gift_recipient_name' | t }}</span>
-                          <input class="starter-input" type="text" name="gift_card_recipient_name" maxlength="255" autocomplete="off">
+                          <input class="starter-input" type="text" name="gift_card_recipient_name" maxlength="{{ forms.cart_add.gift_card_recipient_name.max_length }}" autocomplete="off">
                         </label>
                         <label class="starter-field">
                           <span class="starter-label">{{ 'gift_recipient_email' | t }}</span>
-                          <input class="starter-input" type="email" name="gift_card_recipient_email" inputmode="email" autocomplete="off" spellcheck="false" maxlength="320" placeholder="{{ 'email_example' | t }}" data-starter-gift-email>
+                          <input class="starter-input" type="email" name="gift_card_recipient_email" inputmode="email" autocomplete="off" spellcheck="false" maxlength="{{ forms.cart_add.gift_card_recipient_email.max_length }}" placeholder="{{ 'email_example' | t }}" data-starter-gift-email>
                         </label>
                         <div class="starter-field" data-starter-gift-phone>
                           {%- assign starter_phone_id = 'starter-gift-phone' -%}
@@ -274,8 +274,8 @@
                         <p class="starter-gift__note starter-gift__wide">{{ 'gift_contact_hint' | t }}</p>
                         <label class="starter-field starter-gift__wide">
                           <span class="starter-label">{{ 'gift_message' | t }}</span>
-                          <textarea class="starter-input starter-gift__message" name="gift_card_recipient_message" rows="3" maxlength="2000" aria-describedby="starter-gift-count" data-starter-gift-message></textarea>
-                          <span class="starter-gift__hint starter-gift__count" id="starter-gift-count"><span data-starter-gift-count>0</span> / 2000</span>
+                          <textarea class="starter-input starter-gift__message" name="gift_card_recipient_message" rows="3" maxlength="{{ forms.cart_add.gift_card_recipient_message.max_length }}" aria-describedby="starter-gift-count" data-starter-gift-message></textarea>
+                          <span class="starter-gift__hint starter-gift__count" id="starter-gift-count"><span data-starter-gift-count>0</span> / {{ forms.cart_add.gift_card_recipient_message.max_length }}</span>
                         </label>
                         <label class="starter-field starter-gift__wide">
                           <span class="starter-label">{{ 'gift_send_on' | t }}</span>

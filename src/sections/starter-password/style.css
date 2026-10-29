@@ -19,7 +19,7 @@
 }
 .starter-auth__header > p:last-child,
 .starter-field-help {
-  color: var(--text-muted, #595959);
+  color: var(--text-muted);
 }
 .starter-auth form {
   display: block;
@@ -34,10 +34,10 @@
   display: block;
   width: 100%;
   min-height: 3rem;
-  border: 1px solid var(--border, #bdbdbd);
+  border: 1px solid var(--border);
   border-radius: var(--starter-radius);
-  background: var(--bg, #fff);
-  color: var(--text, #111);
+  background: var(--bg);
+  color: var(--text);
   padding: 0.75rem;
   font: inherit;
   box-sizing: border-box;
@@ -52,10 +52,10 @@
   margin-block-start: 1.25rem;
   padding: 0.875rem 1rem;
   min-height: 3rem;
-  border: 1px solid var(--btn, #111);
+  border: 1px solid var(--btn);
   border-radius: var(--starter-radius);
-  background: var(--btn, #111);
-  color: var(--btn-text, #fff);
+  background: var(--btn);
+  color: var(--btn-text);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -65,7 +65,7 @@
 }
 .starter-message {
   padding: 1rem;
-  border-inline-start: 2px solid var(--text, #111);
+  border-inline-start: 2px solid var(--text);
   background: color-mix(in srgb, var(--text) 4%, var(--bg));
   font-size: 0.875rem;
   line-height: 1.5;

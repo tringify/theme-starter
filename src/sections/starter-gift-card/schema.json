@@ -1,0 +1,5 @@
+{
+  "name": "starter-gift-card",
+  "kind": "section",
+  "ctx_needs": ["gift_card", "forms", "form_error"]
+}

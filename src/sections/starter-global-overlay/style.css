@@ -6,8 +6,8 @@
   width: min(26rem, calc(100vw - 3rem));
   padding: 1rem 1.125rem;
   border: 1px solid currentColor;
-  background: var(--bg, #ffffff);
-  color: var(--text, #111111);
+  background: var(--bg);
+  color: var(--text);
   box-shadow: 0 1rem 3rem rgb(0 0 0 / 12%);
 }
 

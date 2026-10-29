@@ -1,0 +1,32 @@
+.starter-gift-card__shell {
+  display: grid;
+  gap: 2rem;
+  max-width: 40rem;
+}
+.starter-gift-card__card {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid currentColor;
+}
+.starter-gift-card__card .starter-button {
+  justify-self: start;
+  margin-block-start: 1rem;
+}
+.starter-gift-card__balance strong {
+  font-size: 1.75rem;
+}
+.starter-gift-card__message {
+  margin: 0;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid currentColor;
+}
+.starter-gift-card__error {
+  margin: 0;
+  font-weight: 600;
+}
+.starter-gift-card__lookup form {
+  display: grid;
+  gap: 1rem;
+  margin-block-start: 1rem;
+}

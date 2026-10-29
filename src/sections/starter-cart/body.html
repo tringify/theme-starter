@@ -43,9 +43,9 @@
                           {% if gift.name != empty %}{{ 'gift_for' | t: name: gift.name }}{% else %}{{ 'gift_sent_as_gift' | t }}{% endif %}
                         </p>
                         <p class="starter-card__meta">
-                          {%- if gift.email != empty -%}{{ gift.email }}{%- else -%}<span dir="ltr">{{ gift.phone }}</span>{%- endif -%}
-                          {%- if gift.deliver_at %}
-                            <br>{{ 'gift_sends_on' | t }} <time datetime="{{ gift.deliver_at }}" data-starter-local-time>{{ gift.deliver_at | date: 'medium' }}</time>
+                          {%- if gift.email != empty -%}{{ gift.email }}{%- else -%}<span dir="ltr">{{ gift.phone_display }}</span>{%- endif -%}
+                          {%- if gift.deliver_at_display %}
+                            <br>{{ 'gift_sends_on' | t }} <time datetime="{{ gift.deliver_at }}">{{ gift.deliver_at_display }}</time>
                           {%- endif -%}
                         </p>
                       </div>
@@ -732,18 +732,4 @@
 })();
 </script>
 {%- comment -%}/partial:phone-script{%- endcomment -%}
-<script>
-(function () {
-  "use strict";
-  // Show gift send times in the shopper's own time zone and language.
-  if (!window.Intl || !Intl.DateTimeFormat) return;
-  var lang = document.documentElement.lang || undefined;
-  Array.prototype.forEach.call(document.querySelectorAll("time[data-starter-local-time]"), function (node) {
-    var date = new Date(node.getAttribute("datetime"));
-    if (isNaN(date.getTime())) return;
-    try {
-      node.textContent = new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short" }).format(date);
-    } catch (error) {}
-  });
-})();
-</script>
+
