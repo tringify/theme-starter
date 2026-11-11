@@ -276,6 +276,44 @@
               </div>
             {% endfor -%}
           {%- endif -%}
+          {%- comment -%} Shipping estimate: cart.shipping_estimate lists the countries of the shopper's market and each country's
+            state and postal code fields; the script below posts them to cart.shipping_estimate.url (the cart_estimate action) and
+            prints the answer. Null for an empty or pickup cart. {%- endcomment -%}
+          {%- assign est = cart.shipping_estimate -%}
+          {%- if est -%}
+            {%- assign est_cc = est.countries.first.iso_code -%}
+            {%- for c in est.countries -%}{%- if c.selected -%}{%- assign est_cc = c.iso_code -%}{%- endif -%}{%- endfor -%}
+            <details class="starter-estimate" data-starter-estimate data-url="{{ est.url }}" data-csrf="{{ csrf_token }}"
+              data-t-shipping="{{ 'estimate_shipping' | t | escape }}" data-t-free="{{ 'estimate_free' | t | escape }}"
+              data-t-tax="{{ 'estimate_tax' | t | escape }}" data-t-tax-included="{{ 'estimate_tax_included' | t | escape }}"
+              data-t-duties="{{ 'estimate_duties' | t | escape }}" data-t-cod="{{ 'estimate_cod' | t | escape }}"
+              data-t-cod-yes="{{ 'estimate_cod_available' | t | escape }}" data-t-cod-no="{{ 'estimate_cod_unavailable' | t | escape }}"
+              data-t-total="{{ 'estimate_total' | t | escape }}" data-t-error="{{ 'estimate_error' | t | escape }}">
+              <summary>{{ 'estimate_heading' | t }}</summary>
+              <form class="starter-estimate__form" novalidate>
+                <label class="starter-field"><span>{{ 'estimate_country' | t }}</span>
+                  <select name="country_code" data-starter-estimate-country>
+                    {%- for c in est.countries -%}<option value="{{ c.iso_code }}"{% if c.iso_code == est_cc %} selected{% endif %}>{{ c.name }}</option>{%- endfor -%}
+                  </select>
+                </label>
+                {%- for c in est.countries -%}
+                  <div class="starter-estimate__fields" data-for="{{ c.iso_code }}"{% if c.iso_code != est_cc %} hidden{% endif %}>
+                    {%- for f in est.fields_by_country[c.iso_code] -%}
+                      <label class="starter-field"><span>{{ f.label }}</span>
+                        {%- if f.options.size > 0 -%}
+                          <select name="{{ f.key }}"{% if c.iso_code != est_cc %} disabled{% endif %}><option value="">—</option>{%- for o in f.options -%}<option value="{{ o.value }}">{{ o.label }}</option>{%- endfor -%}</select>
+                        {%- else -%}
+                          <input name="{{ f.key }}" inputmode="{{ f.input_mode }}" maxlength="{{ f.max_length }}"{% if f.placeholder != blank %} placeholder="{{ f.placeholder }}"{% endif %}{% if c.iso_code != est_cc %} disabled{% endif %}>
+                        {%- endif -%}
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                {%- endfor -%}
+                <button class="starter-button starter-button--secondary" type="submit">{{ 'estimate_submit' | t }}</button>
+              </form>
+              <div class="starter-estimate__out" aria-live="polite"></div>
+            </details>
+          {%- endif -%}
           <a class="starter-button starter-cart__checkout" href="{{ routes.checkout_url }}">{{ 'checkout' | t }}</a>
           <p class="starter-card__meta">{{ 'charges_at_checkout' | t }}</p>
         </aside>
@@ -288,6 +326,51 @@
     {% endif %}
   </div>
 </main>
+<script>
+(function () {
+  "use strict";
+  // Shipping estimate ([data-starter-estimate]): the country shows its own state and postal fields; Estimate posts them
+  // with the CSRF token to the cart_estimate action and prints shipping, tax, duties, cash on delivery and the total,
+  // or the platform's message (already in the shopper's language). Nothing is stored.
+  document.querySelectorAll("[data-starter-estimate]").forEach(function (root) {
+    var form = root.querySelector("form"), out = root.querySelector(".starter-estimate__out");
+    var country = root.querySelector("[data-starter-estimate-country]");
+    function t(k) { return root.getAttribute("data-t-" + k) || ""; }
+    function line(label, value) {
+      var p = document.createElement("p"); p.className = "starter-cart__total";
+      var a = document.createElement("span"); a.textContent = label; var b = document.createElement("strong"); b.textContent = value;
+      p.append(a, b); out.append(p);
+    }
+    country.addEventListener("change", function () {
+      root.querySelectorAll("[data-for]").forEach(function (g) {
+        var on = g.getAttribute("data-for") === country.value; g.hidden = !on;
+        g.querySelectorAll("input, select").forEach(function (i) { i.disabled = !on; });
+      });
+    });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      out.textContent = "";
+      fetch(root.getAttribute("data-url"), { method: "POST", credentials: "same-origin", body: new URLSearchParams(new FormData(form)),
+        headers: { "Accept": "application/json", "X-CSRF-Token": root.getAttribute("data-csrf") } })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (!j.success) { out.textContent = (j.user_errors && j.user_errors[0] && j.user_errors[0].message) || t("error"); return; }
+          var est = j.estimate;
+          if (est.shipping) line(t("shipping") + " · " + est.shipping.name, est.shipping.free ? t("free") : est.shipping.formatted_price);
+          (est.fees || []).forEach(function (f) { line(f.name, f.formatted); });
+          if (!est.tax.included) line(t("tax"), est.tax.formatted); else if (Number(est.tax.amount) > 0) line(t("tax-included"), est.tax.formatted);
+          if (est.duties && est.duties.collected_at_checkout) line(t("duties"), est.duties.formatted);
+          if (est.cash_on_delivery) line(t("cod"), est.cash_on_delivery.available ? (est.cash_on_delivery.formatted_fee ? "+" + est.cash_on_delivery.formatted_fee : t("cod-yes")) : t("cod-no"));
+          line(t("total"), est.total.formatted);
+          [est.duties && est.duties.note, est.cash_on_delivery && est.cash_on_delivery.note].forEach(function (n) {
+            if (n) { var p = document.createElement("p"); p.className = "starter-card__meta"; p.textContent = n; out.append(p); }
+          });
+        })
+        .catch(function () { out.textContent = t("error"); });
+    });
+  });
+})();
+</script>
 {%- comment -%}partial:phone-script{%- endcomment -%}
 <script>
 (function () {
